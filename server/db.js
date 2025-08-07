@@ -28,6 +28,19 @@ function init() {
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       )`
     );
+
+    // Table for Wolleys (AI co‑worker configurations)
+    db.run(
+      `CREATE TABLE IF NOT EXISTS wolleys (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        name TEXT NOT NULL,
+        instructions TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+      )`
+    );
   });
 }
 
@@ -77,6 +90,54 @@ function getWorkflowById(id) {
   });
 }
 
+// Create a new Wolley (AI co‑worker)
+function createWolley({ userId, name, instructions }) {
+  return new Promise((resolve, reject) => {
+    db.run(
+      'INSERT INTO wolleys (user_id, name, instructions) VALUES (?, ?, ?)',
+      [userId, name, instructions],
+      function (err) {
+        if (err) return reject(err);
+        resolve({ id: this.lastID, userId, name, instructions });
+      }
+    );
+  });
+}
+
+// Get all Wolleys for a user
+function getWolleysByUser(userId) {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM wolleys WHERE user_id = ?', [userId], (err, rows) => {
+      if (err) return reject(err);
+      resolve(rows);
+    });
+  });
+}
+
+// Update a Wolley by id for a user
+function updateWolley({ id, userId, name, instructions }) {
+  return new Promise((resolve, reject) => {
+    db.run(
+      'UPDATE wolleys SET name = ?, instructions = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND user_id = ?',
+      [name, instructions, id, userId],
+      function (err) {
+        if (err) return reject(err);
+        resolve({ id, userId, name, instructions });
+      }
+    );
+  });
+}
+
+// Delete a Wolley by id for a user
+function deleteWolley(id, userId) {
+  return new Promise((resolve, reject) => {
+    db.run('DELETE FROM wolleys WHERE id = ? AND user_id = ?', [id, userId], function (err) {
+      if (err) return reject(err);
+      resolve({ id });
+    });
+  });
+}
+
 module.exports = {
   db,
   init,
@@ -84,4 +145,9 @@ module.exports = {
   createUser,
   saveWorkflow,
   getWorkflowById,
+  // Wolleys API helpers
+  createWolley,
+  getWolleysByUser,
+  updateWolley,
+  deleteWolley,
 };

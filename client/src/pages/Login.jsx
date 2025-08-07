@@ -13,7 +13,8 @@ function Login() {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate('/');
+      // After successful login, redirect to the dashboard
+      navigate('/app');
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.error || 'Login failed');

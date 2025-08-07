@@ -7,6 +7,7 @@ import VoicePanel from '../components/VoicePanel';
 import SeoPanel from '../components/SeoPanel';
 import WorkflowBuilder from '../components/WorkflowBuilder';
 import FeedsPanel from '../components/FeedsPanel';
+import WolleysPanel from '../components/WolleysPanel';
 
 function Dashboard() {
   const { user, logout } = useAuth();
@@ -28,6 +29,7 @@ function Dashboard() {
             <Tabs.Trigger value="seo" className="px-4 py-2 rounded bg-gray-200 data-[state=active]:bg-primary data-[state=active]:text-white focus:outline-none">SEO</Tabs.Trigger>
             <Tabs.Trigger value="workflow" className="px-4 py-2 rounded bg-gray-200 data-[state=active]:bg-primary data-[state=active]:text-white focus:outline-none">Workflow</Tabs.Trigger>
           <Tabs.Trigger value="feeds" className="px-4 py-2 rounded bg-gray-200 data-[state=active]:bg-primary data-[state=active]:text-white focus:outline-none">Feeds</Tabs.Trigger>
+          <Tabs.Trigger value="wolleys" className="px-4 py-2 rounded bg-gray-200 data-[state=active]:bg-primary data-[state=active]:text-white focus:outline-none">Wolleys</Tabs.Trigger>
           </Tabs.List>
           <Tabs.Content value="text" className="bg-white rounded-md shadow">
             <TextPanel />
@@ -47,6 +49,10 @@ function Dashboard() {
           <Tabs.Content value="feeds" className="bg-white rounded-md shadow">
             <FeedsPanel />
           </Tabs.Content>
+        <Tabs.Content value="wolleys" className="bg-white rounded-md shadow">
+          {/* Panel for managing Wolleys */}
+          <WolleysPanel />
+        </Tabs.Content>
         </Tabs.Root>
       </main>
     </div>

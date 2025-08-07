@@ -15,6 +15,7 @@ const voiceRoutes = require('./routes/voice');
 const seoRoutes = require('./routes/seo');
 const workflowRoutes = require('./routes/workflows');
 const feedsRoutes = require('./routes/feeds');
+const wolleysRoutes = require('./routes/wolleys');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -34,6 +35,7 @@ app.use('/api/voice', voiceRoutes);
 app.use('/api/seo', seoRoutes);
 app.use('/api/workflows', workflowRoutes);
 app.use('/api/feeds', feedsRoutes);
+app.use('/api/wolleys', wolleysRoutes);
 
 // Serve static client in production
 if (process.env.NODE_ENV === 'production') {

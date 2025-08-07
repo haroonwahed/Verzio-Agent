@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# Verzio-Agent
-Verzio app
-=======
 # Verzio – AI‑powered Content Creation Platform
 
 ## Overview
@@ -75,4 +71,3 @@ For deployment on Replit or any other platform:
 ---
 
 This scaffold provides a starting point.  You can expand on the workflow builder, integrate neuromarketing templates, and connect to external AI services using the provided hooks.
->>>>>>> e41d3ba (Initial commit)

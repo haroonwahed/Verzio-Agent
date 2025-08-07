@@ -18,7 +18,8 @@ function Signup() {
     }
     try {
       await signup(email, password);
-      navigate('/');
+      // Redirect to dashboard after signup
+      navigate('/app');
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.error || 'Signup failed');
