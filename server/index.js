@@ -18,7 +18,8 @@ const feedsRoutes = require('./routes/feeds');
 const wolleysRoutes = require('./routes/wolleys');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+// Use port 3000 by default so the API works seamlessly on platforms like Replit, which set PORT=3000.
+const PORT = process.env.PORT || 3000;
 
 // Initialize SQLite tables
 initDb();
