@@ -27,6 +27,15 @@ initDb();
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
+// Health check route
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Verzio API Server is running!', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/text', textRoutes);
