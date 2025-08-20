@@ -29,7 +29,7 @@ function Signup() {
     setError('');
 
     try {
-      await signup(email, password);
+      await signup(email, password, email.split('@')[0]);
       navigate('/app');
     } catch (err) {
       setError(err.response?.data?.error || 'Signup failed');
