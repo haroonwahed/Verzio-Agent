@@ -9,15 +9,24 @@ const db = new sqlite3.Database(dbPath);
 function init() {
   try {
     db.serialize(() => {
+      // Drop and recreate users table to ensure correct schema
+      db.run(`DROP TABLE IF EXISTS users`);
       db.run(
-        `CREATE TABLE IF NOT EXISTS users (
+        `CREATE TABLE users (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           email TEXT UNIQUE NOT NULL,
           password TEXT NOT NULL,
-          name TEXT,
+          name TEXT NOT NULL,
           role TEXT DEFAULT 'user',
           created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )`
+        )`,
+        (err) => {
+          if (err) {
+            console.error('Error creating users table:', err);
+          } else {
+            console.log('Users table created successfully with name column');
+          }
+        }
       );
       db.run(
         `CREATE TABLE IF NOT EXISTS workflows (
@@ -28,7 +37,14 @@ function init() {
           created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
           updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-        )`
+        )`,
+        (err) => {
+          if (err) {
+            console.error('Error creating workflows table:', err);
+          } else {
+            console.log('Workflows table created successfully');
+          }
+        }
       );
 
       // Table for Wolleys (AI co‑worker configurations)
@@ -41,10 +57,17 @@ function init() {
           created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
           updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-        )`
+        )`,
+        (err) => {
+          if (err) {
+            console.error('Error creating wolleys table:', err);
+          } else {
+            console.log('Wolleys table created successfully');
+          }
+        }
       );
     });
-    console.log('Database initialized');
+    console.log('Database initialized with all tables');
   } catch (error) {
     console.error('Error initializing database:', error);
   }
