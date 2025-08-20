@@ -1,9 +1,8 @@
-
 const fetch = require('node-fetch');
 
 async function chatMessage(req, res) {
   const { message, history = [] } = req.body;
-  
+
   if (!message) {
     return res.status(400).json({ error: 'Message is required' });
   }
