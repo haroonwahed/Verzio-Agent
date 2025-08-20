@@ -2,6 +2,9 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
+// Set default base URL for axios
+axios.defaults.baseURL = '/api';
+
 const AuthContext = createContext();
 
 export const useAuth = () => {

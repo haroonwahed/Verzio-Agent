@@ -24,7 +24,10 @@ const PORT = process.env.PORT || 3001;
 initDb();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
 app.use(express.json({ limit: '10mb' }));
 
 // Health check route
