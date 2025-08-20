@@ -7,15 +7,12 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     allowedHosts: 'all',
-    hmr: {
-      clientPort: 443
-    },
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'http://0.0.0.0:3001',
         changeOrigin: true,
         secure: false,
-        ws: true
+        rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
   }

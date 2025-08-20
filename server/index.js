@@ -42,12 +42,6 @@ app.get('/', (req, res) => {
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/text', textRoutes);
-app.use('/api/image', require('./routes/image'));
-app.use('/api/seo', require('./routes/seo'));
-app.use('/api/feeds', require('./routes/feeds'));
-app.use('/api/voice', require('./routes/voice'));
-app.use('/api/wolleys', require('./routes/wolleys'));
-app.use('/api/workflows', require('./routes/workflows'));
 app.use('/api/image', imageRoutes);
 app.use('/api/voice', voiceRoutes);
 app.use('/api/seo', seoRoutes);
