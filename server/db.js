@@ -42,6 +42,7 @@ function init() {
       )`
     );
   });
+  console.log('Database initialized');
 }
 
 // Promise‑based helper functions

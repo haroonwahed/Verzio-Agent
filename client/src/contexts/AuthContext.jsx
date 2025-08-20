@@ -66,6 +66,7 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (email, password, name) => {
     try {
+      console.log('Attempting signup with:', { email, name });
       const response = await axios.post('/auth/signup', { email, password, name });
       const { token, user } = response.data;
       
@@ -73,8 +74,10 @@ export const AuthProvider = ({ children }) => {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setUser(user);
       
+      console.log('Signup successful:', user);
       return response.data;
     } catch (error) {
+      console.error('Signup error:', error.response?.data || error.message);
       throw error;
     }
   };

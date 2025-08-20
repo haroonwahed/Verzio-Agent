@@ -9,15 +9,19 @@ const generateToken = (userId) => {
 
 const signup = async (req, res) => {
   try {
+    console.log('Signup request received:', { email: req.body.email, name: req.body.name });
+    
     const { email, password, name } = req.body;
 
     if (!email || !password || !name) {
+      console.log('Missing fields:', { email: !!email, password: !!password, name: !!name });
       return res.status(400).json({ error: 'All fields are required' });
     }
 
     // Check if user already exists
     const existingUser = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
     if (existingUser) {
+      console.log('User already exists:', email);
       return res.status(400).json({ error: 'User already exists' });
     }
 
@@ -25,7 +29,10 @@ const signup = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
-    const result = db.prepare('INSERT INTO users (email, password, name) VALUES (?, ?, ?)').run(email, hashedPassword, name);
+    const stmt = db.prepare('INSERT INTO users (email, password, name) VALUES (?, ?, ?)');
+    const result = stmt.run(email, hashedPassword, name);
+    
+    console.log('User created successfully:', { id: result.lastInsertRowid, email });
     
     const user = { id: result.lastInsertRowid, email, name };
     const token = generateToken(user.id);
@@ -35,8 +42,8 @@ const signup = async (req, res) => {
       user: { id: user.id, email: user.email, name: user.name }
     });
   } catch (error) {
-    console.error('Signup error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Signup error details:', error);
+    res.status(500).json({ error: 'Internal server error: ' + error.message });
   }
 };
 

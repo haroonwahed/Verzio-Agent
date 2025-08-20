@@ -20,8 +20,14 @@ const wolleysRoutes = require('./routes/wolleys');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Initialize SQLite tables
-initDb();
+// Initialize SQLite tables before setting up routes
+try {
+  initDb();
+  console.log('Database setup complete');
+} catch (error) {
+  console.error('Database setup failed:', error);
+  process.exit(1);
+}
 
 // Middleware
 app.use(cors({
