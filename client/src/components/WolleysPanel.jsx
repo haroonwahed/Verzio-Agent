@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Layers, Plus, Trash2, Edit } from 'lucide-react';
 
 /**
  * WolleysPanel allows users to create and manage "Wolleys" – AI co‑workers with
