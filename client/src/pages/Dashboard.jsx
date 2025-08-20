@@ -8,13 +8,19 @@ import SeoPanel from '../components/SeoPanel';
 import WorkflowBuilder from '../components/WorkflowBuilder';
 import FeedsPanel from '../components/FeedsPanel';
 import WolleysPanel from '../components/WolleysPanel';
-import { LogOut, Type, Image, Mic, Search, Workflow, Rss, Layers } from 'lucide-react';
+import ChatPanel from '../components/ChatPanel';
+import TemplatesPanel from '../components/TemplatesPanel';
+import LibraryPanel from '../components/LibraryPanel';
+import AnalyticsPanel from '../components/AnalyticsPanel';
+import { LogOut, Type, Image, Mic, Search, Workflow, Rss, Layers, MessageSquare, FileTemplate, Library, BarChart3 } from 'lucide-react';
 
 function Dashboard() {
   const { logout } = useAuth();
-  const [activeTab, setActiveTab] = useState('text');
+  const [activeTab, setActiveTab] = useState('chat');
 
   const tabs = [
+    { id: 'chat', label: 'Chat', icon: MessageSquare, component: ChatPanel },
+    { id: 'templates', label: 'Templates', icon: FileTemplate, component: TemplatesPanel },
     { id: 'text', label: 'Text', icon: Type, component: TextPanel },
     { id: 'image', label: 'Image', icon: Image, component: ImagePanel },
     { id: 'voice', label: 'Voice', icon: Mic, component: VoicePanel },
@@ -22,6 +28,8 @@ function Dashboard() {
     { id: 'workflows', label: 'Workflows', icon: Workflow, component: WorkflowBuilder },
     { id: 'feeds', label: 'Feeds', icon: Rss, component: FeedsPanel },
     { id: 'wolleys', label: 'Wolleys', icon: Layers, component: WolleysPanel },
+    { id: 'library', label: 'Library', icon: Library, component: LibraryPanel },
+    { id: 'analytics', label: 'Analytics', icon: BarChart3, component: AnalyticsPanel },
   ];
 
   return (

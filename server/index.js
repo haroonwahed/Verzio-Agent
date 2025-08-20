@@ -8,14 +8,18 @@ dotenv.config();
 
 const { init: initDb } = require('./db');
 
+// Route imports
 const authRoutes = require('./routes/auth');
 const textRoutes = require('./routes/text');
 const imageRoutes = require('./routes/image');
 const voiceRoutes = require('./routes/voice');
 const seoRoutes = require('./routes/seo');
-const workflowRoutes = require('./routes/workflows');
 const feedsRoutes = require('./routes/feeds');
+const workflowRoutes = require('./routes/workflows');
 const wolleysRoutes = require('./routes/wolleys');
+const chatRoutes = require('./routes/chat');
+const libraryRoutes = require('./routes/library');
+const analyticsRoutes = require('./routes/analytics');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -45,15 +49,18 @@ app.get('/', (req, res) => {
   });
 });
 
-// API routes
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/text', textRoutes);
 app.use('/api/image', imageRoutes);
 app.use('/api/voice', voiceRoutes);
 app.use('/api/seo', seoRoutes);
-app.use('/api/workflows', workflowRoutes);
 app.use('/api/feeds', feedsRoutes);
+app.use('/api/workflows', workflowRoutes);
 app.use('/api/wolleys', wolleysRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/library', libraryRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // Serve static client in production
 if (process.env.NODE_ENV === 'production') {

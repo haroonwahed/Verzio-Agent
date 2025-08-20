@@ -66,6 +66,26 @@ function init() {
           }
         }
       );
+
+      // Table for Library Items (saved content)
+      db.run(
+        `CREATE TABLE IF NOT EXISTS library_items (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id INTEGER NOT NULL,
+          title TEXT NOT NULL,
+          content TEXT NOT NULL,
+          type TEXT NOT NULL,
+          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        )`,
+        (err) => {
+          if (err) {
+            console.error('Error creating library_items table:', err);
+          } else {
+            console.log('Library items table created successfully');
+          }
+        }
+      );
     });
     console.log('Database initialized with all tables');
   } catch (error) {
