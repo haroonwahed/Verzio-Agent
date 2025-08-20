@@ -14,6 +14,7 @@ function init() {
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           email TEXT UNIQUE NOT NULL,
           password TEXT NOT NULL,
+          name TEXT,
           role TEXT DEFAULT 'user',
           created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )`
@@ -59,14 +60,14 @@ function getUserByEmail(email) {
   });
 }
 
-function createUser({ email, password, role = 'user' }) {
+function createUser({ email, password, name, role = 'user' }) {
   return new Promise((resolve, reject) => {
     db.run(
-      'INSERT INTO users (email, password, role) VALUES (?, ?, ?)',
-      [email, password, role],
+      'INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)',
+      [email, password, name, role],
       function (err) {
         if (err) return reject(err);
-        resolve({ id: this.lastID, email, role });
+        resolve({ id: this.lastID, email, name, role });
       }
     );
   });

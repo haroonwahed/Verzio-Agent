@@ -1,7 +1,7 @@
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const db = require('../db');
+const { getUserByEmail, createUser } = require('../db');
 
 const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -19,7 +19,7 @@ const signup = async (req, res) => {
     }
 
     // Check if user already exists
-    const existingUser = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
+    const existingUser = await getUserByEmail(email);
     if (existingUser) {
       console.log('User already exists:', email);
       return res.status(400).json({ error: 'User already exists' });
@@ -29,12 +29,10 @@ const signup = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
-    const stmt = db.prepare('INSERT INTO users (email, password, name) VALUES (?, ?, ?)');
-    const result = stmt.run(email, hashedPassword, name);
+    const user = await createUser({ email, password: hashedPassword, name });
     
-    console.log('User created successfully:', { id: result.lastInsertRowid, email });
+    console.log('User created successfully:', { id: user.id, email });
     
-    const user = { id: result.lastInsertRowid, email, name };
     const token = generateToken(user.id);
 
     res.status(201).json({
@@ -66,7 +64,7 @@ const login = async (req, res) => {
     }
 
     // Get user from database
-    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
+    const user = await getUserByEmail(email);
     if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
@@ -100,7 +98,7 @@ const getMe = async (req, res) => {
       });
     }
 
-    const user = db.prepare('SELECT id, email, name FROM users WHERE id = ?').get(userId);
+    const user = await getUserByEmail(userId);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
