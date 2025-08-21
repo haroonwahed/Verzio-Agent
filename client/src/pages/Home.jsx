@@ -1,8 +1,24 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function Home() {
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  useEffect(() => {
+    // Initialize theme from localStorage or default to dark
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      setIsDarkMode(savedTheme === 'dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = !isDarkMode;
+    setIsDarkMode(newTheme);
+    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
+  };
+
   useEffect(() => {
     // Mobile menu toggle
     const menuToggle = document.getElementById('menu-toggle');
@@ -45,20 +61,27 @@ function Home() {
   };
 
   return (
-    <div className="min-h-screen text-white" style={{background: 'linear-gradient(180deg, #0c0c0c 0%, #1a1a1a 50%, #0c0c0c 100%)', fontFamily: 'Inter, system-ui, -apple-system, sans-serif'}}>
+    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{
+      background: isDarkMode 
+        ? 'linear-gradient(180deg, #0c0c0c 0%, #1a1a1a 50%, #0c0c0c 100%)' 
+        : 'linear-gradient(180deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%)',
+      fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
+    }}>
       <style>{`
         :root {
           --primary: #9333ea;
           --accent: #c084fc;
-          --bg: #0c0c0c;
-          --fg: #ffffff;
-          --muted: #6b7280;
+          --bg: ${isDarkMode ? '#0c0c0c' : '#ffffff'};
+          --fg: ${isDarkMode ? '#ffffff' : '#111827'};
+          --muted: ${isDarkMode ? '#6b7280' : '#6b7280'};
           --rad: 12px;
         }
 
         .glass {
-          background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: ${isDarkMode 
+            ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02))' 
+            : 'linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.02))'};
+          border: 1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'};
           backdrop-filter: blur(20px);
         }
 
@@ -98,13 +121,15 @@ function Home() {
         }
 
         .glass:hover {
-          background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
-          border-color: rgba(255, 255, 255, 0.12);
+          background: ${isDarkMode 
+            ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04))' 
+            : 'linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.04))'};
+          border-color: ${isDarkMode ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.12)'};
         }
       `}</style>
 
       {/* Header */}
-      <header className="relative border-b border-white/10">
+      <header className={`relative border-b ${isDarkMode ? 'border-white/10' : 'border-gray-200'}`}>
         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -119,14 +144,29 @@ function Home() {
             </div>
             
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#product" className="text-gray-300 hover:text-white transition-colors">Product</a>
-              <a href="#templates" className="text-gray-300 hover:text-white transition-colors">Templates</a>
-              <a href="#pricing" className="text-gray-300 hover:text-white transition-colors">Pricing</a>
-              <a href="#docs" className="text-gray-300 hover:text-white transition-colors">Docs</a>
+              <a href="#product" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>Product</a>
+              <a href="#templates" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>Templates</a>
+              <a href="#pricing" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>Pricing</a>
+              <a href="#docs" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>Docs</a>
             </div>
             
             <div className="hidden md:flex items-center space-x-4">
-              <Link to="/login" className="text-gray-300 hover:text-white px-4 py-2 rounded-lg transition-colors">
+              <button
+                onClick={toggleTheme}
+                className={`p-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/10' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}
+                aria-label="Toggle theme"
+              >
+                {isDarkMode ? (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                  </svg>
+                )}
+              </button>
+              <Link to="/login" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} px-4 py-2 rounded-lg transition-colors`}>
                 Login
               </Link>
               <Link to="/signup" className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
@@ -142,13 +182,28 @@ function Home() {
           </div>
         </nav>
         
-        <div id="mobile-menu" className="mobile-menu hidden md:hidden bg-black/95 border-b border-white/10">
+        <div id="mobile-menu" className={`mobile-menu hidden md:hidden ${isDarkMode ? 'bg-black/95 border-b border-white/10' : 'bg-white/95 border-b border-gray-200'}`}>
           <nav className="px-4 py-4 space-y-2">
-            <a href="#product" className="block px-3 py-2 text-gray-300 hover:text-white rounded-lg hover:bg-white/5">Product</a>
-            <a href="#templates" className="block px-3 py-2 text-gray-300 hover:text-white rounded-lg hover:bg-white/5">Templates</a>
-            <a href="#pricing" className="block px-3 py-2 text-gray-300 hover:text-white rounded-lg hover:bg-white/5">Pricing</a>
-            <a href="#docs" className="block px-3 py-2 text-gray-300 hover:text-white rounded-lg hover:bg-white/5">Docs</a>
-            <Link to="/login" className="block px-3 py-2 text-gray-300 hover:text-white rounded-lg hover:bg-white/5">Login</Link>
+            <button
+              onClick={toggleTheme}
+              className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}
+            >
+              {isDarkMode ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                </svg>
+              )}
+              <span>Toggle theme</span>
+            </button>
+            <a href="#product" className={`block px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Product</a>
+            <a href="#templates" className={`block px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Templates</a>
+            <a href="#pricing" className={`block px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Pricing</a>
+            <a href="#docs" className={`block px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Docs</a>
+            <Link to="/login" className={`block px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Login</Link>
             <Link to="/signup" className="block mt-4 text-center bg-purple-600 text-white px-4 py-2 rounded-lg font-medium">Start free</Link>
           </nav>
         </div>
@@ -164,7 +219,7 @@ function Home() {
                 Made Simple
               </span>
             </h1>
-            <p className="text-xl text-gray-300 mb-8 max-w-2xl">
+            <p className={`text-xl mb-8 max-w-2xl ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
               Generate high-quality text, images, and voice content with our advanced AI platform. 
               Build workflows, optimize for SEO, and scale your content creation like never before.
             </p>
@@ -175,7 +230,7 @@ function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                 </svg>
               </Link>
-              <button className="border border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white px-8 py-4 rounded-xl text-lg font-semibold transition-colors">
+              <button className={`border px-8 py-4 rounded-xl text-lg font-semibold transition-colors ${isDarkMode ? 'border-gray-600 hover:border-gray-400 text-gray-300 hover:text-white' : 'border-gray-300 hover:border-gray-400 text-gray-600 hover:text-gray-900'}`}>
                 Watch Demo
               </button>
             </div>
@@ -206,39 +261,48 @@ function Home() {
       <section id="product" className="mx-auto max-w-7xl px-4 py-20">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Everything you need to go from idea → published</h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">Powerful AI tools and workflow automation to create, optimize, and distribute content across all your channels.</p>
+          <p className={`text-xl max-w-3xl mx-auto ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Powerful AI tools and workflow automation to create, optimize, and distribute content across all your channels.</p>
         </div>
         
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div className="glass rounded-xl p-8 hover:border-white/20 transition-all duration-300 group">
+          <Link to="/signup" className="glass rounded-xl p-8 hover:border-white/20 transition-all duration-300 group cursor-pointer transform hover:scale-105">
             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/20 group-hover:bg-purple-500/30 transition-colors">
               <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
               </svg>
             </div>
             <h3 className="font-semibold text-xl mb-3">AI Workflow Builder</h3>
-            <p className="text-gray-300 leading-relaxed">Drag-and-drop workflow steps: research, outline, write, edit, optimize, and publish with intelligent automation.</p>
-          </div>
+            <p className={`leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Drag-and-drop workflow steps: research, outline, write, edit, optimize, and publish with intelligent automation.</p>
+            <div className="mt-4 flex items-center text-purple-400 group-hover:text-purple-300 transition-colors">
+              <span className="text-sm font-medium">Try workflows →</span>
+            </div>
+          </Link>
 
-          <div className="glass rounded-xl p-8 hover:border-white/20 transition-all duration-300 group">
+          <Link to="/signup" className="glass rounded-xl p-8 hover:border-white/20 transition-all duration-300 group cursor-pointer transform hover:scale-105">
             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/20 group-hover:bg-purple-500/30 transition-colors">
               <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
               </svg>
             </div>
             <h3 className="font-semibold text-xl mb-3">Smart Content Generation</h3>
-            <p className="text-gray-300 leading-relaxed">Generate blog posts, social media content, emails, and more with AI that understands your brand voice and audience.</p>
-          </div>
+            <p className={`leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Generate blog posts, social media content, emails, and more with AI that understands your brand voice and audience.</p>
+            <div className="mt-4 flex items-center text-purple-400 group-hover:text-purple-300 transition-colors">
+              <span className="text-sm font-medium">Start generating →</span>
+            </div>
+          </Link>
 
-          <div className="glass rounded-xl p-8 hover:border-white/20 transition-all duration-300 group">
+          <Link to="/signup" className="glass rounded-xl p-8 hover:border-white/20 transition-all duration-300 group cursor-pointer transform hover:scale-105">
             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/20 group-hover:bg-purple-500/30 transition-colors">
               <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
               </svg>
             </div>
             <h3 className="font-semibold text-xl mb-3">Multi-Channel Publishing</h3>
-            <p className="text-gray-300 leading-relaxed">Publish and distribute your content across multiple platforms simultaneously with optimized formatting for each channel.</p>
-          </div>
+            <p className={`leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Publish and distribute your content across multiple platforms simultaneously with optimized formatting for each channel.</p>
+            <div className="mt-4 flex items-center text-purple-400 group-hover:text-purple-300 transition-colors">
+              <span className="text-sm font-medium">Explore publishing →</span>
+            </div>
+          </Link>
         </div>
       </section>
 
@@ -275,48 +339,48 @@ function Home() {
                 </div>
                 <span className="text-xl font-bold">Creeator</span>
               </div>
-              <p className="text-gray-400 mb-6 max-w-sm">
+              <p className={`mb-6 max-w-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                 Transform your content creation process with AI-powered workflows and intelligent automation.
               </p>
             </div>
             
             <div>
               <h3 className="font-semibold mb-4">Product</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Templates</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Integrations</a></li>
+              <ul className={`space-y-2 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Features</a></li>
+                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Pricing</a></li>
+                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Templates</a></li>
+                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Integrations</a></li>
               </ul>
             </div>
             
             <div>
               <h3 className="font-semibold mb-4">Company</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+              <ul className={`space-y-2 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>About</a></li>
+                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Blog</a></li>
+                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Careers</a></li>
+                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Contact</a></li>
               </ul>
             </div>
             
             <div>
               <h3 className="font-semibold mb-4">Support</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Documentation</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">API Reference</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Status</a></li>
+              <ul className={`space-y-2 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Help Center</a></li>
+                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Documentation</a></li>
+                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>API Reference</a></li>
+                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Status</a></li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-white/10 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm">© 2024 Creeator. All rights reserved.</p>
+          <div className={`border-t mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center ${isDarkMode ? 'border-white/10' : 'border-gray-200'}`}>
+            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>© 2024 Creeator. All rights reserved.</p>
             <div className="flex space-x-6 mt-4 sm:mt-0">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Privacy</a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Terms</a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Security</a>
+              <a href="#" className={`text-sm transition-colors ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Privacy</a>
+              <a href="#" className={`text-sm transition-colors ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Terms</a>
+              <a href="#" className={`text-sm transition-colors ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Security</a>
             </div>
           </div>
         </div>
