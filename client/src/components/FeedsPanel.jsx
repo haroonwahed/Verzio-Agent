@@ -14,7 +14,7 @@ function FeedsPanel() {
     setLoading(true);
     try {
       const productList = products.split('\n').filter(p => p.trim());
-      const res = await axios.post('/api/feeds/generate', { products: productList });
+      const res = await axios.post('/feeds/generate', { items: productList });
       setResults(res.data.results || []);
     } catch (err) {
       console.error('Feed generation failed:', err);
@@ -26,7 +26,7 @@ function FeedsPanel() {
 
   const handleExport = () => {
     const csv = 'Product,Description\n' + 
-      results.map(r => `"${r.product}","${r.description}"`).join('\n');
+      results.map(r => `"${typeof r.input === 'string' ? r.input : r.input.title || r.input}","${r.description || r.error || 'No description'}"`).join('\n');
     
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
@@ -96,8 +96,13 @@ function FeedsPanel() {
               <div className="space-y-4">
                 {results.map((result, index) => (
                   <div key={index} className="bg-gray-50 p-4 rounded-lg">
-                    <h4 className="font-medium text-gray-900 mb-2">{result.product}</h4>
-                    <p className="text-gray-700 text-sm">{result.description}</p>
+                    <h4 className="font-medium text-gray-900 mb-2">
+                      {typeof result.input === 'string' ? result.input : result.input.title || result.input}
+                    </h4>
+                    <p className="text-gray-700 text-sm">
+                      {result.description || result.error || 'No description available'}
+                    </p>
+                    {result.error && <p className="text-red-500 text-xs mt-1">Error: {result.error}</p>}
                   </div>
                 ))}
               </div>
