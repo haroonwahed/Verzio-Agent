@@ -1,3 +1,4 @@
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -6,7 +7,6 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 5173,
-    strictPort: false,
     allowedHosts: [
       'all',
       'e1c70e66-b089-4338-95fb-71f984e5e928-00-2w6h563ver3z2.spock.replit.dev'
@@ -15,13 +15,8 @@ export default defineConfig({
       '/api': {
         target: 'http://0.0.0.0:3001',
         changeOrigin: true,
-        secure: false,
-        timeout: 60000
+        secure: false
       }
     }
-  },
-  build: {
-    outDir: 'dist',
-    sourcemap: true
   }
 })
