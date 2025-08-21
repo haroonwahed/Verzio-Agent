@@ -28,7 +28,7 @@ function TextPanel() {
     setResult('');
 
     try {
-      const response = await axios.post('/api/text/generate', {
+      const response = await axios.post('/text/generate', {
         prompt: prompt.trim(),
         tone
       });
