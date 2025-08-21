@@ -22,7 +22,7 @@ function WolleysPanel() {
 
   async function fetchWolleys() {
     try {
-      const res = await axios.get('/api/wolleys');
+      const res = await axios.get('/wolleys');
       setWolleys(res.data.wolleys || []);
     } catch (err) {
       console.error(err);
@@ -34,9 +34,9 @@ function WolleysPanel() {
     setLoading(true);
     try {
       if (editingId) {
-        await axios.put(`/api/wolleys/${editingId}`, { name, instructions });
+        await axios.put(`/wolleys/${editingId}`, { name, instructions });
       } else {
-        await axios.post('/api/wolleys', { name, instructions });
+        await axios.post('/wolleys', { name, instructions });
       }
       setName('');
       setInstructions('');
@@ -58,7 +58,7 @@ function WolleysPanel() {
   async function handleDelete(id) {
     if (!window.confirm('Are you sure you want to delete this Wolley?')) return;
     try {
-      await axios.delete(`/api/wolleys/${id}`);
+      await axios.delete(`/wolleys/${id}`);
       fetchWolleys();
     } catch (err) {
       console.error(err);
