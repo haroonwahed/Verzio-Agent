@@ -18,13 +18,13 @@ function Dashboard() {
   const [selectedWolley, setSelectedWolley] = useState(null);
 
   const sidebarItems = [
-    { id: 'text', label: 'Generate Text', icon: MessageSquare, color: 'text-blue-600' },
-    { id: 'image', label: 'Generate Images', icon: Image, color: 'text-purple-600' },
-    { id: 'voice', label: 'Generate Voice', icon: Mic, color: 'text-green-600' },
-    { id: 'seo', label: 'SEO Analysis', icon: BarChart3, color: 'text-orange-600' },
-    { id: 'feeds', label: 'Product Feeds', icon: Rss, color: 'text-red-600' },
-    { id: 'workflows', label: 'Workflow Builder', icon: Workflow, color: 'text-indigo-600' },
-    { id: 'wolleys', label: 'AI Agents', icon: Bot, color: 'text-cyan-600' },
+    { id: 'text', label: 'Generate Text', icon: MessageSquare, color: 'text-purple-600' },
+    { id: 'image', label: 'Generate Images', icon: Image, color: 'text-blue-600' },
+    { id: 'voice', label: 'Generate Voice', icon: Mic, color: 'text-indigo-600' },
+    { id: 'seo', label: 'SEO Analysis', icon: BarChart3, color: 'text-violet-600' },
+    { id: 'feeds', label: 'Product Feeds', icon: Rss, color: 'text-purple-500' },
+    { id: 'workflows', label: 'Workflow Builder', icon: Workflow, color: 'text-blue-500' },
+    { id: 'wolleys', label: 'AI Agents', icon: Bot, color: 'text-indigo-500' },
   ];
 
   const handleWolleyChat = (wolley) => {
@@ -51,14 +51,20 @@ function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50/30 via-blue-50/30 to-indigo-50/30">
       {/* Sidebar */}
-      <div className="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 shadow-sm z-10">
+      <div className="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-purple-50 to-blue-50 border-r border-purple-100 shadow-lg z-10">
         {/* Logo */}
         <div className="p-6 border-b border-gray-100">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-white" />
+            <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center relative">
+              <div className="w-6 h-6 relative">
+                <div className="absolute inset-0 bg-white rounded-full opacity-90"></div>
+                <div className="absolute top-1 left-1 w-1.5 h-1.5 bg-purple-600 rounded-full"></div>
+                <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-purple-600 rounded-full"></div>
+                <div className="absolute bottom-1.5 left-1/2 transform -translate-x-1/2 w-3 h-1 bg-purple-600 rounded-full"></div>
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-0.5 h-2 bg-purple-600 rounded-full"></div>
+              </div>
             </div>
             <div>
               <h1 className="text-xl font-bold text-gray-900">Verzio</h1>
@@ -78,11 +84,11 @@ function Dashboard() {
                 onClick={() => setCurrentPanel(item.id)}
                 className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                   isActive 
-                    ? 'bg-blue-50 text-blue-700 shadow-sm' 
-                    : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                    ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg' 
+                    : 'text-gray-700 hover:bg-white/50 hover:text-gray-900'
                 }`}
               >
-                <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : item.color}`} />
+                <Icon className={`w-5 h-5 ${isActive ? 'text-white' : item.color}`} />
                 <span>{item.label}</span>
               </button>
             );
@@ -90,13 +96,13 @@ function Dashboard() {
         </nav>
 
         {/* Bottom Section */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-100 bg-white">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-purple-100 bg-gradient-to-b from-purple-50 to-blue-50">
           <button
             onClick={() => setCurrentPanel('settings')}
             className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 mb-2 ${
               currentPanel === 'settings' 
-                ? 'bg-gray-100 text-gray-900' 
-                : 'text-gray-700 hover:bg-gray-50'
+                ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg' 
+                : 'text-gray-700 hover:bg-white/50'
             }`}
           >
             <Settings className="w-5 h-5" />
@@ -104,7 +110,7 @@ function Dashboard() {
           </button>
           
           <div className="flex items-center space-x-3 px-3 py-2 text-sm text-gray-600">
-            <div className="w-8 h-8 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white text-xs font-semibold">
+            <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">
               {user?.email?.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
