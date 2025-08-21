@@ -107,8 +107,8 @@
         <a href="#templates" class="hover:text-white transition-colors focus:text-white focus:outline-none focus:ring-2 focus:ring-[var(--primary)] rounded">Templates</a>
         <a href="#pricing" class="hover:text-white transition-colors focus:text-white focus:outline-none focus:ring-2 focus:ring-[var(--primary)] rounded">Pricing</a>
         <a href="#docs" class="hover:text-white transition-colors focus:text-white focus:outline-none focus:ring-2 focus:ring-[var(--primary)] rounded">Docs</a>
-        <a href="#login" class="hover:text-white transition-colors focus:text-white focus:outline-none focus:ring-2 focus:ring-[var(--primary)] rounded">Login</a>
-        <a href="#cta" class="ml-2 inline-flex items-center rounded-full bg-[var(--primary)] px-4 py-2 text-white hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]">
+        <a href="/login" class="hover:text-white transition-colors focus:text-white focus:outline-none focus:ring-2 focus:ring-[var(--primary)] rounded">Login</a>
+        <a href="/signup" class="ml-2 inline-flex items-center rounded-full bg-[var(--primary)] px-4 py-2 text-white hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]">
           Start free
         </a>
       </nav>
@@ -132,8 +132,8 @@
         <a href="#templates" class="block px-3 py-2 text-[color:var(--muted)] hover:text-white rounded-lg hover:bg-white/5">Templates</a>
         <a href="#pricing" class="block px-3 py-2 text-[color:var(--muted)] hover:text-white rounded-lg hover:bg-white/5">Pricing</a>
         <a href="#docs" class="block px-3 py-2 text-[color:var(--muted)] hover:text-white rounded-lg hover:bg-white/5">Docs</a>
-        <a href="#login" class="block px-3 py-2 text-[color:var(--muted)] hover:text-white rounded-lg hover:bg-white/5">Login</a>
-        <a href="#cta" class="block mt-4 text-center bg-[var(--primary)] text-white px-4 py-2 rounded-lg font-medium">Start free</a>
+        <a href="/login" class="block px-3 py-2 text-[color:var(--muted)] hover:text-white rounded-lg hover:bg-white/5">Login</a>
+        <a href="/signup" class="block mt-4 text-center bg-[var(--primary)] text-white px-4 py-2 rounded-lg font-medium">Start free</a>
       </nav>
     </div>
   </header>
@@ -149,7 +149,7 @@
           Design, automate, and publish high-performing content with intelligent AI agents, workflow automation, and multi-channel publishing.
         </p>
         <div class="mt-8 flex flex-col sm:flex-row gap-4">
-          <a href="#cta" class="inline-flex items-center justify-center rounded-xl bg-[var(--primary)] px-8 py-4 text-lg font-semibold text-white hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]">
+          <a href="/signup" class="inline-flex items-center justify-center rounded-xl bg-[var(--primary)] px-8 py-4 text-lg font-semibold text-white hover:opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]">
             Start creating for free
           </a>
           <a href="#demo" class="inline-flex items-center justify-center rounded-xl border border-white/15 px-8 py-4 text-lg font-semibold hover:bg-white/5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/20">
@@ -790,7 +790,7 @@
         Start creating better content faster today.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="#signup" class="inline-flex items-center justify-center bg-white text-[var(--primary)] px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[var(--primary)]">
+        <a href="/signup" class="inline-flex items-center justify-center bg-white text-[var(--primary)] px-8 py-4 text-lg font-semibold rounded-xl hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[var(--primary)]">
           Start creating for free
         </a>
         <a href="#demo" class="inline-flex items-center justify-center border-2 border-white text-white px-8 py-4 text-lg font-semibold rounded-xl hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[var(--primary)]">
@@ -875,119 +875,185 @@
   </footer>
 
   <script>
-    // Mobile menu toggle
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-    
-    mobileMenuButton?.addEventListener('click', () => {
-      const isOpen = mobileMenu.classList.contains('open');
-      if (isOpen) {
-        mobileMenu.classList.remove('open');
-        mobileMenuButton.setAttribute('aria-expanded', 'false');
-      } else {
-        mobileMenu.classList.add('open');
-        mobileMenuButton.setAttribute('aria-expanded', 'true');
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mobile menu toggle
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      
+      if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', () => {
+          const isOpen = mobileMenu.classList.contains('open');
+          if (isOpen) {
+            mobileMenu.classList.remove('open');
+            mobileMenuButton.setAttribute('aria-expanded', 'false');
+          } else {
+            mobileMenu.classList.add('open');
+            mobileMenuButton.setAttribute('aria-expanded', 'true');
+          }
+        });
+
+        // Close mobile menu when clicking on links
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+          link.addEventListener('click', () => {
+            mobileMenu.classList.remove('open');
+            mobileMenuButton.setAttribute('aria-expanded', 'false');
+          });
+        });
       }
-    });
 
-    // Close mobile menu when clicking on links
-    document.querySelectorAll('#mobile-menu a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('open');
-        mobileMenuButton.setAttribute('aria-expanded', 'false');
+      // Pricing toggle
+      const pricingToggle = document.getElementById('pricing-toggle');
+      const prices = document.querySelectorAll('[data-monthly]');
+      
+      function updatePricing() {
+        const isYearly = pricingToggle ? pricingToggle.checked : false;
+        prices.forEach(el => {
+          const monthly = parseInt(el.dataset.monthly);
+          const yearly = parseInt(el.dataset.yearly);
+          el.textContent = `$${isYearly ? yearly : monthly}`;
+        });
+      }
+      
+      if (pricingToggle) {
+        pricingToggle.addEventListener('change', updatePricing);
+      }
+      updatePricing();
+
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const href = this.getAttribute('href');
+          if (href === '#') return;
+          
+          const target = document.querySelector(href);
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
       });
-    });
 
-    // Pricing toggle
-    const pricingToggle = document.getElementById('pricing-toggle');
-    const prices = document.querySelectorAll('[data-monthly]');
-    
-    function updatePricing() {
-      const isYearly = pricingToggle.checked;
-      prices.forEach(el => {
-        const monthly = parseInt(el.dataset.monthly);
-        const yearly = parseInt(el.dataset.yearly);
-        el.textContent = `$${isYearly ? yearly : monthly}`;
-      });
-    }
-    
-    pricingToggle?.addEventListener('change', updatePricing);
-    updatePricing();
-
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
+      // Template gallery scroll buttons functionality
+      document.querySelectorAll('[onclick]').forEach(btn => {
+        if (btn.textContent.includes('Use template')) {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Template selection feature - would integrate with main app');
           });
         }
       });
-    });
 
-    // Intersection Observer for fade-in animations
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }
-      });
-    }, observerOptions);
-
-    // Observe sections for animation
-    document.querySelectorAll('section').forEach(section => {
-      section.style.opacity = '0';
-      section.style.transform = 'translateY(30px)';
-      section.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
-      observer.observe(section);
-    });
-
-    // Cookie notice functions
-    function acceptCookies() {
-      localStorage.setItem('cookies-accepted', 'true');
-      document.getElementById('cookie-notice').style.display = 'none';
-    }
-
-    function declineCookies() {
-      localStorage.setItem('cookies-accepted', 'false');
-      document.getElementById('cookie-notice').style.display = 'none';
-    }
-
-    // Check if cookies notice should be shown
-    if (localStorage.getItem('cookies-accepted')) {
-      document.getElementById('cookie-notice').style.display = 'none';
-    }
-
-    // FAQ toggle function
-    function toggleFAQ(element) {
-      // This is handled by the native details/summary behavior
-      // but we can add additional functionality here if needed
-    }
-
-    // Keyboard navigation for FAQ
-    document.querySelectorAll('details summary').forEach(summary => {
-      summary.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+      // CTA buttons functionality
+      document.querySelectorAll('a[href="#cta"], a[href="#signup"]').forEach(btn => {
+        btn.addEventListener('click', function(e) {
           e.preventDefault();
-          summary.parentElement.open = !summary.parentElement.open;
-        }
+          // Redirect to main app signup
+          window.location.href = '/signup';
+        });
       });
-    });
 
-    // Preload hero video
-    const heroVideo = document.querySelector('video');
-    if (heroVideo) {
-      heroVideo.preload = 'metadata';
-    }
+      document.querySelectorAll('a[href="#login"]').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          // Redirect to main app login
+          window.location.href = '/login';
+        });
+      });
+
+      document.querySelectorAll('a[href="#demo"]').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          alert('Demo booking feature - would open scheduling modal');
+        });
+      });
+
+      // Intersection Observer for fade-in animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, observerOptions);
+
+      // Observe sections for animation
+      document.querySelectorAll('section').forEach(section => {
+        section.style.opacity = '0';
+        section.style.transform = 'translateY(30px)';
+        section.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+        observer.observe(section);
+      });
+
+      // Cookie notice functions
+      window.acceptCookies = function() {
+        localStorage.setItem('cookies-accepted', 'true');
+        const notice = document.getElementById('cookie-notice');
+        if (notice) {
+          notice.style.display = 'none';
+        }
+      };
+
+      window.declineCookies = function() {
+        localStorage.setItem('cookies-accepted', 'false');
+        const notice = document.getElementById('cookie-notice');
+        if (notice) {
+          notice.style.display = 'none';
+        }
+      };
+
+      // Check if cookies notice should be shown
+      if (localStorage.getItem('cookies-accepted')) {
+        const notice = document.getElementById('cookie-notice');
+        if (notice) {
+          notice.style.display = 'none';
+        }
+      }
+
+      // FAQ toggle function
+      window.toggleFAQ = function(element) {
+        // This is handled by the native details/summary behavior
+        // but we can add additional functionality here if needed
+      };
+
+      // Keyboard navigation for FAQ
+      document.querySelectorAll('details summary').forEach(summary => {
+        summary.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            summary.parentElement.open = !summary.parentElement.open;
+          }
+        });
+      });
+
+      // Preload hero video
+      const heroVideo = document.querySelector('video');
+      if (heroVideo) {
+        heroVideo.preload = 'metadata';
+        // Fallback for video loading issues
+        heroVideo.addEventListener('error', function() {
+          console.log('Video failed to load, using poster image');
+        });
+      }
+
+      // Initialize hero section animations
+      const heroContent = document.querySelector('.animate-fade-in-up');
+      if (heroContent) {
+        setTimeout(() => {
+          heroContent.style.opacity = '1';
+          heroContent.style.transform = 'translateY(0)';
+        }, 100);
+      }
+    });
   </script>
 </body>
 </html>
