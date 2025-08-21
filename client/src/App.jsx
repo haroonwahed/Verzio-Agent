@@ -24,6 +24,14 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
         {/* Redirect all unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
