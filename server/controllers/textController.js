@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+// Using built-in fetch available in Node.js 18+
 
 /*
  * Generate text via OpenAI GPT‑4o.  The request body may include:

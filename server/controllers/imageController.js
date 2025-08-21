@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+// Using built-in fetch available in Node.js 18+
 
 // Generate an image from a text prompt using OpenAI DALL‑E 3
 async function generateImage(req, res) {
