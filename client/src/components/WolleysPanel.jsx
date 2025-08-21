@@ -143,30 +143,32 @@ function WolleysPanel({ onChatClick }) {
       {wolleys.length === 0 && <p className="text-gray-500">No Wolleys yet.</p>}
       <ul className="space-y-2">
         {wolleys.map((wolley) => (
-          <li key={wolley.id} className="border rounded-md p-3 flex justify-between items-start">
-            <div>
-              <h4 className="font-medium">{wolley.name}</h4>
-              <p className="text-sm text-gray-600 whitespace-pre-wrap">{wolley.instructions}</p>
-            </div>
-            <div className="flex space-x-2">
-              <button
-                onClick={() => onChatClick && onChatClick(wolley)}
-                className="text-green-600 hover:underline"
-              >
-                Chat
-              </button>
-              <button
-                onClick={() => handleEdit(wolley)}
-                className="text-blue-600 hover:underline"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => handleDelete(wolley.id)}
-                className="text-red-600 hover:underline"
-              >
-                Delete
-              </button>
+          <li key={wolley.id} className="border rounded-md overflow-hidden hover:shadow-md transition-shadow">
+            <div 
+              className="p-3 cursor-pointer hover:bg-gray-50"
+              onClick={() => onChatClick && onChatClick(wolley)}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <h4 className="font-medium text-gray-900">{wolley.name}</h4>
+                  <p className="text-sm text-gray-600 whitespace-pre-wrap mt-1 line-clamp-2">{wolley.instructions}</p>
+                  <p className="text-xs text-green-600 mt-2">Click to start chatting →</p>
+                </div>
+                <div className="flex space-x-2 ml-4" onClick={(e) => e.stopPropagation()}>
+                  <button
+                    onClick={() => handleEdit(wolley)}
+                    className="text-blue-600 hover:underline text-sm px-2 py-1"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(wolley.id)}
+                    className="text-red-600 hover:underline text-sm px-2 py-1"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
             </div>
           </li>
         ))}
