@@ -13,6 +13,17 @@ import Dashboard from './pages/Dashboard';
 function App() {
   console.log('App component rendering...');
   console.log('Current location:', window.location.href);
+  console.log('React version:', React.version);
+  
+  // Add error catching
+  React.useEffect(() => {
+    const handleError = (error) => {
+      console.error('Uncaught error:', error);
+    };
+    
+    window.addEventListener('error', handleError);
+    return () => window.removeEventListener('error', handleError);
+  }, []);
   
   return (
     <div className="App min-h-screen bg-gray-50">
