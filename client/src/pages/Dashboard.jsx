@@ -8,7 +8,8 @@ import SeoPanel from '../components/SeoPanel';
 import WorkflowBuilder from '../components/WorkflowBuilder';
 import FeedsPanel from '../components/FeedsPanel';
 import WolleysPanel from '../components/WolleysPanel';
-import { LogOut, Type, Image, Mic, Search, Workflow, Rss, Layers } from 'lucide-react';
+import ProfileSettings from '../components/ProfileSettings';
+import { LogOut, Type, Image, Mic, Search, Workflow, Rss, Layers, User } from 'lucide-react';
 
 function Dashboard() {
   const { logout } = useAuth();
@@ -22,6 +23,7 @@ function Dashboard() {
     { id: 'workflows', label: 'Workflows', icon: Workflow, component: WorkflowBuilder },
     { id: 'feeds', label: 'Feeds', icon: Rss, component: FeedsPanel },
     { id: 'wolleys', label: 'Wolleys', icon: Layers, component: WolleysPanel },
+    { id: 'profile', label: 'Profile', icon: User, component: ProfileSettings },
   ];
 
   return (

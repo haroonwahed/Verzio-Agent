@@ -30,7 +30,7 @@ function Signup() {
 
     try {
       await signup(email, password, email.split('@')[0]);
-      navigate('/app');
+      navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.error || 'Signup failed');
     } finally {
