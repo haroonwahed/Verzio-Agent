@@ -29,7 +29,7 @@ function ImagePanel() {
     setError('');
 
     try {
-      const response = await axios.post('/api/image/generate', {
+      const response = await axios.post('/image/generate', {
         prompt: prompt.trim(),
         size,
         style
