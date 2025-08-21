@@ -3,10 +3,6 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.jsx'
 import './index.css'
-import axios from 'axios'
-
-// Ensure axios doesn't have a baseURL that conflicts with Vite proxy
-axios.defaults.baseURL = ''
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
