@@ -8,24 +8,11 @@ const generateToken = (userId) => {
 
 const signup = async (req, res) => {
   try {
-    console.log('Signup request received:', { email: req.body.email, name: req.body.name });
-
     const { email, password, name } = req.body;
+    console.log('Signup request received:', { email, name });
 
     if (!email || !password || !name) {
-      console.log('Missing fields:', { email: !!email, password: !!password, name: !!name });
-      return res.status(400).json({ error: 'All fields are required' });
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ error: 'Invalid email format' });
-    }
-
-    // Validate password strength
-    if (password.length < 6) {
-      return res.status(400).json({ error: 'Password must be at least 6 characters long' });
+      return res.status(400).json({ error: 'Email, password, and name are required' });
     }
 
     // Check if user already exists
@@ -35,38 +22,35 @@ const signup = async (req, res) => {
         else resolve(row);
       });
     });
-    
+
     if (existingUser) {
-      console.log('User already exists:', email);
-      return res.status(400).json({ error: 'User already exists' });
+      return res.status(409).json({ error: 'User already exists' });
     }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
+    // Insert new user
     const result = await new Promise((resolve, reject) => {
       db.run('INSERT INTO users (email, password, name) VALUES (?, ?, ?)', 
         [email, hashedPassword, name], 
         function(err) {
           if (err) reject(err);
-          else resolve({ lastInsertRowid: this.lastID });
+          else resolve({ lastID: this.lastID });
         }
       );
     });
 
-    console.log('User created successfully:', { id: result.lastInsertRowid, email });
-
-    const user = { id: result.lastInsertRowid, email, name };
-    const token = generateToken(user.id);
+    const userId = result.lastID;
+    const token = generateToken(userId);
 
     res.status(201).json({
       token,
-      user: { id: user.id, email: user.email, name: user.name }
+      user: { id: userId, email, name }
     });
   } catch (error) {
     console.error('Signup error details:', error);
-    res.status(500).json({ error: 'Internal server error: ' + error.message });
+    res.status(500).json({ error: `Internal server error: ${error.message}` });
   }
 };
 
@@ -95,7 +79,7 @@ const login = async (req, res) => {
         else resolve(row);
       });
     });
-    
+
     if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
@@ -120,20 +104,11 @@ const login = async (req, res) => {
 
 const changePassword = async (req, res) => {
   try {
-    const userId = req.user.userId;
     const { currentPassword, newPassword } = req.body;
+    const userId = req.user.userId;
 
     if (!currentPassword || !newPassword) {
       return res.status(400).json({ error: 'Current password and new password are required' });
-    }
-
-    if (newPassword.length < 6) {
-      return res.status(400).json({ error: 'New password must be at least 6 characters long' });
-    }
-
-    // Demo user cannot change password
-    if (userId === 1) {
-      return res.status(400).json({ error: 'Demo user cannot change password' });
     }
 
     // Get user from database
@@ -143,7 +118,7 @@ const changePassword = async (req, res) => {
         else resolve(row);
       });
     });
-    
+
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -151,24 +126,21 @@ const changePassword = async (req, res) => {
     // Verify current password
     const validPassword = await bcrypt.compare(currentPassword, user.password);
     if (!validPassword) {
-      return res.status(400).json({ error: 'Current password is incorrect' });
+      return res.status(401).json({ error: 'Current password is incorrect' });
     }
 
     // Hash new password
     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
-    // Update password in database
+    // Update password
     await new Promise((resolve, reject) => {
-      db.run('UPDATE users SET password = ? WHERE id = ?', 
-        [hashedNewPassword, userId], 
-        function(err) {
-          if (err) reject(err);
-          else resolve();
-        }
-      );
+      db.run('UPDATE users SET password = ? WHERE id = ?', [hashedNewPassword, userId], (err) => {
+        if (err) reject(err);
+        else resolve();
+      });
     });
 
-    res.json({ message: 'Password changed successfully' });
+    res.json({ message: 'Password updated successfully' });
   } catch (error) {
     console.error('Change password error:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -179,7 +151,7 @@ const getMe = async (req, res) => {
   try {
     const userId = req.user.userId;
 
-    // Demo user support
+    // For demo user
     if (userId === 1) {
       return res.json({
         user: { id: 1, email: 'demo@verzio.com', name: 'Demo User' }
@@ -192,14 +164,16 @@ const getMe = async (req, res) => {
         else resolve(row);
       });
     });
-    
+
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    res.json({ user });
+    res.json({
+      user: { id: user.id, email: user.email, name: user.name }
+    });
   } catch (error) {
-    console.error('Get me error:', error);
+    console.error('Get user error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
