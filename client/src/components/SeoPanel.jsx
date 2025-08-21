@@ -9,7 +9,7 @@ function SeoPanel() {
   const handleAnalyze = async () => {
     setLoading(true);
     try {
-      const res = await axios.post('/api/seo/analyze', { content });
+      const res = await axios.post('/seo/analyze', { content });
       setResult(res.data);
     } catch (err) {
       console.error(err);

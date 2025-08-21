@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+// Using built-in fetch available in Node.js 18+
 
 // Calculate Flesch reading ease score
 function fleschReadingEase(text) {
