@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { User, Lock, Save } from 'lucide-react';
+import { User, Lock, Save, X } from 'lucide-react';
 
 function ProfileSettings() {
   const { user, changePassword } = useAuth();

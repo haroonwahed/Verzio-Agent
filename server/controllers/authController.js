@@ -1,4 +1,3 @@
-
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../db');
@@ -10,7 +9,7 @@ const generateToken = (userId) => {
 const signup = async (req, res) => {
   try {
     console.log('Signup request received:', { email: req.body.email, name: req.body.name });
-    
+
     const { email, password, name } = req.body;
 
     if (!email || !password || !name) {
@@ -42,9 +41,9 @@ const signup = async (req, res) => {
     // Create user
     const stmt = db.prepare('INSERT INTO users (email, password, name) VALUES (?, ?, ?)');
     const result = stmt.run(email, hashedPassword, name);
-    
+
     console.log('User created successfully:', { id: result.lastInsertRowid, email });
-    
+
     const user = { id: result.lastInsertRowid, email, name };
     const token = generateToken(user.id);
 
@@ -147,7 +146,7 @@ const changePassword = async (req, res) => {
 const getMe = async (req, res) => {
   try {
     const userId = req.user.userId;
-    
+
     // Demo user support
     if (userId === 1) {
       return res.json({
