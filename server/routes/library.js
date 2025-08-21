@@ -1,12 +1,12 @@
 
 const express = require('express');
 const { getLibraryItems, deleteLibraryItem, saveToLibrary } = require('../controllers/libraryController');
-const authenticateToken = require('../middleware/auth');
+const { authenticate } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.get('/items', authenticateToken, getLibraryItems);
-router.delete('/items/:id', authenticateToken, deleteLibraryItem);
-router.post('/save', authenticateToken, saveToLibrary);
+router.get('/items', authenticate, getLibraryItems);
+router.delete('/items/:id', authenticate, deleteLibraryItem);
+router.post('/save', authenticate, saveToLibrary);
 
 module.exports = router;
