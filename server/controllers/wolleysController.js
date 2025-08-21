@@ -48,7 +48,7 @@ async function update(req, res) {
 // Delete a Wolley
 async function remove(req, res) {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const id = parseInt(req.params.id, 10);
     await deleteWolley(id, userId);
     res.json({ success: true });
@@ -58,4 +58,68 @@ async function remove(req, res) {
   }
 }
 
-module.exports = { listWolleys, create, update, remove };
+// Chat with a Wolley
+async function chat(req, res) {
+  try {
+    const userId = req.user.userId;
+    const { wolleyId, message, chatHistory = [] } = req.body;
+    
+    if (!message) {
+      return res.status(400).json({ error: 'message is required' });
+    }
+
+    // Get the Wolley to use its instructions
+    const wolleys = await getWolleysByUser(userId);
+    const wolley = wolleys.find(w => w.id === parseInt(wolleyId));
+    
+    if (!wolley) {
+      return res.status(404).json({ error: 'Wolley not found' });
+    }
+
+    // Prepare the messages for OpenAI
+    const messages = [
+      {
+        role: 'system',
+        content: `You are ${wolley.name}. ${wolley.instructions}\n\nPlease respond as this AI assistant would, following the given instructions carefully.`
+      },
+      ...chatHistory.map(msg => ({
+        role: msg.role === 'user' ? 'user' : 'assistant',
+        content: msg.content
+      })),
+      {
+        role: 'user',
+        content: message
+      }
+    ];
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o',
+        messages: messages,
+        max_tokens: 1000,
+        temperature: 0.7
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('OpenAI API error:', errorData);
+      return res.status(500).json({ error: 'Failed to generate response' });
+    }
+
+    const data = await response.json();
+    const assistantResponse = data.choices[0].message.content;
+
+    res.json({ response: assistantResponse });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to chat with Wolley' });
+  }
+}
+
+module.exports = { listWolleys, create, update, remove, chat };
