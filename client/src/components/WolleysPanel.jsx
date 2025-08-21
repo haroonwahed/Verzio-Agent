@@ -83,7 +83,7 @@ function WolleysPanel({ onChatClick }) {
       )}
       
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Create New Wolley</h2>
+        <h2 className="text-xl font-semibold">Create New AI Agent</h2>
         <button
           type="button"
           onClick={() => setShowTemplates(true)}
@@ -122,7 +122,7 @@ function WolleysPanel({ onChatClick }) {
           className="bg-primary text-white px-4 py-2 rounded-md hover:bg-indigo-700"
           disabled={loading}
         >
-          {editingId ? (loading ? 'Updating...' : 'Update Wolley') : loading ? 'Creating...' : 'Create Wolley'}
+          {editingId ? (loading ? 'Updating...' : 'Update AI Agent') : loading ? 'Creating...' : 'Create AI Agent'}
         </button>
         {editingId && (
           <button
@@ -139,8 +139,8 @@ function WolleysPanel({ onChatClick }) {
         )}
       </form>
       <hr className="my-4" />
-      <h3 className="text-lg font-semibold">Your Wolleys</h3>
-      {wolleys.length === 0 && <p className="text-gray-500">No Wolleys yet.</p>}
+      <h3 className="text-lg font-semibold">Your AI Agents</h3>
+      {wolleys.length === 0 && <p className="text-gray-500">No AI Agents yet.</p>}
       <ul className="space-y-2">
         {wolleys.map((wolley) => (
           <li key={wolley.id} className="border rounded-md overflow-hidden hover:shadow-md transition-shadow">
