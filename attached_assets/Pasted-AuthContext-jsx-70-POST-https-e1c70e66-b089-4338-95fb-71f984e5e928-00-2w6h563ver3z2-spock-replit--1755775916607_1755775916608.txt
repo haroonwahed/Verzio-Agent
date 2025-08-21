@@ -1,0 +1,90 @@
+AuthContext.jsx:70  POST https://e1c70e66-b089-4338-95fb-71f984e5e928-00-2w6h563ver3z2.spock.replit.dev:5173/api/auth/signup 404 (Not Found)
+dispatchXhrRequest @ axios.js?v=a0317684:1683
+xhr @ axios.js?v=a0317684:1563
+dispatchRequest @ axios.js?v=a0317684:2038
+_request @ axios.js?v=a0317684:2259
+request @ axios.js?v=a0317684:2150
+httpMethod @ axios.js?v=a0317684:2288
+wrap @ axios.js?v=a0317684:8
+signup @ AuthContext.jsx:70
+handleSubmit @ Signup.jsx:32
+callCallback2 @ chunk-4DNEET2Z.js?v=a0317684:3674
+invokeGuardedCallbackDev @ chunk-4DNEET2Z.js?v=a0317684:3699
+invokeGuardedCallback @ chunk-4DNEET2Z.js?v=a0317684:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-4DNEET2Z.js?v=a0317684:3736
+executeDispatch @ chunk-4DNEET2Z.js?v=a0317684:7016
+processDispatchQueueItemsInOrder @ chunk-4DNEET2Z.js?v=a0317684:7036
+processDispatchQueue @ chunk-4DNEET2Z.js?v=a0317684:7045
+dispatchEventsForPlugins @ chunk-4DNEET2Z.js?v=a0317684:7053
+(anonymous) @ chunk-4DNEET2Z.js?v=a0317684:7177
+batchedUpdates$1 @ chunk-4DNEET2Z.js?v=a0317684:18941
+batchedUpdates @ chunk-4DNEET2Z.js?v=a0317684:3579
+dispatchEventForPluginEventSystem @ chunk-4DNEET2Z.js?v=a0317684:7176
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-4DNEET2Z.js?v=a0317684:5478
+dispatchEvent @ chunk-4DNEET2Z.js?v=a0317684:5472
+dispatchDiscreteEvent @ chunk-4DNEET2Z.js?v=a0317684:5449
+AuthContext.jsx:80 Signup error: <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST /auth/signup</pre>
+</body>
+</html>
+
+signup @ AuthContext.jsx:80
+await in signup
+handleSubmit @ Signup.jsx:32
+callCallback2 @ chunk-4DNEET2Z.js?v=a0317684:3674
+invokeGuardedCallbackDev @ chunk-4DNEET2Z.js?v=a0317684:3699
+invokeGuardedCallback @ chunk-4DNEET2Z.js?v=a0317684:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-4DNEET2Z.js?v=a0317684:3736
+executeDispatch @ chunk-4DNEET2Z.js?v=a0317684:7016
+processDispatchQueueItemsInOrder @ chunk-4DNEET2Z.js?v=a0317684:7036
+processDispatchQueue @ chunk-4DNEET2Z.js?v=a0317684:7045
+dispatchEventsForPlugins @ chunk-4DNEET2Z.js?v=a0317684:7053
+(anonymous) @ chunk-4DNEET2Z.js?v=a0317684:7177
+batchedUpdates$1 @ chunk-4DNEET2Z.js?v=a0317684:18941
+batchedUpdates @ chunk-4DNEET2Z.js?v=a0317684:3579
+dispatchEventForPluginEventSystem @ chunk-4DNEET2Z.js?v=a0317684:7176
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-4DNEET2Z.js?v=a0317684:5478
+dispatchEvent @ chunk-4DNEET2Z.js?v=a0317684:5472
+dispatchDiscreteEvent @ chunk-4DNEET2Z.js?v=a0317684:5449
+AuthContext.jsx:69 Attempting signup with: {email: 'info@verzio.com', name: 'info'}
+AuthContext.jsx:70  POST https://e1c70e66-b089-4338-95fb-71f984e5e928-00-2w6h563ver3z2.spock.replit.dev:5173/api/auth/signup 404 (Not Found)
+dispatchXhrRequest @ axios.js?v=a0317684:1683
+xhr @ axios.js?v=a0317684:1563
+dispatchRequest @ axios.js?v=a0317684:2038
+_request @ axios.js?v=a0317684:2259
+request @ axios.js?v=a0317684:2150
+httpMethod @ axios.js?v=a0317684:2288
+wrap @ axios.js?v=a0317684:8
+signup @ AuthContext.jsx:70
+handleSubmit @ Signup.jsx:32
+callCallback2 @ chunk-4DNEET2Z.js?v=a0317684:3674
+invokeGuardedCallbackDev @ chunk-4DNEET2Z.js?v=a0317684:3699
+invokeGuardedCallback @ chunk-4DNEET2Z.js?v=a0317684:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-4DNEET2Z.js?v=a0317684:3736
+executeDispatch @ chunk-4DNEET2Z.js?v=a0317684:7016
+processDispatchQueueItemsInOrder @ chunk-4DNEET2Z.js?v=a0317684:7036
+processDispatchQueue @ chunk-4DNEET2Z.js?v=a0317684:7045
+dispatchEventsForPlugins @ chunk-4DNEET2Z.js?v=a0317684:7053
+(anonymous) @ chunk-4DNEET2Z.js?v=a0317684:7177
+batchedUpdates$1 @ chunk-4DNEET2Z.js?v=a0317684:18941
+batchedUpdates @ chunk-4DNEET2Z.js?v=a0317684:3579
+dispatchEventForPluginEventSystem @ chunk-4DNEET2Z.js?v=a0317684:7176
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-4DNEET2Z.js?v=a0317684:5478
+dispatchEvent @ chunk-4DNEET2Z.js?v=a0317684:5472
+dispatchDiscreteEvent @ chunk-4DNEET2Z.js?v=a0317684:5449
+AuthContext.jsx:80 Signup error: <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST /auth/signup</pre>
+</body>
+</html>
