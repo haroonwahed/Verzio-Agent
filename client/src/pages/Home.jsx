@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Home() {
   console.log('Home component rendering...');
-  
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center">
       <div className="text-center text-white px-6">

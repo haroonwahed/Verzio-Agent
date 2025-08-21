@@ -12,6 +12,7 @@ import Dashboard from './pages/Dashboard';
 
 function App() {
   console.log('App component rendering...');
+  console.log('Current location:', window.location.href);
   
   return (
     <div className="App min-h-screen bg-gray-50">

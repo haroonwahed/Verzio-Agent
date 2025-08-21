@@ -7,17 +7,8 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 4000,
-    strictPort: true,
-    hmr: {
-      host: '0.0.0.0',
-      port: 4000
-    },
-    allowedHosts: ['all'],
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-    },
+    strictPort: false,
+    allowedHosts: 'all',
     proxy: {
       '/api': {
         target: 'http://0.0.0.0:8008',
@@ -25,5 +16,9 @@ export default defineConfig({
         secure: false
       }
     }
+  },
+  preview: {
+    host: '0.0.0.0',
+    port: 4000
   }
-})
+});
