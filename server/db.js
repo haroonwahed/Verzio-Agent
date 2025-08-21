@@ -13,6 +13,7 @@ function init() {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         email TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL,
+        name TEXT,
         role TEXT DEFAULT 'user',
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )`
@@ -41,6 +42,13 @@ function init() {
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       )`
     );
+
+    // Migration: Add name column to users table if it doesn't exist
+    db.run(`ALTER TABLE users ADD COLUMN name TEXT`, (err) => {
+      if (err && !err.message.includes('duplicate column name')) {
+        console.error('Migration error:', err);
+      }
+    });
   });
   console.log('Database initialized');
 }
