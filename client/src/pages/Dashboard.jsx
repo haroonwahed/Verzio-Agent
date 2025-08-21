@@ -1,6 +1,6 @@
 
-import React, { useState, useContext } from 'react';
-import { AuthContext } from '../contexts/AuthContext';
+import React, { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import { Bot, MessageSquare, Image, Mic, BarChart3, Rss, Workflow, Settings, LogOut, Plus, Sparkles } from 'lucide-react';
 import TextPanel from '../components/TextPanel';
 import ImagePanel from '../components/ImagePanel';
@@ -13,7 +13,7 @@ import WolleyChat from '../components/WolleyChat';
 import ProfileSettings from '../components/ProfileSettings';
 
 function Dashboard() {
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout } = useAuth();
   const [currentPanel, setCurrentPanel] = useState('text');
   const [selectedWolley, setSelectedWolley] = useState(null);
 
