@@ -73,5 +73,5 @@ if (process.env.NODE_ENV === 'production') {
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server listening on port ${PORT}`);
-  console.log(`Frontend should be accessible on port 5173`);
+  console.log(`Frontend should be accessible on port 5000`);
 });
