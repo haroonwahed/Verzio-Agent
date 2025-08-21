@@ -33,7 +33,7 @@ function Login() {
         <div className="text-center">
           <Link to="/" className="inline-flex items-center space-x-2 mb-8">
             <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg"></div>
-            <span className="text-2xl font-bold text-gray-900">Verzio</span>
+            <span className="text-2xl font-bold text-gray-900">Creeator</span>
           </Link>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome back</h2>
           <p className="text-gray-600">Sign in to your account to continue creating</p>

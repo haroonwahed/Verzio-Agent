@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { Bot, MessageSquare, Image, Mic, BarChart3, Rss, Workflow, Settings, LogOut, Plus, Sparkles } from 'lucide-react';
+import { Bot, MessageSquare, Image, Mic, BarChart3, Rss, Workflow, Settings, LogOut, Plus, Sparkles, Layers } from 'lucide-react';
 import TextPanel from '../components/TextPanel';
 import ImagePanel from '../components/ImagePanel';
 import VoicePanel from '../components/VoicePanel';
@@ -10,6 +10,7 @@ import FeedsPanel from '../components/FeedsPanel';
 import WorkflowBuilder from '../components/WorkflowBuilder';
 import WolleysPanel from '../components/WolleysPanel';
 import WolleyChat from '../components/WolleyChat';
+import IntegrationsPanel from '../components/IntegrationsPanel';
 import ProfileSettings from '../components/ProfileSettings';
 
 function Dashboard() {
@@ -23,6 +24,7 @@ function Dashboard() {
     { id: 'voice', label: 'Generate Voice', icon: Mic, color: 'text-indigo-600' },
     { id: 'seo', label: 'SEO Analysis', icon: BarChart3, color: 'text-violet-600' },
     { id: 'feeds', label: 'Product Feeds', icon: Rss, color: 'text-purple-500' },
+    { id: 'integrations', label: 'Integrations', icon: Layers, color: 'text-green-600' },
   ];
 
   const handleWolleyChat = (wolley) => {
@@ -41,6 +43,7 @@ function Dashboard() {
       case 'voice': return <VoicePanel />;
       case 'seo': return <SeoPanel />;
       case 'feeds': return <FeedsPanel />;
+      case 'integrations': return <IntegrationsPanel />;
       case 'workflows': return <WorkflowBuilder />;
       case 'wolleys': return <WolleysPanel onChatClick={handleWolleyChat} />;
       case 'settings': return <ProfileSettings />;
@@ -66,7 +69,7 @@ function Dashboard() {
               </div>
             </div>
             <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Verzio</h1>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Creeator</h1>
               <p className="text-xs text-gray-500">AI Content Studio</p>
             </div>
           </div>

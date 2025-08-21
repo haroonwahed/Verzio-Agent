@@ -1,8 +1,8 @@
-# Verzio – AI‑powered Content Creation Platform
+# Creeator – AI‑powered Content Creation Platform
 
 ## Overview
 
-Verzio is a full‑stack web application inspired by Brainvine.ai.  It provides a unified dashboard for generating text, images, voice, and SEO‑optimized content, and supports agent‑based workflow building.  The project is split into two major parts:
+Creeator is a full‑stack web application inspired by Brainvine.ai.  It provides a unified dashboard for generating text, images, voice, and SEO‑optimized content, and supports agent‑based workflow building.  The project is split into two major parts:
 
 * **client/** – a React front‑end using Vite, Tailwind CSS, and Radix UI.  It contains pages for authentication and a dashboard with multiple panels (**Text**, **Image**, **Voice**, **SEO**, **Feeds**, and **Workflow Builder**).  React Flow powers a drag‑and‑drop interface for assembling agent workflows, and the Feeds panel lets you generate multiple product descriptions at once.
 * **server/** – a Node.js back‑end built on Express with JWT‑based authentication.  It exposes RESTful routes for text generation, image manipulation, voice synthesis, SEO analysis, **bulk product description generation (feeds)**, and workflow execution.  A lightweight SQLite database stores users and saved workflows.  The server is structured with separate route and controller modules.

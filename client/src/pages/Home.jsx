@@ -34,7 +34,7 @@ function Home() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg"></div>
-              <span className="text-xl font-bold text-gray-900">Verzio</span>
+              <span className="text-xl font-bold text-gray-900">Creeator</span>
             </div>
             <div className="flex items-center space-x-4">
               <Link 
@@ -118,7 +118,7 @@ function Home() {
             Ready to transform your content creation?
           </h2>
           <p className="text-lg text-purple-100 mb-8">
-            Join thousands of creators who are already using Verzio to generate amazing content.
+            Join thousands of creators who are already using Creeator to generate amazing content.
           </p>
           <Link 
             to="/signup" 
