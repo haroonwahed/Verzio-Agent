@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { MessageCircle, Send, Bot } from 'lucide-react';
+import { MessageCircle, Send, Bot, Download } from 'lucide-react';
 
 /**
  * WolleyChat allows users to chat with their created Wolleys.
@@ -36,15 +36,40 @@ function WolleyChat({ preSelectedWolley }) {
     }
   }
 
-  function handleWolleySelect(wolley) {
+  async function handleWolleySelect(wolley) {
     setSelectedWolley(wolley);
-    setMessages([
-      {
-        role: 'system',
-        content: `Hello! I'm ${wolley.name}. ${wolley.instructions}`,
-        timestamp: new Date()
+    
+    // Load chat history
+    try {
+      const response = await axios.get(`/wolleys/${wolley.id}/history`);
+      const history = response.data.history || [];
+      
+      if (history.length === 0) {
+        // First time chatting with this Wolley
+        setMessages([
+          {
+            role: 'system',
+            content: `Hello! I'm ${wolley.name}. ${wolley.instructions}`,
+            timestamp: new Date()
+          }
+        ]);
+      } else {
+        // Load existing history
+        setMessages(history.map(msg => ({
+          ...msg,
+          timestamp: new Date(msg.created_at)
+        })));
       }
-    ]);
+    } catch (err) {
+      console.error('Failed to load chat history:', err);
+      setMessages([
+        {
+          role: 'system',
+          content: `Hello! I'm ${wolley.name}. ${wolley.instructions}`,
+          timestamp: new Date()
+        }
+      ]);
+    }
   }
 
   async function handleSendMessage(e) {
@@ -58,14 +83,14 @@ function WolleyChat({ preSelectedWolley }) {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const messageText = inputMessage.trim();
     setInputMessage('');
     setLoading(true);
 
     try {
       const response = await axios.post('/wolleys/chat', {
         wolleyId: selectedWolley.id,
-        message: inputMessage.trim(),
-        chatHistory: messages.filter(m => m.role !== 'system')
+        message: messageText
       });
 
       const assistantMessage = {
@@ -86,6 +111,54 @@ function WolleyChat({ preSelectedWolley }) {
     } finally {
       setLoading(false);
     }
+  }
+
+  async function handleClearHistory() {
+    if (!selectedWolley || !window.confirm('Are you sure you want to clear all chat history with this Wolley?')) return;
+    
+    try {
+      await axios.delete(`/wolleys/${selectedWolley.id}/history`);
+      setMessages([
+        {
+          role: 'system',
+          content: `Hello! I'm ${selectedWolley.name}. ${selectedWolley.instructions}`,
+          timestamp: new Date()
+        }
+      ]);
+    } catch (err) {
+      console.error('Failed to clear history:', err);
+    }
+  }
+
+  function handleExportChat() {
+    if (!selectedWolley || messages.length <= 1) return;
+
+    const chatData = messages
+      .filter(msg => msg.role !== 'system')
+      .map(msg => ({
+        role: msg.role,
+        content: msg.content,
+        timestamp: msg.timestamp.toLocaleString()
+      }));
+
+    const exportData = {
+      wolleyName: selectedWolley.name,
+      exportDate: new Date().toLocaleString(),
+      messages: chatData
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+      type: 'application/json'
+    });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${selectedWolley.name}-chat-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 
   if (wolleys.length === 0) {
@@ -134,12 +207,28 @@ function WolleyChat({ preSelectedWolley }) {
                 <p className="text-sm text-gray-600">AI Assistant</p>
               </div>
             </div>
-            <button
-              onClick={() => setSelectedWolley(null)}
-              className="px-3 py-1 text-sm border rounded-md hover:bg-gray-50"
-            >
-              Back to Wolleys
-            </button>
+            <div className="flex space-x-2">
+              <button
+                onClick={handleExportChat}
+                className="px-3 py-1 text-sm border rounded-md hover:bg-gray-50 text-blue-600"
+                disabled={messages.length <= 1}
+              >
+                <Download className="h-3 w-3 inline mr-1" />
+                Export
+              </button>
+              <button
+                onClick={handleClearHistory}
+                className="px-3 py-1 text-sm border rounded-md hover:bg-gray-50 text-red-600"
+              >
+                Clear History
+              </button>
+              <button
+                onClick={() => setSelectedWolley(null)}
+                className="px-3 py-1 text-sm border rounded-md hover:bg-gray-50"
+              >
+                Back to Wolleys
+              </button>
+            </div>
           </div>
 
           {/* Messages */}

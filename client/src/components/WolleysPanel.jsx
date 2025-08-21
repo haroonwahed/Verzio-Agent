@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Layers, Plus, Trash2, Edit } from 'lucide-react';
+import { Layers, Plus, Trash2, Edit, Sparkles } from 'lucide-react';
+import WolleyTemplates from './WolleyTemplates';
 
 /**
  * WolleysPanel allows users to create and manage "Wolleys" – AI co‑workers with
@@ -14,6 +15,7 @@ function WolleysPanel({ onChatClick }) {
   const [instructions, setInstructions] = useState('');
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showTemplates, setShowTemplates] = useState(false);
 
   // Fetch existing Wolleys on mount
   useEffect(() => {
@@ -65,8 +67,33 @@ function WolleysPanel({ onChatClick }) {
     }
   }
 
+  function handleTemplateSelect(template) {
+    setName(template.name);
+    setInstructions(template.instructions);
+    setShowTemplates(false);
+  }
+
   return (
     <div className="p-4 space-y-4">
+      {showTemplates && (
+        <WolleyTemplates
+          onTemplateSelect={handleTemplateSelect}
+          onClose={() => setShowTemplates(false)}
+        />
+      )}
+      
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-semibold">Create New Wolley</h2>
+        <button
+          type="button"
+          onClick={() => setShowTemplates(true)}
+          className="flex items-center space-x-2 text-primary hover:text-indigo-700"
+        >
+          <Sparkles className="h-4 w-4" />
+          <span>Use Template</span>
+        </button>
+      </div>
+      
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">Name</label>

@@ -1,4 +1,4 @@
-const { createWolley, getWolleysByUser, updateWolley, deleteWolley } = require('../db');
+const { createWolley, getWolleysByUser, updateWolley, deleteWolley, saveChatMessage, getChatHistory, clearChatHistory } = require('../db');
 
 // Get all Wolleys for the authenticated user
 async function listWolleys(req, res) {
@@ -62,7 +62,7 @@ async function remove(req, res) {
 async function chat(req, res) {
   try {
     const userId = req.user.userId;
-    const { wolleyId, message, chatHistory = [] } = req.body;
+    const { wolleyId, message } = req.body;
     
     if (!message) {
       return res.status(400).json({ error: 'message is required' });
@@ -76,6 +76,17 @@ async function chat(req, res) {
       return res.status(404).json({ error: 'Wolley not found' });
     }
 
+    // Save user message to history
+    await saveChatMessage({ 
+      userId, 
+      wolleyId: parseInt(wolleyId), 
+      role: 'user', 
+      content: message 
+    });
+
+    // Get chat history
+    const chatHistory = await getChatHistory(userId, parseInt(wolleyId));
+
     // Prepare the messages for OpenAI
     const messages = [
       {
@@ -83,13 +94,9 @@ async function chat(req, res) {
         content: `You are ${wolley.name}. ${wolley.instructions}\n\nPlease respond as this AI assistant would, following the given instructions carefully.`
       },
       ...chatHistory.map(msg => ({
-        role: msg.role === 'user' ? 'user' : 'assistant',
+        role: msg.role,
         content: msg.content
-      })),
-      {
-        role: 'user',
-        content: message
-      }
+      }))
     ];
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -115,6 +122,14 @@ async function chat(req, res) {
     const data = await response.json();
     const assistantResponse = data.choices[0].message.content;
 
+    // Save assistant response to history
+    await saveChatMessage({ 
+      userId, 
+      wolleyId: parseInt(wolleyId), 
+      role: 'assistant', 
+      content: assistantResponse 
+    });
+
     res.json({ response: assistantResponse });
   } catch (err) {
     console.error(err);
@@ -122,4 +137,30 @@ async function chat(req, res) {
   }
 }
 
-module.exports = { listWolleys, create, update, remove, chat };
+// Get chat history for a Wolley
+async function getChatHistoryForWolley(req, res) {
+  try {
+    const userId = req.user.userId;
+    const wolleyId = parseInt(req.params.wolleyId);
+    const history = await getChatHistory(userId, wolleyId);
+    res.json({ history });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch chat history' });
+  }
+}
+
+// Clear chat history for a Wolley
+async function clearChatHistoryForWolley(req, res) {
+  try {
+    const userId = req.user.userId;
+    const wolleyId = parseInt(req.params.wolleyId);
+    await clearChatHistory(userId, wolleyId);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to clear chat history' });
+  }
+}
+
+module.exports = { listWolleys, create, update, remove, chat, getChatHistoryForWolley, clearChatHistoryForWolley };

@@ -49,6 +49,20 @@ function init() {
         console.error('Migration error:', err);
       }
     });
+
+    // Create the chat_messages table
+    db.run(`
+      CREATE TABLE IF NOT EXISTS chat_messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        wolley_id INTEGER NOT NULL,
+        role TEXT NOT NULL,
+        content TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users (id),
+        FOREIGN KEY (wolley_id) REFERENCES wolleys (id) ON DELETE CASCADE
+      )
+    `);
   });
   console.log('Database initialized');
 }
@@ -147,6 +161,46 @@ function deleteWolley(id, userId) {
   });
 }
 
+// Chat History Functions
+function saveChatMessage({ userId, wolleyId, role, content }) {
+  return new Promise((resolve, reject) => {
+    db.run(
+      'INSERT INTO chat_messages (user_id, wolley_id, role, content) VALUES (?, ?, ?, ?)',
+      [userId, wolleyId, role, content],
+      function (err) {
+        if (err) return reject(err);
+        resolve({ id: this.lastID, userId, wolleyId, role, content });
+      }
+    );
+  });
+}
+
+function getChatHistory({ userId, wolleyId }) {
+  return new Promise((resolve, reject) => {
+    db.all(
+      'SELECT * FROM chat_messages WHERE user_id = ? AND wolley_id = ? ORDER BY created_at ASC',
+      [userId, wolleyId],
+      (err, rows) => {
+        if (err) return reject(err);
+        resolve(rows);
+      }
+    );
+  });
+}
+
+function deleteChatHistory({ userId, wolleyId }) {
+  return new Promise((resolve, reject) => {
+    db.run(
+      'DELETE FROM chat_messages WHERE user_id = ? AND wolley_id = ?',
+      [userId, wolleyId],
+      function (err) {
+        if (err) return reject(err);
+        resolve({ message: 'Chat history deleted successfully' });
+      }
+    );
+  });
+}
+
 module.exports = {
   db,
   init,
@@ -159,4 +213,8 @@ module.exports = {
   getWolleysByUser,
   updateWolley,
   deleteWolley,
+  // Chat History API helpers
+  saveChatMessage,
+  getChatHistory,
+  deleteChatHistory,
 };
