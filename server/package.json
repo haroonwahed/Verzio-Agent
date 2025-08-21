@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "PORT=8008 node index.js",
-    "dev": "concurrently \"PORT=8008 npm run start --prefix server\" \"npm run dev --prefix client\"",
+    "dev": "nodemon index.js",
     "migrate": "node db.js"
   },
   "keywords": [],

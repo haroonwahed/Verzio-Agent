@@ -6,7 +6,7 @@
     "server"
   ],
   "scripts": {
-    "dev": "cd server && PORT=8008 npm run dev"
+    "dev": "concurrently \"cd server && PORT=8008 npm run dev\" \"cd client && npm run dev\""
   },
   "devDependencies": {
     "concurrently": "^8.2.1"
