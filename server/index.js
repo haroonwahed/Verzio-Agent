@@ -22,7 +22,7 @@ const libraryRoutes = require('./routes/library');
 const analyticsRoutes = require('./routes/analytics');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 
 // Initialize SQLite tables before setting up routes
 try {
