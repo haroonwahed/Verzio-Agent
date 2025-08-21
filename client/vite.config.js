@@ -9,6 +9,9 @@ export default defineConfig({
     hmr: {
       port: 4000
     },
+    allowedHosts: [
+      'all'
+    ],
     proxy: {
       '/api': {
         target: 'http://0.0.0.0:8008',
