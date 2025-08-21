@@ -3,7 +3,7 @@ const { createWolley, getWolleysByUser, updateWolley, deleteWolley } = require('
 // Get all Wolleys for the authenticated user
 async function listWolleys(req, res) {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const wolleys = await getWolleysByUser(userId);
     res.json({ wolleys });
   } catch (err) {
@@ -15,7 +15,7 @@ async function listWolleys(req, res) {
 // Create a new Wolley
 async function create(req, res) {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const { name, instructions } = req.body;
     if (!name || !instructions) {
       return res.status(400).json({ error: 'name and instructions are required' });
@@ -31,7 +31,7 @@ async function create(req, res) {
 // Update an existing Wolley
 async function update(req, res) {
   try {
-    const userId = req.user.id;
+    const userId = req.user.userId;
     const id = parseInt(req.params.id, 10);
     const { name, instructions } = req.body;
     if (!name || !instructions) {

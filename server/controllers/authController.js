@@ -29,7 +29,13 @@ const signup = async (req, res) => {
     }
 
     // Check if user already exists
-    const existingUser = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
+    const existingUser = await new Promise((resolve, reject) => {
+      db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
+        if (err) reject(err);
+        else resolve(row);
+      });
+    });
+    
     if (existingUser) {
       console.log('User already exists:', email);
       return res.status(400).json({ error: 'User already exists' });
@@ -39,8 +45,15 @@ const signup = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
-    const stmt = db.prepare('INSERT INTO users (email, password, name) VALUES (?, ?, ?)');
-    const result = stmt.run(email, hashedPassword, name);
+    const result = await new Promise((resolve, reject) => {
+      db.run('INSERT INTO users (email, password, name) VALUES (?, ?, ?)', 
+        [email, hashedPassword, name], 
+        function(err) {
+          if (err) reject(err);
+          else resolve({ lastInsertRowid: this.lastID });
+        }
+      );
+    });
 
     console.log('User created successfully:', { id: result.lastInsertRowid, email });
 
@@ -76,7 +89,13 @@ const login = async (req, res) => {
     }
 
     // Get user from database
-    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
+    const user = await new Promise((resolve, reject) => {
+      db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
+        if (err) reject(err);
+        else resolve(row);
+      });
+    });
+    
     if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
@@ -118,7 +137,13 @@ const changePassword = async (req, res) => {
     }
 
     // Get user from database
-    const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
+    const user = await new Promise((resolve, reject) => {
+      db.get('SELECT * FROM users WHERE id = ?', [userId], (err, row) => {
+        if (err) reject(err);
+        else resolve(row);
+      });
+    });
+    
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -133,8 +158,15 @@ const changePassword = async (req, res) => {
     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
     // Update password in database
-    const stmt = db.prepare('UPDATE users SET password = ? WHERE id = ?');
-    stmt.run(hashedNewPassword, userId);
+    await new Promise((resolve, reject) => {
+      db.run('UPDATE users SET password = ? WHERE id = ?', 
+        [hashedNewPassword, userId], 
+        function(err) {
+          if (err) reject(err);
+          else resolve();
+        }
+      );
+    });
 
     res.json({ message: 'Password changed successfully' });
   } catch (error) {
@@ -154,7 +186,13 @@ const getMe = async (req, res) => {
       });
     }
 
-    const user = db.prepare('SELECT id, email, name FROM users WHERE id = ?').get(userId);
+    const user = await new Promise((resolve, reject) => {
+      db.get('SELECT id, email, name FROM users WHERE id = ?', [userId], (err, row) => {
+        if (err) reject(err);
+        else resolve(row);
+      });
+    });
+    
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
