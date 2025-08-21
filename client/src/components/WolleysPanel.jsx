@@ -8,7 +8,7 @@ import { Layers, Plus, Trash2, Edit } from 'lucide-react';
  * can create, edit or delete Wolleys. All API calls are authenticated via
  * axios defaults from AuthContext.
  */
-function WolleysPanel() {
+function WolleysPanel({ onChatClick }) {
   const [wolleys, setWolleys] = useState([]);
   const [name, setName] = useState('');
   const [instructions, setInstructions] = useState('');
@@ -122,6 +122,12 @@ function WolleysPanel() {
               <p className="text-sm text-gray-600 whitespace-pre-wrap">{wolley.instructions}</p>
             </div>
             <div className="flex space-x-2">
+              <button
+                onClick={() => onChatClick && onChatClick(wolley)}
+                className="text-green-600 hover:underline"
+              >
+                Chat
+              </button>
               <button
                 onClick={() => handleEdit(wolley)}
                 className="text-blue-600 hover:underline"

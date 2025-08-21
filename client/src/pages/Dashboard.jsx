@@ -15,6 +15,12 @@ import { LogOut, Type, Image, Mic, Search, Workflow, Rss, Layers, User, MessageC
 function Dashboard() {
   const { logout } = useAuth();
   const [activeTab, setActiveTab] = useState('text');
+  const [selectedWolleyForChat, setSelectedWolleyForChat] = useState(null);
+
+  const handleChatClick = (wolley) => {
+    setSelectedWolleyForChat(wolley);
+    setActiveTab('wolley-chat');
+  };
 
   const tabs = [
     { id: 'text', label: 'Text', icon: Type, component: TextPanel },
@@ -23,8 +29,8 @@ function Dashboard() {
     { id: 'seo', label: 'SEO', icon: Search, component: SeoPanel },
     { id: 'workflows', label: 'Workflows', icon: Workflow, component: WorkflowBuilder },
     { id: 'feeds', label: 'Feeds', icon: Rss, component: FeedsPanel },
-    { id: 'wolleys', label: 'Wolleys', icon: Layers, component: WolleysPanel },
-    { id: 'wolley-chat', label: 'Wolley Chat', icon: MessageCircle, component: WolleyChat },
+    { id: 'wolleys', label: 'Wolleys', icon: Layers, component: WolleysPanel, props: { onChatClick: handleChatClick } },
+    { id: 'wolley-chat', label: 'Wolley Chat', icon: MessageCircle, component: WolleyChat, props: { preSelectedWolley: selectedWolleyForChat } },
     { id: 'profile', label: 'Profile', icon: User, component: ProfileSettings },
   ];
 
@@ -74,7 +80,7 @@ function Dashboard() {
           {tabs.map((tab) => (
             <Tabs.Content key={tab.id} value={tab.id} className="focus:outline-none">
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <tab.component />
+                <tab.component {...(tab.props || {})} />
               </div>
             </Tabs.Content>
           ))}

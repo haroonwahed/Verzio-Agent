@@ -8,7 +8,7 @@ import { MessageCircle, Send, Bot } from 'lucide-react';
  * Users can select a Wolley and have a conversation where the AI
  * responds according to the Wolley's custom instructions.
  */
-function WolleyChat() {
+function WolleyChat({ preSelectedWolley }) {
   const [wolleys, setWolleys] = useState([]);
   const [selectedWolley, setSelectedWolley] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -19,6 +19,13 @@ function WolleyChat() {
   useEffect(() => {
     fetchWolleys();
   }, []);
+
+  // Auto-select Wolley if preSelectedWolley is provided
+  useEffect(() => {
+    if (preSelectedWolley && !selectedWolley) {
+      handleWolleySelect(preSelectedWolley);
+    }
+  }, [preSelectedWolley, selectedWolley]);
 
   async function fetchWolleys() {
     try {
