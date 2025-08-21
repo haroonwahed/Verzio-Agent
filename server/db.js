@@ -7,90 +7,42 @@ const db = new sqlite3.Database(dbPath);
 
 // Initialize tables if they don't exist
 function init() {
-  try {
-    db.serialize(() => {
-      // Drop and recreate users table to ensure correct schema
-      db.run(`DROP TABLE IF EXISTS users`);
-      db.run(
-        `CREATE TABLE users (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          email TEXT UNIQUE NOT NULL,
-          password TEXT NOT NULL,
-          name TEXT NOT NULL,
-          role TEXT DEFAULT 'user',
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )`,
-        (err) => {
-          if (err) {
-            console.error('Error creating users table:', err);
-          } else {
-            console.log('Users table created successfully with name column');
-          }
-        }
-      );
-      db.run(
-        `CREATE TABLE IF NOT EXISTS workflows (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          user_id INTEGER NOT NULL,
-          name TEXT NOT NULL,
-          definition TEXT NOT NULL,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-        )`,
-        (err) => {
-          if (err) {
-            console.error('Error creating workflows table:', err);
-          } else {
-            console.log('Workflows table created successfully');
-          }
-        }
-      );
+  db.serialize(() => {
+    db.run(
+      `CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        role TEXT DEFAULT 'user',
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )`
+    );
+    db.run(
+      `CREATE TABLE IF NOT EXISTS workflows (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        name TEXT NOT NULL,
+        definition TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+      )`
+    );
 
-      // Table for Wolleys (AI co‑worker configurations)
-      db.run(
-        `CREATE TABLE IF NOT EXISTS wolleys (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          user_id INTEGER NOT NULL,
-          name TEXT NOT NULL,
-          instructions TEXT NOT NULL,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-        )`,
-        (err) => {
-          if (err) {
-            console.error('Error creating wolleys table:', err);
-          } else {
-            console.log('Wolleys table created successfully');
-          }
-        }
-      );
-
-      // Table for Library Items (saved content)
-      db.run(
-        `CREATE TABLE IF NOT EXISTS library_items (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          user_id INTEGER NOT NULL,
-          title TEXT NOT NULL,
-          content TEXT NOT NULL,
-          type TEXT NOT NULL,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-        )`,
-        (err) => {
-          if (err) {
-            console.error('Error creating library_items table:', err);
-          } else {
-            console.log('Library items table created successfully');
-          }
-        }
-      );
-    });
-    console.log('Database initialized with all tables');
-  } catch (error) {
-    console.error('Error initializing database:', error);
-  }
+    // Table for Wolleys (AI co‑worker configurations)
+    db.run(
+      `CREATE TABLE IF NOT EXISTS wolleys (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        name TEXT NOT NULL,
+        instructions TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+      )`
+    );
+  });
+  console.log('Database initialized');
 }
 
 // Promise‑based helper functions
@@ -103,14 +55,14 @@ function getUserByEmail(email) {
   });
 }
 
-function createUser({ email, password, name, role = 'user' }) {
+function createUser({ email, password, role = 'user' }) {
   return new Promise((resolve, reject) => {
     db.run(
-      'INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)',
-      [email, password, name, role],
+      'INSERT INTO users (email, password, role) VALUES (?, ?, ?)',
+      [email, password, role],
       function (err) {
         if (err) return reject(err);
-        resolve({ id: this.lastID, email, name, role });
+        resolve({ id: this.lastID, email, role });
       }
     );
   });

@@ -4,8 +4,8 @@
   "description": "Back‑end for the Verzio content creation platform",
   "main": "index.js",
   "scripts": {
-    "start": "PORT=8008 node index.js",
-    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "dev": "concurrently \"npm run start --prefix server\" \"npm run dev --prefix client\"",
     "migrate": "node db.js"
   },
   "keywords": [],
