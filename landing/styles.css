@@ -1,0 +1,111 @@
+
+/* Landing Page Custom Styles */
+/* Most styles are handled by Tailwind CSS in the HTML file */
+
+/* Custom scrollbar for template gallery */
+.overflow-x-auto::-webkit-scrollbar {
+  height: 6px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 3px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Enhanced focus states for better accessibility */
+a:focus-visible,
+button:focus-visible,
+details summary:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Smooth hover transitions for glass elements */
+.glass:hover {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Ensure proper text contrast */
+.text-muted {
+  color: var(--muted);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --muted: #b0b0b0;
+    --fg: #ffffff;
+  }
+  
+  .glass {
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-fade-in-up {
+    animation: none;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  video {
+    display: none;
+  }
+  
+  video + .absolute {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card);
+    border-radius: calc(var(--rad) - 8px);
+  }
+}
+
+/* Print styles */
+@media print {
+  .sticky,
+  #cookie-notice,
+  video,
+  .glass {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  a {
+    text-decoration: underline;
+  }
+}
+
+/* Dark mode support (already implemented but ensuring coverage) */
+@media (prefers-color-scheme: dark) {
+  /* Colors already set in CSS variables, this ensures proper inheritance */
+  * {
+    color-scheme: dark;
+  }
+}
