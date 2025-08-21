@@ -1,4 +1,3 @@
-
 const express = require('express');
 const { getAnalytics } = require('../controllers/analyticsController');
 const { authenticate } = require('../middleware/auth');
