@@ -1,0 +1,61 @@
+“Fix the layout jump that only corrects after a resize (e.g., when DevTools is open). Do this with pure CSS + Tailwind, not JS height math. Don’t change page content or routes—only wrappers and styles.
+
+Global fixes
+
+Ensure these rules exist once (e.g., in src/styles/theme-pro.css imported by main.jsx):
+
+/* global layout baseline */
+html, body, #root { height: 100%; }
+.app-shell { min-height: 100dvh; }            /* use dynamic viewport unit */
+.sidebar { width: 18rem; }                     /* 288px */
+.content { min-width: 0; }                     /* prevents overflow with flex */
+.two-pane { display:grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+
+
+Wrap the whole app once with a stable shell
+
+In the root layout component (where the sidebar + main live), replace any ad‑hoc wrappers or h-screen/100vh with:
+
+export default function AppShell({ sidebar, children }) {
+  return (
+    <div className="app-shell bg-gray-50 flex">
+      <aside className="sidebar shrink-0 sticky top-0 h-dvh overflow-y-auto">
+        {sidebar}
+      </aside>
+      <main className="content flex-1 overflow-x-hidden px-6 py-6">
+        {children}
+      </main>
+    </div>
+  );
+}
+
+
+Use <AppShell sidebar={<Sidebar/>}>…</AppShell> around your existing pages.
+
+Remove JS height calculations
+
+Search the codebase for any of:
+
+window.innerHeight, useWindowSize, style={{ height: … }}, h-screen, 100vh.
+
+Replace them with min-h-dvh, h-dvh, flex/grid, and overflow-auto on scrollable panes. Example:
+
+- <div style={{ height: window.innerHeight - 80 }}>
++ <div className="h-dvh overflow-auto">
+
+
+Gutter + spacing consistency
+
+Add gap-6 (24px) between sidebar and content by putting px-6 on the main and keeping the sidebar width fixed.
+
+For split editors, wrap in .two-pane rather than ad‑hoc widths.
+
+Defensive tweaks
+
+Ensure the top-level container uses min-h-dvh (not h-screen).
+
+Keep the sidebar sticky top-0 h-dvh so it doesn’t push content down at large widths.
+
+Do not rely on resize listeners for first-render layout.
+
+After these changes, the page must look identical with DevTools open or closed, with no big blank space above the content.”**
