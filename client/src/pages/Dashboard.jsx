@@ -184,8 +184,10 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Labs Features */}
-      <LabsFloatingButton />
+      {/* Labs floating button - only show if features enabled */}
+      {(import.meta.env.VITE_FEATURE_CREWS === 'true' || import.meta.env.VITE_FEATURE_PLANNER === 'true') && (
+        <LabsFloatingButton />
+      )}
     </div>
   )
 }

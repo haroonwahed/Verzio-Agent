@@ -1,46 +1,55 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { TestTube, Users, Calendar } from 'lucide-react';
 
-function LabsNav() {
+export default function LabsNav() {
   const location = useLocation();
-  
+
+  const isActive = (path) => location.pathname.startsWith(path);
+
   return (
-    <div className="labs-nav bg-white/5 backdrop-blur-lg border border-white/10 rounded-xl p-4 mb-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <div className="w-6 h-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-            <span className="text-white text-xs font-bold">L</span>
+    <div className="labs-nav bg-white border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center space-x-8">
+            <Link to="/" className="flex items-center space-x-2">
+              <TestTube className="h-6 w-6 text-purple-600" />
+              <span className="font-bold text-xl">Labs</span>
+              <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Beta</span>
+            </Link>
           </div>
-          <span className="font-semibold text-white">Labs</span>
-          <span className="bg-yellow-500/20 text-yellow-300 px-2 py-1 rounded-md text-xs">BETA</span>
+
+          <nav className="flex space-x-6">
+            {import.meta.env.VITE_FEATURE_CREWS === 'true' && (
+              <Link
+                to="/labs/crews"
+                className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium ${
+                  isActive('/labs/crews')
+                    ? 'bg-purple-100 text-purple-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                }`}
+              >
+                <Users className="h-4 w-4" />
+                <span>Crews</span>
+              </Link>
+            )}
+
+            {import.meta.env.VITE_FEATURE_PLANNER === 'true' && (
+              <Link
+                to="/labs/planner/board"
+                className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium ${
+                  isActive('/labs/planner')
+                    ? 'bg-purple-100 text-purple-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                }`}
+              >
+                <Calendar className="h-4 w-4" />
+                <span>Planner</span>
+              </Link>
+            )}
+          </nav>
         </div>
-        
-        <nav className="flex items-center space-x-1">
-          <Link 
-            to="/labs/crews" 
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              location.pathname.startsWith('/labs/crews') 
-                ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' 
-                : 'text-gray-300 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            Crews
-          </Link>
-          <Link 
-            to="/labs/planner/board" 
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              location.pathname.startsWith('/labs/planner') 
-                ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' 
-                : 'text-gray-300 hover:text-white hover:bg-white/5'
-            }`}
-          >
-            Planner
-          </Link>
-        </nav>
       </div>
     </div>
   );
 }
-
-export default LabsNav;
