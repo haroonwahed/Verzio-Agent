@@ -55,3 +55,5 @@ function LabsNav() {
     </div>
   );
 }
+
+export default LabsNav;
