@@ -736,9 +736,6 @@ function Home() {
 }
 
 export default Home;
-import React from 'react';
-import { ArrowRight, Play, CheckCircle, Bot, Workflow, Calendar, BarChart3 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 export default function Home() {
   const features = [

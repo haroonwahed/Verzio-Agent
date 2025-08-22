@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Bot, Wand2, FileText, Image } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import Card from '../components/ui/Card';
-import SectionTitle from '../components/ui/SectionTitle';
+import Card from '../../components/ui/Card';
+import SectionTitle from '../../components/ui/SectionTitle';
 
 export default function NewCrew() {
   const [selectedTemplate, setSelectedTemplate] = useState('');
