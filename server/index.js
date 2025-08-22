@@ -18,7 +18,7 @@ const feedsRoutes = require('./routes/feeds');
 const wolleysRoutes = require('./routes/wolleys');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 5000;
 
 // Initialize SQLite tables before setting up routes
 try {
