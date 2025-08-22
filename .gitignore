@@ -13,3 +13,10 @@ server/data.db
 
 # Misc
 .DS_Store
+# Ignore local SQLite DBs
+server/*.db
+server/*.db-journal
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
