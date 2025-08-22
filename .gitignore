@@ -27,3 +27,10 @@ server/*.db-journal
 server/.env
 *.sqlite*
 server/*.db*
+
+# env & db
+.env
+*.env
+server/.env
+*.sqlite*
+server/*.db*
