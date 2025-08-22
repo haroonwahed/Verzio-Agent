@@ -30,8 +30,10 @@ try {
 }
 
 // Seed Labs data if features are enabled
-if (process.env.FEATURE_CREWS === 'true' || process.env.FEATURE_PLANNER === 'true') {
-  const seedLabs = require('./seed-labs');
+// Note: Ensure VITE_FEATURE_CREWS and VITE_FEATURE_PLANNER are correctly set in your .env file
+if (process.env.VITE_FEATURE_CREWS === 'true' || process.env.VITE_FEATURE_PLANNER === 'true') {
+  // Assuming seed-labs.js is in the root or correctly referenced
+  const seedLabs = require('./seed-labs'); 
   seedLabs();
 }
 
@@ -51,22 +53,25 @@ app.get('/', (req, res) => {
   });
 });
 
-// API routes
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/text', textRoutes);
 app.use('/api/image', imageRoutes);
 app.use('/api/voice', voiceRoutes);
 app.use('/api/seo', seoRoutes);
 app.use('/api/feeds', feedsRoutes);
-app.use('/api/workflows', workflowRoutes);
 app.use('/api/wolleys', wolleysRoutes);
+app.use('/api/workflows', workflowRoutes);
 
-// Labs feature routes (feature flag gated)
-if (process.env.FEATURE_CREWS === 'true') {
-  app.use('/api/crews', require('./modules/crews/routes'));
+// Labs routes (conditionally enabled)
+if (process.env.VITE_FEATURE_CREWS === 'true') {
+  const crewsRoutes = require('./modules/crews/routes');
+  app.use('/api/crews', crewsRoutes);
 }
-if (process.env.FEATURE_PLANNER === 'true') {
-  app.use('/api/planner', require('./modules/planner/routes'));
+
+if (process.env.VITE_FEATURE_PLANNER === 'true') {
+  const plannerRoutes = require('./modules/planner/routes');
+  app.use('/api/planner', plannerRoutes);
 }
 
 // Serve static client in production

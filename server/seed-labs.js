@@ -6,7 +6,7 @@ async function seedLabsData() {
     console.log('Seeding Labs data...');
 
     // Only seed if features are enabled
-    if (process.env.FEATURE_CREWS === 'true') {
+    if (process.env.VITE_FEATURE_CREWS === 'true') {
       console.log('Seeding Crews data...');
       
       // Create crew templates
@@ -81,7 +81,7 @@ async function seedLabsData() {
       console.log('Crews templates seeded successfully');
     }
 
-    if (process.env.FEATURE_PLANNER === 'true') {
+    if (process.env.VITE_FEATURE_PLANNER === 'true') {
       console.log('Seeding Planner data...');
       
       // Create demo tasks

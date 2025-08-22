@@ -30,20 +30,20 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/pricing" element={<Pricing />} />
-        
+
         {/* Product pages */}
         <Route path="/wolleys" element={<Wolleys />} />
         <Route path="/workflows" element={<Workflows />} />
         <Route path="/media-studio" element={<MediaStudio />} />
         <Route path="/content-writer" element={<ContentWriter />} />
-        
+
         {/* Resource pages */}
         <Route path="/templates" element={<Templates />} />
         <Route path="/documentation" element={<Documentation />} />
         <Route path="/api" element={<ApiDocs />} />
         <Route path="/guides" element={<Guides />} />
         <Route path="/blog" element={<Blog />} />
-        
+
         {/* Labs routes (feature flag gated) */}
         {import.meta.env.VITE_FEATURE_CREWS === 'true' && (
           <>
@@ -57,7 +57,7 @@ function App() {
             <Route path="/labs/planner/calendar" element={<PlannerCalendar />} />
           </>
         )}
-        
+
         {/* Protected dashboard */}
         <Route
           path="/app"
