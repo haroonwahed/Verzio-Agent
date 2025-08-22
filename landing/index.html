@@ -21,7 +21,21 @@
       --ring: rgba(124, 58, 237, 0.5);
       --rad: 14px;
     }
-    html, body { height: 100%; }
+    
+    [data-theme="light"] {
+      --bg: #ffffff;
+      --fg: #111827;
+      --muted: #6b7280;
+      --primary: #7c3aed;
+      --accent: #22d3ee;
+      --card: #f9fafb;
+      --ring: rgba(124, 58, 237, 0.5);
+    }
+    
+    html, body { 
+      height: 100%; 
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
     body {
       background: var(--bg);
       color: var(--fg);
@@ -97,17 +111,29 @@
   <header class="sticky top-0 z-40 border-b border-white/10 bg-black/30 backdrop-blur">
     <div class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
       <a href="#" class="flex items-center gap-2 font-semibold text-lg" aria-label="Creeator Home">
-        <span class="inline-block h-8 w-8 rounded bg-gradient-to-tr from-[var(--primary)] to-[var(--accent)]"></span>
-        Creeator
+        <div class="h-8 w-8 rounded bg-gradient-to-tr from-[var(--primary)] to-[var(--accent)] flex items-center justify-center">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          </svg>
+        </div>
+        <span class="text-[color:var(--fg)]">Creeator</span>
       </a>
 
       <nav class="hidden md:flex items-center gap-6 text-sm text-[color:var(--muted)]" role="navigation">
-        <a href="#product" class="hover:text-white transition-colors focus:text-white focus:outline-none focus:ring-2 focus:ring-[var(--primary)] rounded">Product</a>
-        <a href="#templates" class="hover:text-white transition-colors focus:text-white focus:outline-none focus:ring-2 focus:ring-[var(--primary)] rounded">Templates</a>
-        <a href="#pricing" class="hover:text-white transition-colors focus:text-white focus:outline-none focus:ring-2 focus:ring-[var(--primary)] rounded">Pricing</a>
-        <a href="#docs" class="hover:text-white transition-colors focus:text-white focus:outline-none focus:ring-2 focus:ring-[var(--primary)] rounded">Docs</a>
-        <a href="/login" class="hover:text-white transition-colors focus:text-white focus:outline-none focus:ring-2 focus:ring-[var(--primary)] rounded">Login</a>
-        <a href="/signup" class="ml-2 inline-flex items-center rounded-full bg-[var(--primary)] px-4 py-2 text-white hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]">
+        <a href="#product" class="hover:text-[color:var(--fg)] transition-colors focus:text-[color:var(--fg)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] rounded">Product</a>
+        <a href="#templates" class="hover:text-[color:var(--fg)] transition-colors focus:text-[color:var(--fg)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] rounded">Templates</a>
+        <a href="#pricing" class="hover:text-[color:var(--fg)] transition-colors focus:text-[color:var(--fg)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] rounded">Pricing</a>
+        <a href="#docs" class="hover:text-[color:var(--fg)] transition-colors focus:text-[color:var(--fg)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] rounded">Docs</a>
+        <button id="theme-toggle" class="p-2 rounded-lg transition-colors hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]" aria-label="Toggle theme">
+          <svg id="sun-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          <svg id="moon-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+          </svg>
+        </button>
+        <a href="/client/src/pages/Login.jsx" class="hover:text-[color:var(--fg)] transition-colors focus:text-[color:var(--fg)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] rounded">Login</a>
+        <a href="/client/src/pages/Signup.jsx" class="ml-2 inline-flex items-center rounded-full bg-[var(--primary)] px-4 py-2 text-white hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]">
           Start free
         </a>
       </nav>
@@ -125,14 +151,23 @@
     </div>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="mobile-menu md:hidden bg-black/95 border-b border-white/10">
+    <div id="mobile-menu" class="mobile-menu md:hidden bg-[var(--bg)]/95 border-b border-white/10">
       <nav class="px-4 py-4 space-y-2">
-        <a href="#product" class="block px-3 py-2 text-[color:var(--muted)] hover:text-white rounded-lg hover:bg-white/5">Product</a>
-        <a href="#templates" class="block px-3 py-2 text-[color:var(--muted)] hover:text-white rounded-lg hover:bg-white/5">Templates</a>
-        <a href="#pricing" class="block px-3 py-2 text-[color:var(--muted)] hover:text-white rounded-lg hover:bg-white/5">Pricing</a>
-        <a href="#docs" class="block px-3 py-2 text-[color:var(--muted)] hover:text-white rounded-lg hover:bg-white/5">Docs</a>
-        <a href="/login" class="block px-3 py-2 text-[color:var(--muted)] hover:text-white rounded-lg hover:bg-white/5">Login</a>
-        <a href="/signup" class="block mt-4 text-center bg-[var(--primary)] text-white px-4 py-2 rounded-lg font-medium">Start free</a>
+        <button id="mobile-theme-toggle" class="flex items-center space-x-2 px-3 py-2 text-[color:var(--muted)] hover:text-[color:var(--fg)] rounded-lg hover:bg-white/5 w-full text-left">
+          <svg id="mobile-sun-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          <svg id="mobile-moon-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+          </svg>
+          <span>Toggle theme</span>
+        </button>
+        <a href="#product" class="block px-3 py-2 text-[color:var(--muted)] hover:text-[color:var(--fg)] rounded-lg hover:bg-white/5">Product</a>
+        <a href="#templates" class="block px-3 py-2 text-[color:var(--muted)] hover:text-[color:var(--fg)] rounded-lg hover:bg-white/5">Templates</a>
+        <a href="#pricing" class="block px-3 py-2 text-[color:var(--muted)] hover:text-[color:var(--fg)] rounded-lg hover:bg-white/5">Pricing</a>
+        <a href="#docs" class="block px-3 py-2 text-[color:var(--muted)] hover:text-[color:var(--fg)] rounded-lg hover:bg-white/5">Docs</a>
+        <a href="/client/src/pages/Login.jsx" class="block px-3 py-2 text-[color:var(--muted)] hover:text-[color:var(--fg)] rounded-lg hover:bg-white/5">Login</a>
+        <a href="/client/src/pages/Signup.jsx" class="block mt-4 text-center bg-[var(--primary)] text-white px-4 py-2 rounded-lg font-medium">Start free</a>
       </nav>
     </div>
   </header>
@@ -176,19 +211,12 @@
 
       <div class="glass rounded-[var(--rad)] p-4">
         <div class="relative rounded-[calc(var(--rad)-8px)] overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800">
-          <video 
+          <img 
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23374151'/%3E%3Cstop offset='100%25' style='stop-color:%23111827'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='800' height='400' fill='url(%23bg)'/%3E%3Crect x='40' y='40' width='720' height='320' rx='12' fill='%231f2937' stroke='%23374151'/%3E%3Crect x='60' y='80' width='680' height='20' rx='4' fill='%236366f1'/%3E%3Crect x='60' y='120' width='200' height='60' rx='8' fill='%23374151'/%3E%3Crect x='280' y='120' width='200' height='60' rx='8' fill='%23374151'/%3E%3Crect x='500' y='120' width='200' height='60' rx='8' fill='%23374151'/%3E%3Crect x='60' y='200' width='680' height='140' rx='8' fill='%23374151'/%3E%3Ctext x='400' y='360' font-family='Inter' font-size='16' fill='%239CA3AF' text-anchor='middle'%3ECreeator Dashboard%3C/text%3E%3C/svg%3E" 
+            alt="Creeator Dashboard Preview"
             class="w-full h-[400px] object-cover" 
-            autoplay 
-            muted 
-            loop 
-            playsinline 
-            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400' viewBox='0 0 800 400'%3E%3Crect width='800' height='400' fill='%23111827'/%3E%3Ctext x='50%25' y='50%25' font-family='Inter' font-size='24' fill='%239CA3AF' text-anchor='middle' dominant-baseline='middle'%3EProduct Demo%3C/text%3E%3C/svg%3E"
-            preload="metadata"
-          >
-            <source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-          <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
         </div>
       </div>
     </div>
@@ -955,10 +983,14 @@
     <div class="mx-auto max-w-7xl px-4 py-16">
       <div class="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
         <div class="col-span-2">
-          <div class="flex items-center gap-2 font-semibold text-xl mb-4">
-            <span class="inline-block h-8 w-8 rounded bg-gradient-to-tr from-[var(--primary)] to-[var(--accent)]"></span>
-            Creeator
-          </div>
+          <a href="#" class="flex items-center gap-2 font-semibold text-xl mb-4 hover:opacity-80 transition-opacity">
+            <div class="h-8 w-8 rounded bg-gradient-to-tr from-[var(--primary)] to-[var(--accent)] flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
+            </div>
+            <span class="text-[color:var(--fg)]">Creeator</span>
+          </a>
           <p class="text-[color:var(--muted)] mb-6 max-w-sm">
             The AI-powered content creation platform that helps teams build, optimize, and publish high-performing content 10x faster.
           </p>
@@ -1026,6 +1058,55 @@
   <script>
     // Wait for DOM to be fully loaded
     document.addEventListener('DOMContentLoaded', function() {
+      // Theme toggle functionality
+      const themeToggle = document.getElementById('theme-toggle');
+      const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
+      const sunIcon = document.getElementById('sun-icon');
+      const moonIcon = document.getElementById('moon-icon');
+      const mobileSunIcon = document.getElementById('mobile-sun-icon');
+      const mobileMoonIcon = document.getElementById('mobile-moon-icon');
+      const body = document.body;
+
+      // Check for saved theme preference
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const currentTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+      // Apply theme
+      function applyTheme(theme) {
+        if (theme === 'light') {
+          body.setAttribute('data-theme', 'light');
+          sunIcon.classList.add('hidden');
+          moonIcon.classList.remove('hidden');
+          mobileSunIcon.classList.add('hidden');
+          mobileMoonIcon.classList.remove('hidden');
+        } else {
+          body.removeAttribute('data-theme');
+          sunIcon.classList.remove('hidden');
+          moonIcon.classList.add('hidden');
+          mobileSunIcon.classList.remove('hidden');
+          mobileMoonIcon.classList.add('hidden');
+        }
+        localStorage.setItem('theme', theme);
+      }
+
+      // Initialize theme
+      applyTheme(currentTheme);
+
+      // Theme toggle event listeners
+      function toggleTheme() {
+        const currentTheme = body.hasAttribute('data-theme') ? 'light' : 'dark';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        applyTheme(newTheme);
+      }
+
+      if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+      }
+      
+      if (mobileThemeToggle) {
+        mobileThemeToggle.addEventListener('click', toggleTheme);
+      }
       // Mobile menu toggle
       const mobileMenuButton = document.getElementById('mobile-menu-button');
       const mobileMenu = document.getElementById('mobile-menu');

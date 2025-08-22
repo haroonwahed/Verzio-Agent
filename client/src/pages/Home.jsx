@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Bot from './assets/Bot'; // Assuming Bot and Sparkles are local components
-import Sparkles from './assets/Sparkles'; // Assuming Bot and Sparkles are local components
 
 
 function Home() {
@@ -297,7 +295,9 @@ function Home() {
 
           <Link to="/signup" className="glass rounded-xl p-8 hover:border-white/20 transition-all duration-300 group cursor-pointer transform hover:scale-105">
             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/20 group-hover:bg-blue-500/30 transition-colors">
-              <Sparkles className="w-6 h-6 text-blue-400" />
+              <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+              </svg>
             </div>
             <h3 className="font-semibold text-xl mb-3">Multi-Format Generation</h3>
             <p className={`leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Create blog posts, social media content, product descriptions, images, voiceovers, and more—all optimized for your channels.</p>
