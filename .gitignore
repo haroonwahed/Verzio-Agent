@@ -20,3 +20,10 @@ server/*.db-journal
 *.sqlite3
 *.sqlite-wal
 *.sqlite-shm
+
+# env & db
+.env
+*.env
+server/.env
+*.sqlite*
+server/*.db*
