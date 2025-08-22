@@ -1,0 +1,169 @@
+Role: You are editing my repo. Do NOT break or change the current UI/UX. Do not rename, move, or delete existing files, routes, classes, or IDs. This is an additive feature pack.
+
+Goal: Make the app a combo of Brainvine (content workflows/templates) and Motion (smart task scheduling) without altering existing pages. Create two new, isolated modules:
+
+Crews (Brainvine-like content system: reusable agent/workflow blueprints that produce drafts)
+
+Planner (Motion-like tasks + calendar auto-scheduling)
+
+Non-negotiable guardrails
+
+Zero regressions: All existing pages, endpoints, and styles remain untouched.
+
+Additive only: New code lives in new folders, new routes, and new DB tables.
+
+Feature flags: Wrap everything under env flags:
+
+FEATURE_CREWS=true|false
+
+FEATURE_PLANNER=true|false
+
+Styling: Reuse current design tokens. If you need classes, scope them with a .labs- prefix so nothing collides.
+
+Routing: Expose new features only at these new paths (not linked from the current nav):
+
+/labs/crews, /labs/crews/:id
+
+/labs/planner/board, /labs/planner/calendar
+
+Data safety: Backwards-compatible migrations; do not modify existing tables except for strictly additive, nullable columns (if absolutely necessary).
+
+Secrets: No client-side leakage. API keys stay server-only.
+
+Detect stack and branch (follow one path)
+
+If backend is Django: create apps crews and planner.
+
+If backend is Express/Node: create server/modules/crews and server/modules/planner.
+
+If there’s a React/Vite frontend: add pages under src/pages/labs/… and local components under src/components/labs/….
+
+If it’s server-rendered templates only: add templates under templates/labs/....
+
+Data models (create migrations/schemas)
+
+Crews (Brainvine-like)
+
+CrewTemplate(id, name, purpose, fields_json, prompt_schema_json, created_at, updated_at)
+
+Crew(id, name, template_id→CrewTemplate, purpose, inputs_json, status{draft,queued,done,failed}, tags, created_at, updated_at)
+
+CrewDraft(id, crew_id→Crew, content_md, seo_meta_json, score, created_at)
+
+CrewRun(id, crew_id, input_snapshot_json, output_snapshot_json, tokens_used, status{queued,running,done,failed}, created_at)
+
+Planner (Motion-like)
+
+Task(id, title, notes, priority{low,med,high}, est_minutes, due_at, hard_deadline:boolean, status{todo,doing,done,blocked}, tags, created_at, updated_at)
+
+TaskLink(id, task_id, depends_on_task_id)
+
+WorkHours(id, user_id, weekday:int, start_time, end_time, timezone)
+
+EventBlock(id, task_id, starts_at, ends_at, source{auto,manual}, calendar_id nullable)
+
+CalendarSource(id, user_id, type{ics,google}, url_or_token, enabled:boolean, last_sync_at)
+
+API (new endpoints only)
+
+Crews
+
+POST /api/crews/templates (create template)
+
+GET /api/crews/templates
+
+POST /api/crews (instantiate from template)
+
+POST /api/crews/:id/run (queue run; returns run id)
+
+GET /api/crews/:id/drafts
+
+Planner
+
+POST /api/tasks / GET /api/tasks / PATCH /api/tasks/:id
+
+POST /api/scheduler/plan → returns proposed EventBlock[] using constraints (work hours, deadlines, priorities, est_minutes)
+
+POST /api/blocks/commit → save accepted plan as EventBlock rows
+
+POST /api/calendars/sync (stub; no external calls unless key present)
+
+Implement the scheduler with a simple greedy algorithm: sort tasks by (hard_deadline desc, priority desc, due_at asc), fit into available work windows; chunk long tasks into blocks ≤ 90 min; avoid overlaps; never schedule past hard_deadline.
+
+UI (new pages only; do not change current screens)
+
+/labs/crews
+
+Table: Name, Template, Last Run, Status, Actions (Run, View Drafts, Duplicate)
+
+“New Crew” → wizard (choose template → fill fields → create)
+
+Editor page /labs/crews/:id: split pane (Markdown editor + live preview + SEO score chip)
+
+/labs/planner/board
+
+Kanban (To-do, Doing, Blocked, Done), drag-drop, batch select, quick-create
+
+/labs/planner/calendar
+
+Week view (Mon–Sun), drag blocks; toolbar: Auto-schedule, Commit Plan, Working hours modal
+
+Navigation exposure: do not add entries to the existing sidebar/header. Add a small floating “Labs” button (fixed bottom-right) that links to /labs/crews and /labs/planner/calendar only if the corresponding feature flag is true.
+
+Integrations (placeholders only)
+
+Content generation uses the server-side AI key if present; else simulate with seeded lorem ipsum and mock token counts.
+
+Calendar sync endpoint is a stub; return 200 + {synced:false} when no token configured.
+
+Configuration
+
+Read flags from env: FEATURE_CREWS, FEATURE_PLANNER. Default both false.
+
+Add .env.example entries and never expose secrets to the browser.
+
+Deliverables
+
+New backend modules/apps with models, migrations, routes, controllers/views, and unit tests for the scheduler.
+
+New frontend pages/components under /labs/* with scoped styles (.labs- prefix; no global CSS collisions).
+
+Seed scripts:
+
+3 example CrewTemplates (Blog Post OS, Landing Page, Ad Set).
+
+6 demo tasks with varied priorities/due dates.
+
+Docs: docs/labs.md covering data models, endpoints, flags, and how to run.
+
+Acceptance checks (must pass)
+
+Existing app starts and behaves exactly as before with both flags false.
+
+With flags on, /labs/* routes render and pass basic smoke tests.
+
+Scheduler unit tests: plan contains no overlaps, respects work hours, honors hard deadlines, and chunks long tasks.
+
+Lint/tests: no warnings added; build succeeds.
+
+No network calls to external APIs unless keys are present.
+
+Commands to add (adjust to stack)
+
+Django: python manage.py startapp crews, python manage.py startapp planner; include urls under /labs/*; run migrations; add flags in settings/env.
+
+Express: register routers at /api/crews and /api/planner; if using React, serve /labs/* pages; env-gate with flags.
+
+React: add routes to new pages; scope styles with .labs- classes; do not touch existing routes or components.
+
+Microcopy (use “Crews” throughout)
+
+Primary CTA: New Crew
+
+Actions: Run Crew · View Drafts · Duplicate
+
+Empty state: “No Crews yet. Create one to generate content and propose a schedule.”
+
+Status: Queued → Running → Draft Ready → Blocks Proposed → Committed
+
+Proceed now and implement exactly as specified, honoring all guardrails and flags.
