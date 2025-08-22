@@ -734,9 +734,6 @@ export default function Home() {
     </div>
   );
 }
-      {/* Header */}
-      <header className="border-b border-[var(--border)] bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
               <img src="/brand/creeator-mark.svg" alt="Creeator" className="w-8 h-8" />
