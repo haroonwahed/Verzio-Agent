@@ -172,7 +172,7 @@ export default function Home() {
                           <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Personalized AI assistants for content creation</p>
                         </div>
                       </Link>
-                      
+
                       <Link to="/workflows" className="flex items-start space-x-3 p-3 rounded-lg hover:bg-purple-50 hover:bg-opacity-10 transition-colors group">
                         <div className="w-10 h-10 bg-blue-500 bg-opacity-20 rounded-lg flex items-center justify-center">
                           <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -184,7 +184,7 @@ export default function Home() {
                           <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Simple drag & drop flows for automation</p>
                         </div>
                       </Link>
-                      
+
                       <Link to="/media-studio" className="flex items-start space-x-3 p-3 rounded-lg hover:bg-purple-50 hover:bg-opacity-10 transition-colors group">
                         <div className="w-10 h-10 bg-green-500 bg-opacity-20 rounded-lg flex items-center justify-center">
                           <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -196,7 +196,7 @@ export default function Home() {
                           <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Image, video & audio generation</p>
                         </div>
                       </Link>
-                      
+
                       <Link to="/content-writer" className="flex items-start space-x-3 p-3 rounded-lg hover:bg-purple-50 hover:bg-opacity-10 transition-colors group">
                         <div className="w-10 h-10 bg-indigo-500 bg-opacity-20 rounded-lg flex items-center justify-center">
                           <svg className="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -729,131 +729,6 @@ export default function Home() {
               <a href="#" className={`text-sm transition-colors ${isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>Security</a>
             </div>
           </div>
-        </div>
-      </footer>
-    </div>
-  );
-}
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-3">
-              <img src="/brand/creeator-mark.svg" alt="Creeator" className="w-8 h-8" />
-              <span className="text-xl font-bold text-gray-900">Creeator</span>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Link to="/login" className="text-gray-600 hover:text-gray-900">
-                Sign in
-              </Link>
-              <Link to="/signup" className="btn-brand">
-                Try Creeator
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 mb-6">
-            Create, run, and schedule{' '}
-            <span className="bg-gradient-to-r from-[var(--brand-400)] to-[var(--brand-700)] bg-clip-text text-transparent">
-              content with Crews
-            </span>
-          </h1>
-          <p className="text-xl text-[var(--muted)] max-w-3xl mx-auto mb-10 leading-relaxed">
-            AI-powered content workflows that understand your brand voice and automate your creative process. 
-            Focus on strategy while your Crews handle execution.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Link to="/signup" className="btn-brand text-lg px-8 py-4 flex items-center justify-center space-x-2">
-              <span>Try Creeator</span>
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <button className="px-8 py-4 border-2 border-[var(--border)] rounded-xl text-lg font-semibold text-gray-700 hover:bg-gray-50 transition-all flex items-center justify-center space-x-2">
-              <Play className="w-5 h-5" />
-              <span>Book demo</span>
-            </button>
-          </div>
-
-          {/* Feature chips */}
-          <div className="flex flex-wrap justify-center gap-3 mb-16">
-            {features.map((feature, index) => (
-              <div key={index} className="flex items-center space-x-2 bg-white px-4 py-2 rounded-full border border-[var(--border)] shadow-sm">
-                <CheckCircle className="w-4 h-4 text-green-500" />
-                <span className="text-sm font-medium text-gray-700">{feature}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Mock AI Employee Card */}
-          <div className="max-w-md mx-auto">
-            <div className="card p-6 text-left">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-10 h-10 bg-[var(--brand-500)] rounded-lg flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Content Marketing Crew</h3>
-                  <p className="text-sm text-[var(--muted)]">AI employee • Active</p>
-                </div>
-              </div>
-              
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">Blog Writing</span>
-                  <div className="w-8 h-4 bg-[var(--brand-100)] rounded-full relative">
-                    <div className="w-3 h-3 bg-[var(--brand-500)] rounded-full absolute top-0.5 right-0.5"></div>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">SEO Optimization</span>
-                  <div className="w-8 h-4 bg-[var(--brand-100)] rounded-full relative">
-                    <div className="w-3 h-3 bg-[var(--brand-500)] rounded-full absolute top-0.5 right-0.5"></div>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">Social Media</span>
-                  <div className="w-8 h-4 bg-gray-200 rounded-full relative">
-                    <div className="w-3 h-3 bg-gray-400 rounded-full absolute top-0.5 left-0.5"></div>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-700">Email Campaigns</span>
-                  <div className="w-8 h-4 bg-[var(--brand-100)] rounded-full relative">
-                    <div className="w-3 h-3 bg-[var(--brand-500)] rounded-full absolute top-0.5 right-0.5"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 border-t border-[var(--border)]">
-        <div className="max-w-7xl mx-auto">
-          <p className="text-center text-[var(--muted)] mb-8">Trusted by teams at</p>
-          <div className="flex items-center justify-center space-x-8 opacity-50">
-            {logos.map((logo, index) => (
-              <div key={index} className="px-4 py-2 bg-gray-100 rounded-lg">
-                <span className="text-gray-600 font-medium">{logo}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-[var(--border)] py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <img src="/brand/creeator-mark.svg" alt="Creeator" className="w-6 h-6" />
-            <span className="text-lg font-bold text-gray-900">Creeator</span>
-          </div>
-          <p className="text-[var(--muted)] text-sm">
-            © 2025 Creeator · <a href="/privacy" className="link">Privacy</a> · <a href="/terms" className="link">Terms</a>
-          </p>
         </div>
       </footer>
     </div>
