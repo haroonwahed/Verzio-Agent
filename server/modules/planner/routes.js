@@ -1,58 +1,33 @@
-
 const express = require('express');
 const router = express.Router();
-const plannerController = require('./controller');
 const auth = require('../../middleware/auth');
-
-// Feature flag check middleware
-const checkPlannerFeature = (req, res, next) => {
-  if (process.env.FEATURE_PLANNER !== 'true') {
-    return res.status(404).json({ error: 'Feature not enabled' });
-  }
-  next();
-};
-
-// Apply feature flag to all routes
-router.use(checkPlannerFeature);
+const {
+  getTasks,
+  createTask,
+  getTask,
+  updateTask,
+  deleteTask,
+  generateSchedule,
+  getEventBlocks,
+  commitEventBlocks,
+  getWorkHours,
+  updateWorkHours
+} = require('./controller');
 
 // Task routes
-router.post('/tasks', auth, plannerController.createTask);
-router.get('/tasks', auth, plannerController.getTasks);
-router.patch('/tasks/:id', auth, plannerController.updateTask);
+router.get('/tasks', auth, getTasks);
+router.post('/tasks', auth, createTask);
+router.get('/tasks/:id', auth, getTask);
+router.patch('/tasks/:id', auth, updateTask);
+router.delete('/tasks/:id', auth, deleteTask);
 
-// Scheduler routes
-router.post('/scheduler/plan', auth, plannerController.planSchedule);
-router.post('/blocks/commit', auth, plannerController.commitBlocks);
-router.get('/blocks', auth, plannerController.getBlocks);
+// Schedule routes
+router.post('/schedule/plan', auth, generateSchedule);
+router.get('/blocks', auth, getEventBlocks);
+router.post('/blocks/commit', auth, commitEventBlocks);
 
-// Calendar routes
-router.post('/calendars/sync', auth, plannerController.syncCalendars);
-
-module.exports = router;
-const express = require('express');
-const router = express.Router();
-const controller = require('./controller');
-const auth = require('../../middleware/auth');
-
-// Apply auth middleware to all routes
-router.use(auth);
-
-// Tasks
-router.get('/tasks', controller.getTasks);
-router.post('/tasks', controller.createTask);
-router.get('/tasks/:id', controller.getTask);
-router.patch('/tasks/:id', controller.updateTask);
-router.delete('/tasks/:id', controller.deleteTask);
-
-// Scheduler
-router.post('/scheduler/plan', controller.generateSchedule);
-
-// Event Blocks
-router.get('/blocks', controller.getEventBlocks);
-router.post('/blocks/commit', controller.commitEventBlocks);
-
-// Work Hours
-router.get('/work-hours', controller.getWorkHours);
-router.post('/work-hours', controller.updateWorkHours);
+// Work hours routes
+router.get('/work-hours', auth, getWorkHours);
+router.post('/work-hours', auth, updateWorkHours);
 
 module.exports = router;

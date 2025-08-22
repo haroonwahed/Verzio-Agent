@@ -1,5 +1,6 @@
 
 const plannerModel = require('./models');
+const { getDb } = require('../../db');
 
 // Simple greedy scheduler algorithm
 const scheduleTasksIntoBlocks = (tasks, workHours, existingBlocks = []) => {
@@ -102,123 +103,6 @@ const isSlotAvailable = (slot, durationMinutes, existingBlocks, dueDate, hardDea
   
   return !hasConflict;
 };
-
-const createTask = async (req, res) => {
-  try {
-    const { title, notes, priority, est_minutes, due_at, hard_deadline, tags } = req.body;
-    const result = plannerModel.createTask(title, notes, priority, est_minutes, due_at, hard_deadline, tags);
-    res.json({ id: result.lastInsertRowid, message: 'Task created successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-const getTasks = async (req, res) => {
-  try {
-    const tasks = plannerModel.getTasks();
-    res.json(tasks);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-const updateTask = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const updates = req.body;
-    plannerModel.updateTask(id, updates);
-    res.json({ message: 'Task updated successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-const planSchedule = async (req, res) => {
-  try {
-    const userId = req.user?.id || 1; // Default user for demo
-    
-    // Get tasks that need scheduling (not done/blocked)
-    const allTasks = plannerModel.getTasks();
-    const tasksToSchedule = allTasks.filter(t => ['todo', 'doing'].includes(t.status));
-    
-    // Get work hours
-    const workHours = plannerModel.getWorkHours(userId);
-    
-    // Get existing blocks for the week
-    const startOfWeek = new Date();
-    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(endOfWeek.getDate() + 6);
-    
-    const existingBlocks = plannerModel.getEventBlocks(
-      startOfWeek.toISOString(),
-      endOfWeek.toISOString()
-    );
-    
-    // Generate schedule
-    const proposedBlocks = scheduleTasksIntoBlocks(tasksToSchedule, workHours, existingBlocks);
-    
-    res.json({ proposed_blocks: proposedBlocks });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-const commitBlocks = async (req, res) => {
-  try {
-    const { blocks } = req.body;
-    
-    // Clear existing auto-generated blocks for these tasks
-    const taskIds = [...new Set(blocks.map(b => b.task_id))];
-    taskIds.forEach(taskId => {
-      plannerModel.deleteEventBlocks(taskId);
-    });
-    
-    // Create new blocks
-    blocks.forEach(block => {
-      plannerModel.createEventBlock(
-        block.task_id,
-        block.starts_at,
-        block.ends_at,
-        'auto'
-      );
-    });
-    
-    res.json({ message: 'Schedule committed successfully', blocks_created: blocks.length });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-const getBlocks = async (req, res) => {
-  try {
-    const { start_date, end_date } = req.query;
-    const blocks = plannerModel.getEventBlocks(start_date, end_date);
-    res.json(blocks);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-const syncCalendars = async (req, res) => {
-  try {
-    // Stub implementation - no external API calls
-    res.json({ synced: false, message: 'Calendar sync not configured' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-module.exports = {
-  createTask,
-  getTasks,
-  updateTask,
-  planSchedule,
-  commitBlocks,
-  getBlocks,
-  syncCalendars
-};
-const { getDb } = require('../../db');
 
 const getTasks = (req, res) => {
   try {
