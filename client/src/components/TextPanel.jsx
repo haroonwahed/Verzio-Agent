@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { MessageSquare, Copy, Download, Sparkles, Wand2, FileText, RefreshCw } from 'lucide-react';
+import { FileText, Copy, RefreshCw, Download, Settings, Wand2, Sparkles, Send, Bot, Workflow, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 function TextPanel() {
   const [prompt, setPrompt] = useState('');

@@ -20,6 +20,8 @@ import ContentWriter from './pages/ContentWriter';
 import Workflows from './pages/Workflows';
 import MediaStudio from './pages/MediaStudio';
 import Wolleys from './pages/Wolleys';
+import CrewsIndex from './pages/crews/index';
+import NewCrew from './pages/crews/new';
 
 // Labs pages
 import CrewsList from './pages/labs/CrewsList';
@@ -82,6 +84,8 @@ function App() {
             </PrivateRoute>
           }
         />
+            <Route path="/crews" element={<PrivateRoute><CrewsIndex /></PrivateRoute>} />
+            <Route path="/crews/new" element={<PrivateRoute><NewCrew /></PrivateRoute>} />
         {/* Redirect all unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

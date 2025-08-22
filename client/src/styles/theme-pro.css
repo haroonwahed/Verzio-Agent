@@ -6,24 +6,12 @@ html, body, #root { height: 100%; }
 .two-pane { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
 
 /* Professional Theme Design System */
-:root.theme-pro {
-  --bg: #f7f8fb;
-  --surface: #ffffff;
-  --muted: #6b7280;
-  --text: #0f172a;
-  --primary: #7c3aed;
-  --accent: #22d3ee;
-  --success: #16a34a;
-  --border: #e5e7eb;
-  --hover: #f3f4f6;
-  --rad: 14px;
-  --rad-sm: 10px;
-  --shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 30px rgba(0,0,0,.05);
-  --space-1: 8px;
-  --space-2: 12px;
-  --space-3: 16px;
-  --space-4: 24px;
-  --space-5: 32px;
+:root {
+  --brand-50:#f3f4ff; --brand-100:#e7e9ff; --brand-200:#ccd0ff; --brand-300:#aab0ff;
+  --brand-400:#8c92ff; --brand-500:#6b72ff; --brand-600:#5158f0; --brand-700:#4146c4;
+  --brand-800:#363aa0; --brand-900:#2c307f;
+  --bg:#f8fafc; --panel:#ffffff; --muted:#64748b; --border:#e5e7eb; --ring: var(--brand-400);
+  --radius: 16px; --gap: 24px; --gap-lg: 32px;
 }
 
 /* App shell: fix the exact issue you see (tight gutter between sidebar and content) */
@@ -315,4 +303,43 @@ html, body, #root { height: 100%; }
 /* Custom theme styles */
 .theme-pro {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* New styles from edited snippet */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+
+.btn-brand {
+  background: var(--brand-600);
+  color: white;
+  border-radius: 12px;
+  padding: .75rem 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-brand:hover {
+  background: var(--brand-700);
+  transform: translateY(-1px);
+}
+
+.btn-brand:disabled {
+  opacity: .6;
+  transform: none;
+}
+
+.link {
+  color: var(--brand-700);
+  text-decoration: none;
+}
+
+.link:hover {
+  color: var(--brand-800);
+  text-decoration: underline;
 }
