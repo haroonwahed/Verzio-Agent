@@ -1,3 +1,9 @@
+/* Global layout baseline */
+html, body, #root { height: 100%; }
+.app-shell { min-height: 100dvh; }
+.sidebar { width: 18rem; }
+.content { min-width: 0; }
+.two-pane { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
 
 /* Professional Theme Design System */
 :root.theme-pro {
@@ -304,4 +310,9 @@
   cursor: pointer;
   min-height: 20px;
   overflow: hidden;
+}
+
+/* Custom theme styles */
+.theme-pro {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }

@@ -1,31 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { User, FileText, Image, Mic, Settings, BarChart, Plus, Search, Grid, List, Filter, MessageSquare, Wand2, Workflow, Rss, BookOpen, HelpCircle, ExternalLink, Bell, LogOut } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Bot, MessageSquare, Image, Mic, BarChart3, Rss, Workflow, Settings, LogOut, Plus, Sparkles, Layers } from 'lucide-react';
+import AppShell from '../components/AppShell';
 import TextPanel from '../components/TextPanel';
 import ImagePanel from '../components/ImagePanel';
 import VoicePanel from '../components/VoicePanel';
-import SeoPanel from '../components/SeoPanel';
-import FeedsPanel from '../components/FeedsPanel';
-import WorkflowBuilder from '../components/WorkflowBuilder';
 import WolleysPanel from '../components/WolleysPanel';
-import WolleyChat from '../components/WolleyChat';
-import IntegrationsPanel from '../components/IntegrationsPanel';
+import SeoPanel from '../components/SeoPanel';
 import ProfileSettings from '../components/ProfileSettings';
+import IntegrationsPanel from '../components/IntegrationsPanel';
+import FeedsPanel from '../components/FeedsPanel';
 import LabsFloatingButton from '../components/LabsFloatingButton';
-import { Link } from 'react-router-dom';
 
 function Dashboard() {
   const { user, logout } = useAuth();
   const [currentPanel, setCurrentPanel] = useState('text');
   const [selectedWolley, setSelectedWolley] = useState(null);
 
+  // Placeholder for notification state management (replace with actual context/state)
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([]); // Example: [{ id: 1, title: 'New Feature', message: '...', read: false, created_at: ... }]
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+  const markAsRead = (id) => {
+    setNotifications(notifications.map(n => n.id === id ? { ...n, read: true } : n));
+  };
+
+  // Placeholder for active panel state management in the new structure
+  const [activePanel, setActivePanel] = useState('text');
+
+
   const sidebarItems = [
-    { id: 'text', label: 'Generate Text', icon: MessageSquare, color: 'text-purple-600' },
-    { id: 'image', label: 'Generate Images', icon: Image, color: 'text-blue-600' },
-    { id: 'voice', label: 'Generate Voice', icon: Mic, color: 'text-indigo-600' },
-    { id: 'seo', label: 'SEO Analysis', icon: BarChart3, color: 'text-violet-600' },
-    { id: 'feeds', label: 'Product Feeds', icon: Rss, color: 'text-purple-500' },
-    { id: 'integrations', label: 'Integrations', icon: Layers, color: 'text-green-600' },
+    { id: 'text', label: 'Generate Text', icon: MessageSquare, color: 'text-purple-600', category: 'creator' },
+    { id: 'image', label: 'Generate Images', icon: Image, color: 'text-blue-600', category: 'creator' },
+    { id: 'voice', label: 'Generate Voice', icon: Mic, color: 'text-indigo-600', category: 'creator' },
+    { id: 'seo', label: 'SEO Analysis', icon: BarChart3, color: 'text-violet-600', category: 'creator' },
+    { id: 'feeds', label: 'Product Feeds', icon: Rss, color: 'text-purple-500', category: 'management' },
+    { id: 'integrations', label: 'Integrations', icon: Layers, color: 'text-green-600', category: 'management' },
+    { id: 'workflows', label: 'Workflows', icon: Workflow, color: 'text-pink-500', category: 'management' },
+    { id: 'wolleys', label: 'AI Agents', icon: Bot, color: 'text-cyan-500', category: 'creator' },
+    { id: 'settings', label: 'Profile Settings', icon: Settings, color: 'text-red-500', category: 'management' },
+    // Example for resources
+    // { id: 'docs', label: 'Documentation', icon: BookOpen, href: '/docs', external: false, category: 'resources' },
+    // { id: 'help', label: 'Help Center', icon: HelpCircle, href: 'https://help.creeator.ai', external: true, category: 'resources' },
   ];
 
   const handleWolleyChat = (wolley) => {
@@ -33,12 +51,12 @@ function Dashboard() {
     setCurrentPanel('wolley-chat');
   };
 
-  const renderContent = () => {
+  const renderActivePanel = () => {
     if (currentPanel === 'wolley-chat' && selectedWolley) {
       return <WolleyChat selectedWolley={selectedWolley} onBack={() => setCurrentPanel('wolleys')} />;
     }
 
-    switch (currentPanel) {
+    switch (activePanel) { // Changed to activePanel for the new structure
       case 'text': return <TextPanel />;
       case 'image': return <ImagePanel />;
       case 'voice': return <VoicePanel />;
@@ -52,141 +70,200 @@ function Dashboard() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50 app-shell">
-      {/* Sidebar */}
-      <aside className="sidebar fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform lg:translate-x-0 lg:static lg:inset-0">
-        {/* Logo */}
-        <div className="p-6 border-b border-gray-100">
-          <a href="/" className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-              <div className="w-7 h-7 relative">
-                {/* Modern brain-like logo */}
-                <div className="absolute inset-0">
-                  <svg viewBox="0 0 24 24" className="w-7 h-7 text-white">
-                    <path fill="currentColor" d="M12 2C10.9 2 10 2.9 10 4C10 4.7 10.4 5.3 11 5.6V7C11 7.6 11.4 8 12 8S13 7.6 13 8V5.6C13.6 5.3 14 4.7 14 4C14 2.9 13.1 2 12 2M8.5 6C7.1 6 6 7.1 6 8.5S7.1 11 8.5 11C9.3 11 10 10.6 10.4 10H11V12C11 12.6 11.4 13 12 13S13 12.6 13 12V10H13.6C14 10.6 14.7 11 15.5 11C16.9 11 18 9.9 18 8.5S16.9 6 15.5 6C15.1 6 14.7 6.1 14.4 6.3C14.1 6.1 13.7 6 13.3 6H10.7C10.3 6 9.9 6.1 9.6 6.3C9.3 6.1 8.9 6 8.5 6M7 14C5.9 14 5 14.9 5 16S5.9 18 7 18C7.4 18 7.8 17.9 8.1 17.7C8.4 17.9 8.8 18 9.2 18H14.8C15.2 18 15.6 17.9 15.9 17.7C16.2 17.9 16.6 18 17 18C18.1 18 19 17.1 19 16S18.1 14 17 14C16.6 14 16.2 14.1 15.9 14.3C15.6 14.1 15.2 14 14.8 14H9.2C8.8 14 8.4 14.1 8.1 14.3C7.8 14.1 7.4 14 7 14M10 20C10 21.1 10.9 22 12 22S14 21.1 14 20C14 19.3 13.6 18.7 13 18.4V17H11V18.4C10.4 18.7 10 19.3 10 20Z"/>
-                  </svg>
+  const sidebarContent = (
+    <>
+      {/* Header */}
+      <div className="p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between mb-6">
+          <Link to="/" className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">V</span>
+            </div>
+            <span className="text-xl font-bold text-gray-900">Verzio</span>
+          </Link>
+          <div className="relative">
+            <button 
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="p-2 text-gray-400 hover:text-gray-600 transition-colors relative"
+            >
+              <Bell className="h-5 w-5" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+
+            {showNotifications && (
+              <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                <div className="p-4 border-b border-gray-200">
+                  <h3 className="font-semibold text-gray-900">Notifications</h3>
+                </div>
+                <div className="max-h-64 overflow-y-auto">
+                  {notifications.length === 0 ? (
+                    <div className="p-4 text-center text-gray-500">
+                      No notifications
+                    </div>
+                  ) : (
+                    notifications.map((notification) => (
+                      <div
+                        key={notification.id}
+                        className={`p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer ${
+                          !notification.read ? 'bg-blue-50' : ''
+                        }`}
+                        onClick={() => markAsRead(notification.id)}
+                      >
+                        <div className="flex items-start space-x-3">
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-gray-900">
+                              {notification.title}
+                            </p>
+                            <p className="text-sm text-gray-600 mt-1">
+                              {notification.message}
+                            </p>
+                            <p className="text-xs text-gray-400 mt-1">
+                              {new Date(notification.created_at).toLocaleString()}
+                            </p>
+                          </div>
+                          {!notification.read && (
+                            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Creeator</h1>
-              <p className="text-xs text-gray-500">AI Content Studio</p>
-            </div>
-          </a>
-        </div>
-
-        {/* Search and Quick Access */}
-        <div className="px-6 py-4 border-b border-gray-100">
-          <div className="relative mb-4">
-            <input
-              type="text"
-              placeholder="Search workflows, agents, or content types..."
-              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
-            />
-            <svg className="absolute right-3 top-3 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
-
-          {/* Quick Access Buttons */}
-          <div className="flex space-x-2">
-            <button
-              onClick={() => setCurrentPanel('workflows')}
-              className={`flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
-                currentPanel === 'workflows'
-                  ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-md'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              <Workflow className="w-4 h-4" />
-              <span>Workflows</span>
-            </button>
-            <button
-              onClick={() => setCurrentPanel('wolleys')}
-              className={`flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
-                currentPanel === 'wolleys'
-                  ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-md'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              <Bot className="w-4 h-4" />
-              <span>AI Agents</span>
-            </button>
+            )}
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className="p-4 space-y-1">
-          {sidebarItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = currentPanel === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setCurrentPanel(item.id)}
-                className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  isActive
-                    ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg'
-                    : 'text-gray-700 hover:bg-white/50 hover:text-gray-900'
-                }`}
-              >
-                <Icon className={`w-5 h-5 ${isActive ? 'text-white' : item.color}`} />
-                <span>{item.label}</span>
-              </button>
-            );
-          })}
-        </nav>
+        {/* Search */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <input
+            type="text"
+            placeholder="Search tools..."
+            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+      </div>
 
-        {/* Bottom Section */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-purple-100 bg-gradient-to-b from-purple-50 to-blue-50">
+      {/* Navigation */}
+      <div className="flex-1 overflow-y-auto p-6">
+        <div className="space-y-6">
+          {/* Creator Tools */}
+          <div>
+            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+              Creator Tools
+            </h3>
+            <div className="space-y-1">
+              {sidebarItems.filter(item => item.category === 'creator').map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => setActivePanel(item.id)}
+                  className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors ${
+                    activePanel === item.id
+                      ? 'bg-blue-50 text-blue-700'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  <item.icon className="h-5 w-5" />
+                  <span className="font-medium">{item.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Management */}
+          <div>
+            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+              Management
+            </h3>
+            <div className="space-y-1">
+              {sidebarItems.filter(item => item.category === 'management').map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => setActivePanel(item.id)}
+                  className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors ${
+                    activePanel === item.id
+                      ? 'bg-blue-50 text-blue-700'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  <item.icon className="h-5 w-5" />
+                  <span className="font-medium">{item.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Resources */}
+          <div>
+            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+              Resources
+            </h3>
+            <div className="space-y-1">
+              {sidebarItems.filter(item => item.category === 'resources').map((item) => (
+                item.external ? (
+                  <a
+                    key={item.id}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors text-gray-600 hover:bg-gray-50"
+                  >
+                    <item.icon className="h-5 w-5" />
+                    <span className="font-medium">{item.label}</span>
+                    <ExternalLink className="h-3 w-3 ml-auto" />
+                  </a>
+                ) : (
+                  <Link
+                    key={item.id}
+                    to={item.href}
+                    className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors text-gray-600 hover:bg-gray-50"
+                  >
+                    <item.icon className="h-5 w-5" />
+                    <span className="font-medium">{item.label}</span>
+                  </Link>
+                )
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* User Profile */}
+      <div className="p-6 border-t border-gray-200">
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+            <User className="h-5 w-5 text-white" />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-gray-900">{user?.email || 'User'}</p>
+            <p className="text-xs text-gray-500">Free Plan</p>
+          </div>
           <button
-            onClick={() => setCurrentPanel('settings')}
-            className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 mb-2 ${
-              currentPanel === 'settings'
-                ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg'
-                : 'text-gray-700 hover:bg-white/50'
-            }`}
+            onClick={logout}
+            className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
+            title="Logout"
           >
-            <Settings className="w-5 h-5" />
-            <span>Settings</span>
+            <LogOut className="h-4 w-4" />
           </button>
-
-          <div className="flex items-center space-x-3 px-3 py-2 text-sm text-gray-600">
-            <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">
-              {user?.email?.charAt(0).toUpperCase()}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-medium text-gray-900 truncate">{user?.email}</p>
-            </div>
-            <button
-              onClick={logout}
-              className="p-1 hover:bg-gray-100 rounded"
-              title="Logout"
-            >
-              <LogOut className="w-4 h-4 text-gray-500" />
-            </button>
-          </div>
-          <footer className="mt-4 pt-4 border-t border-gray-200 text-center text-sm text-gray-500">
-            <p>&copy; {new Date().getFullYear()} Creeator. All rights reserved.</p>
-            <div className="flex justify-center space-x-4 mt-2">
-              <a href="/about" className="hover:text-purple-600">About</a>
-              <a href="/contact" className="hover:text-purple-600">Contact</a>
-              <a href="/privacy" className="hover:text-purple-600">Privacy Policy</a>
-            </div>
-          </footer>
         </div>
-      </aside>
+      </div>
+    </>
+  );
 
-      {/* Main content */}
-      <main className="content lg:ml-64">
-        <div className="page-header">
-          {renderContent()}
-        </div>
-      </main>
+  return (
+    <>
+      <AppShell sidebar={<div className="bg-white border-r border-gray-200 flex flex-col h-full">{sidebarContent}</div>}>
+        {renderActivePanel()}
+      </AppShell>
 
+      {/* Labs Floating Button */}
       <LabsFloatingButton />
-    </div>
+    </>
   );
 }
 
