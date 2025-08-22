@@ -11,6 +11,7 @@ import WolleysPanel from '../components/WolleysPanel';
 import WolleyChat from '../components/WolleyChat';
 import IntegrationsPanel from '../components/IntegrationsPanel';
 import ProfileSettings from '../components/ProfileSettings';
+import LabsFloatingButton from '../components/LabsFloatingButton';
 
 function Dashboard() {
   const { user, logout } = useAuth();
@@ -182,8 +183,9 @@ function Dashboard() {
           {renderContent()}
         </div>
       </div>
-    </div>
-  );
-}
 
-export default Dashboard;
+      {/* Labs Features */}
+      <LabsFloatingButton />
+    </div>
+  )
+}

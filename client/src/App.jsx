@@ -16,6 +16,10 @@ import ApiDocs from './pages/ApiDocs'
 import Guides from './pages/Guides'
 import Blog from './pages/Blog'
 import Pricing from './pages/Pricing'
+import CrewsList from './pages/labs/CrewsList'
+import CrewDrafts from './pages/labs/CrewDrafts'
+import PlannerBoard from './pages/labs/PlannerBoard'
+import PlannerCalendar from './pages/labs/PlannerCalendar'
 
 function App() {
   return (
@@ -39,6 +43,12 @@ function App() {
         <Route path="/api" element={<ApiDocs />} />
         <Route path="/guides" element={<Guides />} />
         <Route path="/blog" element={<Blog />} />
+        
+        {/* Labs routes (feature flag gated) */}
+        <Route path="/labs/crews" element={<CrewsList />} />
+        <Route path="/labs/crews/:id/drafts" element={<CrewDrafts />} />
+        <Route path="/labs/planner/board" element={<PlannerBoard />} />
+        <Route path="/labs/planner/calendar" element={<PlannerCalendar />} />
         
         {/* Protected dashboard */}
         <Route

@@ -29,6 +29,12 @@ try {
   process.exit(1);
 }
 
+// Seed Labs data if features are enabled
+if (process.env.FEATURE_CREWS === 'true' || process.env.FEATURE_PLANNER === 'true') {
+  const seedLabs = require('./seed-labs');
+  seedLabs();
+}
+
 // Middleware
 app.use(cors({
   origin: true,
@@ -38,8 +44,8 @@ app.use(express.json({ limit: '10mb' }));
 
 // Health check route
 app.get('/', (req, res) => {
-  res.json({ 
-    message: 'Verzio API Server is running!', 
+  res.json({
+    message: 'Verzio API Server is running!',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development'
   });
@@ -51,9 +57,17 @@ app.use('/api/text', textRoutes);
 app.use('/api/image', imageRoutes);
 app.use('/api/voice', voiceRoutes);
 app.use('/api/seo', seoRoutes);
-app.use('/api/workflows', workflowRoutes);
 app.use('/api/feeds', feedsRoutes);
+app.use('/api/workflows', workflowRoutes);
 app.use('/api/wolleys', wolleysRoutes);
+
+// Labs feature routes (feature flag gated)
+if (process.env.FEATURE_CREWS === 'true') {
+  app.use('/api/crews', require('./modules/crews/routes'));
+}
+if (process.env.FEATURE_PLANNER === 'true') {
+  app.use('/api/planner', require('./modules/planner/routes'));
+}
 
 // Serve static client in production
 if (process.env.NODE_ENV === 'production') {
