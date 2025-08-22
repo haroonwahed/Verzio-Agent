@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 
-function Home() {
+export default function Home() {
   const [isDarkMode, setIsDarkMode] = useState(true);
 
   useEffect(() => {
@@ -735,21 +735,7 @@ function Home() {
   );
 }
 
-export default Home;
-
-export default function Home() {
-  const features = [
-    "Draft on-brand content",
-    "Auto-schedule deep work", 
-    "Evidence panel",
-    "Approvals"
-  ];
-
-  const logos = [
-    "Company A", "Company B", "Company C", "Company D", "Company E"
-  ];
-
-  return (
+}
     <div className="min-h-screen bg-[var(--bg)]">
       {/* Header */}
       <header className="border-b border-[var(--border)] bg-white">
