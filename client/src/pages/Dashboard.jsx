@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { User, FileText, Image, Mic, Settings, BarChart, Plus, Search, Grid, List, Filter, MessageSquare, Wand2, Workflow, Rss, BookOpen, HelpCircle, ExternalLink, Bell, LogOut } from 'lucide-react';
+import { User, FileText, Image, Mic, Settings, BarChart, BarChart3, Plus, Search, Grid, List, Filter, MessageSquare, Wand2, Workflow, Rss, BookOpen, HelpCircle, ExternalLink, Bell, LogOut, Bot, Layers } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import AppShell from '../components/AppShell';
