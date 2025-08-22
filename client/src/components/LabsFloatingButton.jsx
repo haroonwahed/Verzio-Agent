@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Flask } from 'lucide-react';
+import { TestTube } from 'lucide-react';
 
 function LabsFloatingButton() {
   const [showLabsFeatures, setShowLabsFeatures] = useState(false);
@@ -51,7 +51,7 @@ function LabsFloatingButton() {
           className="bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-full shadow-lg transition-all duration-200 hover:scale-105"
           title="Labs Features"
         >
-          <Flask className="h-6 w-6" />
+          <TestTube className="h-6 w-6" />
         </button>
 
         {/* Dropdown Menu */}
@@ -59,7 +59,7 @@ function LabsFloatingButton() {
           <div className="absolute bottom-16 right-0 bg-white rounded-lg shadow-xl border border-gray-200 py-2 min-w-48">
             <div className="px-4 py-2 border-b border-gray-100">
               <div className="flex items-center space-x-2">
-                <Flask className="h-4 w-4 text-purple-600" />
+                <TestTube className="h-4 w-4 text-purple-600" />
                 <span className="font-semibold text-sm">Labs</span>
                 <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Beta</span>
               </div>
