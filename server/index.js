@@ -84,6 +84,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server listening on http://0.0.0.0:${PORT}`);
-  console.log(`Frontend should be accessible on port 5173`);
+  console.log(`✅ Server successfully started on http://0.0.0.0:${PORT}`);
+  console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`📱 Frontend should be accessible on port 5174`);
 });
