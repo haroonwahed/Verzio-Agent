@@ -150,10 +150,96 @@ function Home() {
             </a>
 
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#product" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>Product</a>
-              <a href="#templates" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>Templates</a>
-              <a href="#pricing" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>Pricing</a>
-              <a href="#docs" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>Docs</a>
+              {/* Product Dropdown */}
+              <div className="relative group">
+                <button className={`flex items-center space-x-1 ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
+                  <span>Product</span>
+                  <svg className="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+                <div className={`absolute top-full left-0 mt-2 w-80 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 ${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'} border rounded-xl shadow-xl`}>
+                  <div className="p-6">
+                    <div className="space-y-4">
+                      <Link to="/wolleys" className="flex items-start space-x-3 p-3 rounded-lg hover:bg-purple-50 hover:bg-opacity-10 transition-colors group">
+                        <div className="w-10 h-10 bg-purple-500 bg-opacity-20 rounded-lg flex items-center justify-center">
+                          <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                          </svg>
+                        </div>
+                        <div className="flex-1">
+                          <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>AI Agents (Wolleys)</h4>
+                          <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Personalized AI assistants for content creation</p>
+                        </div>
+                      </Link>
+                      
+                      <Link to="/workflows" className="flex items-start space-x-3 p-3 rounded-lg hover:bg-purple-50 hover:bg-opacity-10 transition-colors group">
+                        <div className="w-10 h-10 bg-blue-500 bg-opacity-20 rounded-lg flex items-center justify-center">
+                          <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                          </svg>
+                        </div>
+                        <div className="flex-1">
+                          <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Workflows</h4>
+                          <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Simple drag & drop flows for automation</p>
+                        </div>
+                      </Link>
+                      
+                      <Link to="/media-studio" className="flex items-start space-x-3 p-3 rounded-lg hover:bg-purple-50 hover:bg-opacity-10 transition-colors group">
+                        <div className="w-10 h-10 bg-green-500 bg-opacity-20 rounded-lg flex items-center justify-center">
+                          <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                          </svg>
+                        </div>
+                        <div className="flex-1">
+                          <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Media Studio</h4>
+                          <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Image, video & audio generation</p>
+                        </div>
+                      </Link>
+                      
+                      <Link to="/content-writer" className="flex items-start space-x-3 p-3 rounded-lg hover:bg-purple-50 hover:bg-opacity-10 transition-colors group">
+                        <div className="w-10 h-10 bg-indigo-500 bg-opacity-20 rounded-lg flex items-center justify-center">
+                          <svg className="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                          </svg>
+                        </div>
+                        <div className="flex-1">
+                          <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Content Writer</h4>
+                          <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Professional AI content creation</p>
+                        </div>
+                      </Link>
+                    </div>
+                    <div className="mt-6 pt-4 border-t border-gray-200 border-opacity-20">
+                      <Link to="/app" className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-center block">
+                        Get started
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Resources Dropdown */}
+              <div className="relative group">
+                <button className={`flex items-center space-x-1 ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
+                  <span>Resources</span>
+                  <svg className="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+                <div className={`absolute top-full left-0 mt-2 w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 ${isDarkMode ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'} border rounded-xl shadow-xl`}>
+                  <div className="p-4">
+                    <div className="space-y-2">
+                      <Link to="/templates" className={`block px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Templates</Link>
+                      <Link to="/documentation" className={`block px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Documentation</Link>
+                      <Link to="/api" className={`block px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>API</Link>
+                      <Link to="/guides" className={`block px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Guides</Link>
+                      <Link to="/blog" className={`block px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Blog</Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <Link to="/pricing" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>Pricing</Link>
             </div>
 
             <div className="hidden md:flex items-center space-x-4">
@@ -205,10 +291,22 @@ function Home() {
               )}
               <span>Toggle theme</span>
             </button>
-            <a href="#product" className={`block px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Product</a>
-            <a href="#templates" className={`block px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Templates</a>
-            <a href="#pricing" className={`block px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Pricing</a>
-            <a href="#docs" className={`block px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Docs</a>
+            <div className="space-y-1">
+              <p className={`px-3 py-2 text-sm font-semibold ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Product</p>
+              <Link to="/wolleys" className={`block px-6 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>AI Agents (Wolleys)</Link>
+              <Link to="/workflows" className={`block px-6 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Workflows</Link>
+              <Link to="/media-studio" className={`block px-6 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Media Studio</Link>
+              <Link to="/content-writer" className={`block px-6 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Content Writer</Link>
+            </div>
+            <div className="space-y-1 mt-4">
+              <p className={`px-3 py-2 text-sm font-semibold ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Resources</p>
+              <Link to="/templates" className={`block px-6 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Templates</Link>
+              <Link to="/documentation" className={`block px-6 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Documentation</Link>
+              <Link to="/api" className={`block px-6 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>API</Link>
+              <Link to="/guides" className={`block px-6 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Guides</Link>
+              <Link to="/blog" className={`block px-6 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Blog</Link>
+            </div>
+            <Link to="/pricing" className={`block px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Pricing</Link>
             <Link to="/login" className={`block px-3 py-2 rounded-lg transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white hover:bg-white/5' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}>Login</Link>
             <Link to="/signup" className="block mt-4 text-center bg-purple-600 text-white px-4 py-2 rounded-lg font-medium">Start free</Link>
           </nav>
