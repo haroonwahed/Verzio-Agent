@@ -1,0 +1,188 @@
+Role: You are editing my repo. Do NOT break or change existing UI/UX or logic. This is an additive refactor + feature pack. Keep all existing IDs, component names, and routes. You may add classes, wrappers, and new files.
+
+PART A — Design system + layout polish (no behavior changes)
+Guardrails
+
+No backend edits. No JS logic changes.
+
+CSS-first: Fix layout and spacing by adding a new theme file + tiny markup hooks.
+
+Backout switch: All visual changes activate only when <body class="theme-pro"> is present. Removing that class fully reverts to the current look.
+
+Create
+
+Add static/css/theme-pro.css (or client/src/styles/theme-pro.css if React).
+
+In the base layout (or root App), add class="theme-pro" on <body> and include the stylesheet. If you can’t edit body, apply the class on your top-level wrapper.
+
+Design tokens
+/* static/css/theme-pro.css */
+:root.theme-pro{
+  --bg:#f7f8fb; --surface:#ffffff; --muted:#6b7280; --text:#0f172a;
+  --primary:#7c3aed; --accent:#22d3ee; --success:#16a34a;
+  --border:#e5e7eb; --hover:#f3f4f6;
+  --rad:14px; --rad-sm:10px; --shadow:0 1px 2px rgba(0,0,0,.06),0 10px 30px rgba(0,0,0,.05);
+  --space-1:8px; --space-2:12px; --space-3:16px; --space-4:24px; --space-5:32px;
+}
+
+/* App shell: fix the exact issue you see (tight gutter between sidebar and content) */
+.theme-pro .app-shell{ display:grid; grid-template-columns: 260px minmax(0,1fr); gap: var(--space-4); }
+.theme-pro .sidebar{ background:var(--surface); border-right:1px solid var(--border); }
+.theme-pro .content{ padding: var(--space-5) var(--space-5); }
+
+/* Page header + toolbar rhythm */
+.theme-pro .page-header{ margin-bottom: var(--space-4); }
+.theme-pro .toolbar{ display:flex; gap: var(--space-2); align-items:center; flex-wrap:wrap; }
+
+/* Panels + cards */
+.theme-pro .panel,.theme-pro .card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--rad); box-shadow:var(--shadow); }
+
+/* Buttons (accessible disabled state) */
+.theme-pro .btn-primary{ background:var(--primary); color:#fff; border-radius:var(--rad-sm); height:40px; padding:0 16px; }
+.theme-pro .btn-primary[disabled]{ opacity:.55; cursor:not-allowed; }
+
+/* Inputs */
+.theme-pro textarea,.theme-pro input,.theme-pro select{
+  background:#fff; border:1px solid var(--border); border-radius:var(--rad-sm); padding:10px 12px; width:100%;
+}
+.theme-pro textarea{ min-height: 160px; }
+
+/* Table (if used) */
+.theme-pro table.data{ width:100%; border-collapse:separate; border-spacing:0; font-size:14px; }
+.theme-pro table.data thead th{ color:var(--muted); font-weight:600; padding:10px 12px; border-bottom:1px solid var(--border); position:sticky; top:0; background:#fff; }
+.theme-pro table.data tbody td{ padding:10px 12px; border-bottom:1px solid var(--border); }
+
+/* Status pill */
+.theme-pro .pill{ display:inline-flex; gap:6px; align-items:center; padding:4px 10px; border-radius:999px; background:rgba(22,163,74,.08); color:var(--success); border:1px solid rgba(22,163,74,.18); font-weight:600; }
+
+/* Empty state */
+.theme-pro .empty{ text-align:center; padding:40px 0; color:var(--muted); }
+.theme-pro .empty a{ color:var(--primary); font-weight:600; }
+
+/* Responsive fix: two-pane generator pages */
+@media (min-width: 1024px){
+  .theme-pro .two-pane{ display:grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); align-items:start; }
+}
+
+Apply (non-breaking hooks only)
+
+Wrap your main layout with:
+
+<div class="app-shell">
+  <aside class="sidebar">…existing sidebar…</aside>
+  <main class="content">…existing content…</main>
+</div>
+
+
+On Generate Text and Generate Voice, wrap the left/right columns in a .two-pane container. Do not rename existing classes—just add this wrapper so spacing is fixed.
+
+Ensure primary CTAs get the .btn-primary class (existing classes stay).
+
+Page-specific fixes (from the screenshots)
+
+Generate Text: Use .two-pane. Left: “Quick Templates” + textarea + CTA. Right: Generated Content panel with .panel and a clearly visible empty state.
+
+Generate Voice: Same .two-pane. Left: textarea + voice select + CTA; right: audio player pane. Ensure 24px minimum gap to sidebar and between panes.
+
+Make the disabled Generate buttons pass contrast (see .btn-primary[disabled]).
+
+Acceptance (visual): With theme-pro on <body>, the sidebar-to-content gutter is ≥ 24px, two-pane pages align top, headings align to left grid line, and panels have consistent radius/shadow.
+
+PART B — Brainvine × Motion features (additive, behind flags)
+Guardrails
+
+No UI rewrites. Add new routes only; no changes to existing nav.
+
+Flags: FEATURE_CREWS, FEATURE_PLANNER default false; show a small “Labs” floating button (bottom-right) only when at least one flag is true.
+
+Do not ship external API calls unless keys are present.
+
+New routes (frontend)
+
+/labs/crews (list)
+
+/labs/crews/:id (editor)
+
+/labs/planner/board (kanban)
+
+/labs/planner/calendar (week view)
+
+If using React Router, add these routes in a new labs chunk. If server-rendered, add new templates under templates/labs/….
+
+Data models (back end; create migrations/schemas — new tables only)
+
+Crews
+
+CrewTemplate(id, name, purpose, fields_json, prompt_schema_json, created_at, updated_at)
+
+Crew(id, name, template_id→CrewTemplate, purpose, inputs_json, status{draft,queued,done,failed}, tags, created_at, updated_at)
+
+CrewRun(id, crew_id, input_snapshot_json, output_snapshot_json, tokens_used, status{queued,running,done,failed}, created_at)
+
+CrewDraft(id, crew_id, content_md, seo_meta_json, score, created_at)
+
+Planner
+
+Task(id, title, notes, priority{low,med,high}, est_minutes, due_at, hard_deadline:boolean, status{todo,doing,done,blocked}, tags, created_at, updated_at)
+
+TaskLink(id, task_id, depends_on_task_id)
+
+WorkHours(id, user_id, weekday:int, start_time, end_time, timezone)
+
+EventBlock(id, task_id, starts_at, ends_at, source{auto,manual}, calendar_id nullable)
+
+API (new endpoints only)
+
+Crews: GET/POST /api/crews, POST /api/crews/:id/run, GET /api/crews/:id/drafts, GET /api/crew-templates
+
+Planner: GET/POST /api/tasks, PATCH /api/tasks/:id,
+POST /api/scheduler/plan → returns proposed EventBlock[],
+POST /api/blocks/commit
+
+Scheduler algorithm (first pass): Sort tasks by (hard_deadline desc, priority desc, due_at asc), pack into WorkHours windows, chunk blocks to ≤ 90 minutes, avoid overlaps, never past hard_deadline. Return proposals; commit on confirmation.
+
+Front-end pages (scoped classes only; use .labs-*)
+
+/labs/crews
+
+Header actions: New Crew, Run Crew (per row).
+
+Table columns: Name, Template, Last Run, Status (use .pill).
+
+Editor /labs/crews/:id: split pane editor (Markdown left, Preview + SEO chip right).
+
+/labs/planner/board
+
+Columns: To-do, Doing, Blocked, Done; drag-drop; quick add.
+
+/labs/planner/calendar
+
+Week (Mon–Sun), blocks drag/resize; toolbar: Auto-schedule, Commit Plan, Work Hours.
+
+Seeds & docs
+
+Seed 3 CrewTemplates (Blog Post OS, Landing Page, Ad Set) and 6 demo tasks with varied priorities/due dates.
+
+Add docs/labs.md explaining flags, data models, routes, and how to test.
+
+Acceptance (functional):
+
+With flags off, nothing changes visually/behaviorally.
+
+With FEATURE_CREWS=true, /labs/crews works end-to-end, generating a mock draft when no API key is present.
+
+With FEATURE_PLANNER=true, /labs/planner/calendar auto-schedules sample tasks into visible blocks without overlaps.
+
+PART C — QA checklist Replit must pass
+
+Existing pages render exactly as before when <body> lacks theme-pro.
+
+With theme-pro, two-pane pages use a ≥ 24px gutter to the sidebar and between panes; headers align; buttons are accessible.
+
+No JS errors; no selectors renamed.
+
+No secrets in client bundle.
+
+Lint/tests pass; build succeeds.
+
+Proceed now: add theme-pro.css, wrap the app with .app-shell/.sidebar/.content, insert .two-pane wrappers for “Generate Text” and “Generate Voice”, then implement flag-gated Crews and Planner modules per above—without modifying any existing files beyond adding classes/wrappers and linking the stylesheet.
