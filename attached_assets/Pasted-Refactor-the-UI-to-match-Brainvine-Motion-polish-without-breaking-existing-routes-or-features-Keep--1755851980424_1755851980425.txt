@@ -1,0 +1,194 @@
+Refactor the UI to match Brainvine/Motion polish without breaking existing routes or features. Keep React + Tailwind. Do NOT remove current components—only add/rename and wire up.
+
+0) Branding & tokens
+
+Rename the product everywhere to Creeator (sidebar header, document titles, metadata).
+
+Create shared design tokens at frontend/src/styles/theme-pro.css and import once in main.jsx:
+
+:root {
+  --brand-50:#f3f4ff; --brand-100:#e7e9ff; --brand-200:#ccd0ff; --brand-300:#aab0ff;
+  --brand-400:#8c92ff; --brand-500:#6b72ff; --brand-600:#5158f0; --brand-700:#4146c4;
+  --brand-800:#363aa0; --brand-900:#2c307f;
+  --bg:#f8fafc; --panel:#ffffff; --muted:#64748b; --border:#e5e7eb; --ring: var(--brand-400);
+  --radius: 16px; --gap: 24px; --gap-lg: 32px;
+}
+html,body,#root{height:100%}
+.app-shell{min-height:100dvh}
+.sidebar{width:18rem}
+.content{min-width:0}
+.card{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.btn-brand{background:var(--brand-600); color:white; border-radius:12px; padding:.75rem 1rem; font-weight:600}
+.btn-brand:disabled{opacity:.6}
+.link{color:var(--brand-700)}
+
+1) Logo (generate once, then never change)
+
+Create frontend/public/brand/creeator-logo.svg and …/creeator-mark.svg:
+
+Concept: rounded square with a spark ✦ + stylized C (negative space), geometric, no text, single brand gradient from --brand-400 → --brand-700.
+
+Keep the wordmark Creeator in Inter/SF-like font, tight letter‑spacing, lowercase “reeator” after a slightly larger “C”.
+
+Place a comment at the top of each SVG: <!-- DO NOT MODIFY: locked brand asset -->.
+
+Use the mark in the sidebar and the wordmark on the marketing/landing page.
+
+2) Sidebar polish (Brainvine style), fix empty “Resources”
+
+Ensure the app uses a stable wrapper:
+
+// src/components/AppShell.jsx
+export default function AppShell({ sidebar, children }) {
+  return (
+    <div className="app-shell bg-[var(--bg)] flex">
+      <aside className="sidebar shrink-0 sticky top-0 h-dvh overflow-y-auto bg-white/80 backdrop-blur border-r border-[var(--border)]">
+        {sidebar}
+      </aside>
+      <main className="content flex-1 overflow-x-hidden">{children}</main>
+    </div>
+  );
+}
+
+
+Update sidebar component:
+
+Top: logo mark + Creeator.
+
+Creator Tools group (existing links).
+
+Management group (Product Feeds, Integrations, Workflows).
+
+Resources group (FIX: add these items):
+
+Docs (/docs), Changelog (/changelog), Keyboard Shortcuts (open modal), Status (/status), Contact (/contact).
+
+Bottom account capsule stays.
+
+Add active/hover styles; consistent 24px gutters.
+
+3) Rename “AI Agents” → Crews and add primary buttons like Brainvine
+
+Replace every user‑facing “AI Agents” string with Crews.
+
+In the left nav under Creator Tools, add Crews and Workflows buttons with icons and .btn-brand style for CTAs where relevant.
+
+Route Crews to /crews (listing) and Workflows to /workflows.
+
+On the Generate Text page, add a top strip with two quick‑action tiles (Brainvine‑like cards):
+
+“Start a Crew Run” → /crews/new
+
+“Open Workflow Builder” → /workflows
+Each tile is a .card with icon, short text, and a right‑chevron.
+
+4) Dashboard (Brainvine feel)
+
+On /dashboard:
+
+Layout: px-8 py-6 container; grid with 12 cols, gap-[var(--gap)].
+
+Cards:
+
+Welcome/XP card (col-span-5): greeting, small level bar, today usage stat.
+
+Latest activity (col-span-3): list of 4 recent items (drafts ready, crew run started, workflow executed).
+
+Calendar peek (col-span-4): mini week calendar with upcoming scheduled blocks (stub OK).
+
+Chat with a Crew (col-span-4): small list of favorite crews; quick “Run” chips.
+
+Recently used tools (col-span-4): last 6 pages.
+
+Your usage (col-span-4): small area chart placeholder.
+
+All cards use .card with 16px radius and subtle shadow. Keep copy concise.
+
+Add a thin footer only on app pages (not needed on competitors but helpful): © 2025 Creeator · v0.x · Changelog · Privacy. Implement as a muted, single‑line bar at the very bottom of main content.
+
+5) Landing / Home (Motion inspiration, no breaking app)
+
+Create /home (marketing shell) separate from app dashboard:
+
+Hero: large headline “Create, run, and schedule content with Crews.” Subhead mirrors Motion’s clarity.
+
+CTA buttons: Try Creeator (primary), Book demo (secondary ghost).
+
+Feature chips row (e.g., “Draft on‑brand content”, “Auto‑schedule deep work”, “Evidence panel”, “Approvals”).
+
+Animated/mock “AI employee” card showing a Crew with 3–4 skills toggles (non‑functional).
+
+Social proof row (logos placeholder).
+
+No footer needed beyond standard marketing footer.
+
+6) Components & routes (lightweight, additive)
+
+Add src/pages/crews/index.jsx (list + “New Crew” button), src/pages/crews/new.jsx (create form stub).
+
+Ensure /workflows page exists (builder entry). If already present, only add the CTA tiles and the list styling.
+
+Add src/components/ui/Card.jsx, src/components/ui/SectionTitle.jsx, reuse across pages.
+
+Minimal examples:
+
+// src/pages/dashboard/index.jsx (sketch)
+export default function Dashboard() {
+  return (
+    <div className="px-8 py-6 space-y-[var(--gap-lg)]">
+      <div className="grid grid-cols-12 gap-[var(--gap)]">
+        <WelcomeCard className="col-span-12 xl:col-span-5" />
+        <LatestActivity className="col-span-12 sm:col-span-6 xl:col-span-3" />
+        <CalendarPeek className="col-span-12 sm:col-span-6 xl:col-span-4" />
+        <ChatWithCrew className="col-span-12 md:col-span-6 xl:col-span-4" />
+        <RecentTools className="col-span-12 md:col-span-6 xl:col-span-4" />
+        <UsageChart className="col-span-12 xl:col-span-4" />
+      </div>
+      <footer className="text-sm text-[var(--muted)] border-t border-[var(--border)] pt-4">
+        © 2025 Creeator · <a className="link" href="/changelog">Changelog</a> · <a className="link" href="/privacy">Privacy</a>
+      </footer>
+    </div>
+  );
+}
+
+7) UX details (like Brainvine)
+
+Consistent gutters: ≥24px between sidebar and content and between cards.
+
+Sticky section headers on long panels.
+
+Keyboard: add ⌘K command palette stub (opens modal with quick nav).
+
+All scrollable panes use overflow-auto; remove JS height hacks; prefer min-h-dvh.
+
+8) Text & naming
+
+Everywhere in UI: “AI Agents” → Crews; “Generate Content” copy stays but add “Run with a Crew” CTA.
+
+Update email/address metadata to Creeator.
+
+Sidebar top name: Creeator with the new SVG mark.
+
+9) Guardrails
+
+Do not rename existing routes/components beyond the user‑facing label change.
+
+Do not alter any server/API logic.
+
+New assets go under frontend/public/brand/….
+
+After creating the SVG logo files, mark them with the “DO NOT MODIFY” comment and do not regenerate.
+
+10) Acceptance checks
+
+Sidebar shows Crews and Workflows buttons.
+
+“Resources” group is populated (Docs, Changelog, Shortcuts, Status, Contact).
+
+Dashboard renders Brainvine‑style cards and a slim footer; no giant gaps with DevTools closed.
+
+Landing page /home reflects Motion‑style hero + chips + CTA.
+
+Logos display (mark in app sidebar, wordmark on /home), and SVGs are locked with top comments.
+
+No regressions on existing generator pages.”**
