@@ -1,6 +1,8 @@
-
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Bot from './assets/Bot'; // Assuming Bot and Sparkles are local components
+import Sparkles from './assets/Sparkles'; // Assuming Bot and Sparkles are local components
+
 
 function Home() {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -23,7 +25,7 @@ function Home() {
     // Mobile menu toggle
     const menuToggle = document.getElementById('menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
-    
+
     const toggleMenu = () => {
       if (mobileMenu) {
         mobileMenu.classList.toggle('hidden');
@@ -62,8 +64,8 @@ function Home() {
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'text-white' : 'text-gray-900'}`} style={{
-      background: isDarkMode 
-        ? 'linear-gradient(180deg, #0c0c0c 0%, #1a1a1a 50%, #0c0c0c 100%)' 
+      background: isDarkMode
+        ? 'linear-gradient(180deg, #0c0c0c 0%, #1a1a1a 50%, #0c0c0c 100%)'
         : 'linear-gradient(180deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%)',
       fontFamily: 'Inter, system-ui, -apple-system, sans-serif'
     }}>
@@ -78,8 +80,8 @@ function Home() {
         }
 
         .glass {
-          background: ${isDarkMode 
-            ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02))' 
+          background: ${isDarkMode
+            ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02))'
             : 'linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.02))'};
           border: 1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'};
           backdrop-filter: blur(20px);
@@ -121,8 +123,8 @@ function Home() {
         }
 
         .glass:hover {
-          background: ${isDarkMode 
-            ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04))' 
+          background: ${isDarkMode
+            ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04))'
             : 'linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.04))'};
           border-color: ${isDarkMode ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.12)'};
         }
@@ -132,24 +134,30 @@ function Home() {
       <header className={`relative border-b ${isDarkMode ? 'border-white/10' : 'border-gray-200'}`}>
         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                  </svg>
+            <a href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-7 h-7 relative">
+                  {/* Modern brain-like logo */}
+                  <div className="absolute inset-0">
+                    <svg viewBox="0 0 24 24" className="w-7 h-7 text-white">
+                      <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                    </svg>
+                  </div>
                 </div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">Creeator</span>
               </div>
-            </div>
-            
+              <div>
+                <h1 className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Creeator</h1>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>AI Content Platform</p>
+              </div>
+            </a>
+
             <div className="hidden md:flex items-center space-x-8">
               <a href="#product" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>Product</a>
               <a href="#templates" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>Templates</a>
               <a href="#pricing" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>Pricing</a>
               <a href="#docs" className={`${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>Docs</a>
             </div>
-            
+
             <div className="hidden md:flex items-center space-x-4">
               <button
                 onClick={toggleTheme}
@@ -173,7 +181,7 @@ function Home() {
                 Start free
               </Link>
             </div>
-            
+
             <button id="menu-toggle" className="md:hidden p-2 text-gray-300 hover:text-white">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -181,7 +189,7 @@ function Home() {
             </button>
           </div>
         </nav>
-        
+
         <div id="mobile-menu" className={`mobile-menu hidden md:hidden ${isDarkMode ? 'bg-black/95 border-b border-white/10' : 'bg-white/95 border-b border-gray-200'}`}>
           <nav className="px-4 py-4 space-y-2">
             <button
@@ -213,15 +221,11 @@ function Home() {
       <section className="relative overflow-hidden">
         <div className="mx-auto max-w-7xl px-4 py-16 lg:py-24 grid lg:grid-cols-2 gap-10 items-center">
           <div className="text-center lg:text-left">
-            <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-              AI-Powered Content Creation
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">
-                Made Simple
-              </span>
+            <h1 className={`text-5xl md:text-7xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+              Create content <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">10× faster</span> with AI workflows
             </h1>
-            <p className={`text-xl mb-8 max-w-2xl ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-              Generate high-quality text, images, and voice content with our advanced AI platform. 
-              Build workflows, optimize for SEO, and scale your content creation like never before.
+            <p className={`text-xl md:text-2xl mb-8 ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} leading-relaxed`}>
+              Transform your content creation with intelligent AI agents. Build custom workflows that research, write, optimize, and publish across all your channels automatically.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Link to="/signup" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all transform hover:scale-105 flex items-center justify-center space-x-2">
@@ -235,7 +239,7 @@ function Home() {
               </button>
             </div>
           </div>
-          
+
           <div className="relative">
             <div className="glass rounded-2xl p-8 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20"></div>
@@ -263,7 +267,7 @@ function Home() {
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Everything you need to go from idea → published</h2>
           <p className={`text-xl max-w-3xl mx-auto ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Powerful AI tools and workflow automation to create, optimize, and distribute content across all your channels.</p>
         </div>
-        
+
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           <Link to="/signup" className="glass rounded-xl p-8 hover:border-white/20 transition-all duration-300 group cursor-pointer transform hover:scale-105">
             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/20 group-hover:bg-purple-500/30 transition-colors">
@@ -284,22 +288,20 @@ function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
               </svg>
             </div>
-            <h3 className="font-semibold text-xl mb-3">Smart Content Generation</h3>
-            <p className={`leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Generate blog posts, social media content, emails, and more with AI that understands your brand voice and audience.</p>
+            <h3 className="font-semibold text-xl mb-3">Smart AI Agents</h3>
+            <p className={`leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Deploy specialized AI agents that understand your brand voice and create consistent, high-quality content across all formats.</p>
             <div className="mt-4 flex items-center text-purple-400 group-hover:text-purple-300 transition-colors">
               <span className="text-sm font-medium">Start generating →</span>
             </div>
           </Link>
 
           <Link to="/signup" className="glass rounded-xl p-8 hover:border-white/20 transition-all duration-300 group cursor-pointer transform hover:scale-105">
-            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/20 group-hover:bg-purple-500/30 transition-colors">
-              <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-              </svg>
+            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/20 group-hover:bg-blue-500/30 transition-colors">
+              <Sparkles className="w-6 h-6 text-blue-400" />
             </div>
-            <h3 className="font-semibold text-xl mb-3">Multi-Channel Publishing</h3>
-            <p className={`leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Publish and distribute your content across multiple platforms simultaneously with optimized formatting for each channel.</p>
-            <div className="mt-4 flex items-center text-purple-400 group-hover:text-purple-300 transition-colors">
+            <h3 className="font-semibold text-xl mb-3">Multi-Format Generation</h3>
+            <p className={`leading-relaxed ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Create blog posts, social media content, product descriptions, images, voiceovers, and more—all optimized for your channels.</p>
+            <div className="mt-4 flex items-center text-blue-400 group-hover:text-blue-300 transition-colors">
               <span className="text-sm font-medium">Explore publishing →</span>
             </div>
           </Link>
@@ -312,7 +314,7 @@ function Home() {
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Build Custom AI Workflows</h2>
           <p className={`text-xl max-w-3xl mx-auto ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Design powerful automated workflows that connect multiple AI tools and external services to streamline your content creation process.</p>
         </div>
-        
+
         <div className="glass rounded-2xl p-8 lg:p-12">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -347,7 +349,7 @@ function Home() {
                 </svg>
               </Link>
             </div>
-            
+
             <div className="relative">
               <div className="space-y-4">
                 <div className="flex items-center justify-between p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
@@ -361,13 +363,13 @@ function Home() {
                   </div>
                   <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                 </div>
-                
+
                 <div className="flex justify-center">
                   <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                   </svg>
                 </div>
-                
+
                 <div className="flex items-center justify-between p-4 bg-purple-500/10 border border-purple-500/20 rounded-lg">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
@@ -379,13 +381,13 @@ function Home() {
                   </div>
                   <div className="w-3 h-3 bg-orange-500 rounded-full animate-pulse"></div>
                 </div>
-                
+
                 <div className="flex justify-center">
                   <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
                   </svg>
                 </div>
-                
+
                 <div className="flex items-center justify-between p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
@@ -409,7 +411,7 @@ function Home() {
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Connect with your favorite tools</h2>
           <p className={`text-xl max-w-3xl mx-auto ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Seamlessly integrate with thousands of external tools and platforms to streamline your workflow.</p>
         </div>
-        
+
         <div className="relative">
           {/* Central Hub */}
           <div className="flex justify-center mb-8">
@@ -422,7 +424,7 @@ function Home() {
               <div className="absolute -inset-4 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-3xl animate-pulse"></div>
             </div>
           </div>
-          
+
           {/* Integration Icons */}
           <div className="grid grid-cols-4 md:grid-cols-8 gap-8 items-center justify-items-center">
             {/* Row 1 */}
@@ -470,9 +472,9 @@ function Home() {
               </svg>
             </div>
           </div>
-          
+
           <div className="text-center mt-12">
-            <Link to="/signup" className="inline-flex items-center bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold transition-colors">
+            <Link to="/app" className="inline-flex items-center bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-xl font-semibold transition-colors">
               Explore All Integrations
               <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
@@ -488,7 +490,7 @@ function Home() {
           <h2 className="text-4xl md:text-5xl font-bold mb-4">FAQ</h2>
           <p className={`text-xl ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>Everything you need to know about Creeator and how it works.</p>
         </div>
-        
+
         <div className="space-y-4">
           <details className={`group rounded-xl p-6 ${isDarkMode ? 'bg-white/5' : 'bg-gray-50'}`}>
             <summary className="flex items-center justify-between cursor-pointer font-semibold text-lg">
@@ -501,7 +503,7 @@ function Home() {
               <p>Creeator is an AI-powered content creation platform that helps you generate high-quality text, images, and voice content. Our advanced workflow builder allows you to connect multiple AI tools and automate your entire content creation process from research to publishing.</p>
             </div>
           </details>
-          
+
           <details className={`group rounded-xl p-6 ${isDarkMode ? 'bg-white/5' : 'bg-gray-50'}`}>
             <summary className="flex items-center justify-between cursor-pointer font-semibold text-lg">
               <span>How can I customize my content workflows?</span>
@@ -513,7 +515,7 @@ function Home() {
               <p>Our visual workflow builder lets you drag and drop different AI tools and steps to create custom automation. You can configure AI agents, add research sources, set tone and style, include SEO requirements, and define approval workflows to match your exact needs.</p>
             </div>
           </details>
-          
+
           <details className={`group rounded-xl p-6 ${isDarkMode ? 'bg-white/5' : 'bg-gray-50'}`}>
             <summary className="flex items-center justify-between cursor-pointer font-semibold text-lg">
               <span>What integrations are available?</span>
@@ -525,7 +527,7 @@ function Home() {
               <p>Creeator integrates with thousands of external tools including Google Drive, GitHub, Facebook, Instagram, Gmail, Slack, Google Analytics, and many more. You can connect these tools directly into your workflows to automate publishing and distribution.</p>
             </div>
           </details>
-          
+
           <details className={`group rounded-xl p-6 ${isDarkMode ? 'bg-white/5' : 'bg-gray-50'}`}>
             <summary className="flex items-center justify-between cursor-pointer font-semibold text-lg">
               <span>Is there a free trial available?</span>
@@ -537,7 +539,7 @@ function Home() {
               <p>Yes! We offer a 14-day free trial with no credit card required. You can explore all features, create workflows, and generate content to see how Creeator fits into your content creation process. Cancel anytime during the trial period.</p>
             </div>
           </details>
-          
+
           <details className={`group rounded-xl p-6 ${isDarkMode ? 'bg-white/5' : 'bg-gray-50'}`}>
             <summary className="flex items-center justify-between cursor-pointer font-semibold text-lg">
               <span>How does the AI content generation work?</span>
@@ -574,53 +576,53 @@ function Home() {
 
       {/* Footer */}
       <footer className="border-t border-white/10">
-        <div className="mx-auto max-w-7xl px-4 py-16">
+        <div className="max-w-7xl mx-auto px-4 py-16">
           <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
             <div className="col-span-2">
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+              <a href="/" className="flex items-center space-x-3 mb-4 hover:opacity-80 transition-opacity">
+                <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                   </svg>
                 </div>
-                <span className="text-xl font-bold">Creeator</span>
-              </div>
-              <p className={`mb-6 max-w-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                Transform your content creation process with AI-powered workflows and intelligent automation.
+                <span className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Creeator</span>
+              </a>
+              <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-4 max-w-sm`}>
+                The AI-powered content creation platform that helps teams build, optimize, and publish high-performing content 10x faster.
               </p>
             </div>
-            
+
             <div>
               <h3 className="font-semibold mb-4">Product</h3>
               <ul className={`space-y-2 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Features</a></li>
-                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Pricing</a></li>
-                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Templates</a></li>
-                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Integrations</a></li>
+                <li><a href="#features" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Features</a></li>
+                <li><a href="#pricing" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Pricing</a></li>
+                <li><a href="/app" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Templates</a></li>
+                <li><a href="/app" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Integrations</a></li>
               </ul>
             </div>
-            
+
             <div>
               <h3 className="font-semibold mb-4">Company</h3>
               <ul className={`space-y-2 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>About</a></li>
-                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Blog</a></li>
-                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Careers</a></li>
-                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Contact</a></li>
+                <li><a href="#about" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>About</a></li>
+                <li><a href="https://blog.creeator.ai" target="_blank" rel="noopener noreferrer" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Blog</a></li>
+                <li><a href="mailto:careers@creeator.ai" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Careers</a></li>
+                <li><a href="mailto:hello@creeator.ai" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Contact</a></li>
               </ul>
             </div>
-            
+
             <div>
               <h3 className="font-semibold mb-4">Support</h3>
               <ul className={`space-y-2 text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Help Center</a></li>
-                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Documentation</a></li>
-                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>API Reference</a></li>
-                <li><a href="#" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Status</a></li>
+                <li><a href="https://help.creeator.ai" target="_blank" rel="noopener noreferrer" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Help Center</a></li>
+                <li><a href="https://docs.creeator.ai" target="_blank" rel="noopener noreferrer" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Documentation</a></li>
+                <li><a href="https://api.creeator.ai" target="_blank" rel="noopener noreferrer" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>API</a></li>
+                <li><a href="https://status.creeator.ai" target="_blank" rel="noopener noreferrer" className={`transition-colors ${isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'}`}>Status</a></li>
               </ul>
             </div>
           </div>
-          
+
           <div className={`border-t mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center ${isDarkMode ? 'border-white/10' : 'border-gray-200'}`}>
             <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>© 2024 Creeator. All rights reserved.</p>
             <div className="flex space-x-6 mt-4 sm:mt-0">

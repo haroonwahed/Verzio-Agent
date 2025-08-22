@@ -56,7 +56,7 @@ function Dashboard() {
       <div className="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-purple-50 to-blue-50 border-r border-purple-100 shadow-lg z-10">
         {/* Logo */}
         <div className="p-6 border-b border-gray-100">
-          <div className="flex items-center space-x-3">
+          <a href="/" className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
               <div className="w-7 h-7 relative">
                 {/* Modern brain-like logo */}
@@ -71,7 +71,7 @@ function Dashboard() {
               <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Creeator</h1>
               <p className="text-xs text-gray-500">AI Content Studio</p>
             </div>
-          </div>
+          </a>
         </div>
 
         {/* Search and Quick Access */}
@@ -79,7 +79,7 @@ function Dashboard() {
           <div className="relative mb-4">
             <input
               type="text"
-              placeholder="Search or ask anything..."
+              placeholder="Search workflows, agents, or content types..."
               className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
             />
             <svg className="absolute right-3 top-3 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,8 +92,8 @@ function Dashboard() {
             <button
               onClick={() => setCurrentPanel('workflows')}
               className={`flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
-                currentPanel === 'workflows' 
-                  ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-md' 
+                currentPanel === 'workflows'
+                  ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-md'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -103,8 +103,8 @@ function Dashboard() {
             <button
               onClick={() => setCurrentPanel('wolleys')}
               className={`flex-1 flex items-center justify-center space-x-2 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
-                currentPanel === 'wolleys' 
-                  ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-md' 
+                currentPanel === 'wolleys'
+                  ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-md'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -124,8 +124,8 @@ function Dashboard() {
                 key={item.id}
                 onClick={() => setCurrentPanel(item.id)}
                 className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  isActive 
-                    ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg' 
+                  isActive
+                    ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg'
                     : 'text-gray-700 hover:bg-white/50 hover:text-gray-900'
                 }`}
               >
@@ -141,8 +141,8 @@ function Dashboard() {
           <button
             onClick={() => setCurrentPanel('settings')}
             className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 mb-2 ${
-              currentPanel === 'settings' 
-                ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg' 
+              currentPanel === 'settings'
+                ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-white shadow-lg'
                 : 'text-gray-700 hover:bg-white/50'
             }`}
           >
@@ -165,6 +165,14 @@ function Dashboard() {
               <LogOut className="w-4 h-4 text-gray-500" />
             </button>
           </div>
+          <footer className="mt-4 pt-4 border-t border-gray-200 text-center text-sm text-gray-500">
+            <p>&copy; {new Date().getFullYear()} Creeator. All rights reserved.</p>
+            <div className="flex justify-center space-x-4 mt-2">
+              <a href="/about" className="hover:text-purple-600">About</a>
+              <a href="/contact" className="hover:text-purple-600">Contact</a>
+              <a href="/privacy" className="hover:text-purple-600">Privacy Policy</a>
+            </div>
+          </footer>
         </div>
       </div>
 
