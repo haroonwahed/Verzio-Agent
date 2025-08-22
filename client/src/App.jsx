@@ -45,13 +45,13 @@ function App() {
         <Route path="/blog" element={<Blog />} />
         
         {/* Labs routes (feature flag gated) */}
-        {process.env.REACT_APP_FEATURE_CREWS === 'true' && (
+        {import.meta.env.VITE_FEATURE_CREWS === 'true' && (
           <>
             <Route path="/labs/crews" element={<CrewsList />} />
             <Route path="/labs/crews/:id/drafts" element={<CrewDrafts />} />
           </>
         )}
-        {process.env.REACT_APP_FEATURE_PLANNER === 'true' && (
+        {import.meta.env.VITE_FEATURE_PLANNER === 'true' && (
           <>
             <Route path="/labs/planner/board" element={<PlannerBoard />} />
             <Route path="/labs/planner/calendar" element={<PlannerCalendar />} />
