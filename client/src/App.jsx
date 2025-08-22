@@ -45,10 +45,18 @@ function App() {
         <Route path="/blog" element={<Blog />} />
         
         {/* Labs routes (feature flag gated) */}
-        <Route path="/labs/crews" element={<CrewsList />} />
-        <Route path="/labs/crews/:id/drafts" element={<CrewDrafts />} />
-        <Route path="/labs/planner/board" element={<PlannerBoard />} />
-        <Route path="/labs/planner/calendar" element={<PlannerCalendar />} />
+        {process.env.REACT_APP_FEATURE_CREWS === 'true' && (
+          <>
+            <Route path="/labs/crews" element={<CrewsList />} />
+            <Route path="/labs/crews/:id/drafts" element={<CrewDrafts />} />
+          </>
+        )}
+        {process.env.REACT_APP_FEATURE_PLANNER === 'true' && (
+          <>
+            <Route path="/labs/planner/board" element={<PlannerBoard />} />
+            <Route path="/labs/planner/calendar" element={<PlannerCalendar />} />
+          </>
+        )}
         
         {/* Protected dashboard */}
         <Route
