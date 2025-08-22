@@ -1,0 +1,130 @@
+Do repo hygiene to prevent duplicate component/exports and case‑sensitivity mistakes in our Vite + React app. Apply the steps below without changing feature behavior.
+
+1) Enforce ‘one component, one default export’ (or named‑only) convention
+
+Standardize React components to either:
+
+export default function ComponentName() { … } (no other export default lines), or
+
+named exports only and no default.
+Choose the first option across the codebase to minimize diff.
+
+Run a code sweep over /client/src:
+
+If a file contains export default X; and export default function X() or const X = … in the same file, remove the extra line and keep exactly one export default function X() { … }.
+
+If a file has both function X(){} and const X = () => {} definitions, collapse to a single definition.
+
+Remove any extra export default statements (max 1 per file).
+
+2) Add lint rules that block this forever
+
+Install and configure ESLint + import rules + React rules:
+
+npm i -D eslint @eslint/js eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-import eslint-plugin-jsx-a11y eslint-config-prettier
+
+
+Create .eslintrc.cjs at project root:
+
+// .eslintrc.cjs
+const { FlatCompat } = require('@eslint/eslintrc');
+const compat = new FlatCompat();
+
+module.exports = [
+  ...compat.extends(
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:import/recommended',
+    'plugin:jsx-a11y/recommended',
+    'prettier'
+  ),
+  {
+    files: ['client/src/**/*.{js,jsx,ts,tsx}'],
+    languageOptions: { ecmaVersion: 2023, sourceType: 'module' },
+    settings: { react: { version: 'detect' } },
+    rules: {
+      // Prevent your current error:
+      'no-redeclare': 'error',
+      'import/no-duplicates': 'error',
+      'import/export': 'error',
+      // Exactly one default export per file
+      'import/no-anonymous-default-export': 'off',
+      'no-duplicate-imports': 'error',
+      // Prefer a single default export style:
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector:
+            'Program:has(ExportDefaultDeclaration) > ExportDefaultDeclaration ~ ExportDefaultDeclaration',
+          message: 'Only one default export per file.',
+        },
+      ],
+      // Case-sensitive path safety on Linux
+      'import/no-unresolved': ['error', { caseSensitive: true }],
+      // React hygiene
+      'react/display-name': 'off',
+      'react/prop-types': 'off'
+    },
+  },
+];
+
+
+Add Prettier (no config needed) and helpful scripts in package.json:
+
+{
+  "scripts": {
+    "lint": "eslint \"client/src/**/*.{js,jsx,ts,tsx}\"",
+    "lint:fix": "eslint \"client/src/**/*.{js,jsx,ts,tsx}\" --fix",
+    "check": "npm run lint"
+  }
+}
+
+3) Project‑wide autofix + detectors
+
+Run autofix now:
+
+npm run lint:fix || true
+
+
+Then run a hard check that must be green:
+
+npm run lint
+
+
+Add a quick guard that fails builds if a file has multiple default exports:
+
+grep -R --include='*.{js,jsx,ts,tsx}' -n 'export default' client/src | cut -d: -f1 | sort | uniq -c | awk '$1>1{print "Multiple default exports in", $2; exit 1}'
+
+4) Case‑sensitivity + duplicate file safety
+
+Ensure there is only one of each page/component (e.g., no home.jsx and Home.jsx duplicates). If both exist, keep Home.jsx and update imports accordingly.
+
+Replace any mixed default + named import for pages with a single default import, e.g.:
+
+- import { Home } from '@/pages/Home.jsx'
++ import Home from '@/pages/Home.jsx'
+
+5) Vite dev UX (optional)
+
+You may keep the HMR error overlay on; it helps catch these issues early. If you must disable it:
+
+// vite.config.js
+export default {
+  server: { hmr: { overlay: false } }
+}
+
+
+(Leave it on in dev by default.)
+
+6) Acceptance criteria
+
+There is no file under client/src with more than one export default.
+
+npm run lint returns 0 errors.
+
+App compiles and hot‑reloads without “Identifier has already been declared” errors.
+
+New PRs/changes must pass npm run check before start.
+
+Apply these changes, commit, and run npm run lint until clean.”
