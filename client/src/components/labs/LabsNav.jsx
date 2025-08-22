@@ -53,3 +53,43 @@ export default function LabsNav() {
     </div>
   );
 }
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+
+function LabsNav() {
+  const location = useLocation();
+  
+  const isCrewsEnabled = import.meta.env.VITE_FEATURE_CREWS === 'true';
+  const isPlannerEnabled = import.meta.env.VITE_FEATURE_PLANNER === 'true';
+
+  return (
+    <nav className="labs-nav">
+      {isCrewsEnabled && (
+        <Link
+          to="/labs/crews"
+          className={`labs-nav-item ${location.pathname.startsWith('/labs/crews') ? 'active' : ''}`}
+        >
+          🤖 AI Crews
+        </Link>
+      )}
+      {isPlannerEnabled && (
+        <>
+          <Link
+            to="/labs/planner/board"
+            className={`labs-nav-item ${location.pathname === '/labs/planner/board' ? 'active' : ''}`}
+          >
+            📋 Board
+          </Link>
+          <Link
+            to="/labs/planner/calendar"
+            className={`labs-nav-item ${location.pathname === '/labs/planner/calendar' ? 'active' : ''}`}
+          >
+            📅 Calendar
+          </Link>
+        </>
+      )}
+    </nav>
+  );
+}
+
+export default LabsNav;

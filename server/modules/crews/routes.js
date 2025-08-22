@@ -26,3 +26,29 @@ router.post('/:id/run', auth, crewsController.runCrew);
 router.get('/:id/drafts', auth, crewsController.getCrewDrafts);
 
 module.exports = router;
+const express = require('express');
+const router = express.Router();
+const controller = require('./controller');
+const auth = require('../../middleware/auth');
+
+// Apply auth middleware to all routes
+router.use(auth);
+
+// Crew Templates
+router.get('/templates', controller.getCrewTemplates);
+
+// Crews
+router.get('/', controller.getCrews);
+router.post('/', controller.createCrew);
+router.get('/:id', controller.getCrew);
+router.put('/:id', controller.updateCrew);
+router.delete('/:id', controller.deleteCrew);
+
+// Crew Runs
+router.post('/:id/run', controller.runCrew);
+router.get('/:id/runs', controller.getCrewRuns);
+
+// Crew Drafts
+router.get('/:id/drafts', controller.getCrewDrafts);
+
+module.exports = router;

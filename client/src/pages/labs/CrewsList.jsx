@@ -273,3 +273,182 @@ function NewCrewModal({ templates, onClose, onCreated }) {
 }
 
 export default CrewsList;
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Plus, Play, Clock, CheckCircle, XCircle } from 'lucide-react';
+import LabsNav from '../../components/labs/LabsNav';
+import axios from 'axios';
+
+function CrewsList() {
+  const [crews, setCrews] = useState([]);
+  const [templates, setTemplates] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [runningCrew, setRunningCrew] = useState(null);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const [crewsRes, templatesRes] = await Promise.all([
+        axios.get('/api/crews'),
+        axios.get('/api/crew-templates')
+      ]);
+      setCrews(crewsRes.data);
+      setTemplates(templatesRes.data);
+    } catch (error) {
+      console.error('Error fetching crews data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRunCrew = async (crewId) => {
+    setRunningCrew(crewId);
+    try {
+      await axios.post(`/api/crews/${crewId}/run`);
+      // Refresh data to show updated status
+      await fetchData();
+    } catch (error) {
+      console.error('Error running crew:', error);
+    } finally {
+      setRunningCrew(null);
+    }
+  };
+
+  const getStatusPill = (status) => {
+    const statusClasses = {
+      draft: 'pill status-draft',
+      queued: 'pill status-queued',
+      done: 'pill status-done',
+      failed: 'pill status-failed'
+    };
+    
+    const statusIcons = {
+      draft: '📝',
+      queued: '⏳',
+      done: '✅',
+      failed: '❌'
+    };
+
+    return (
+      <span className={statusClasses[status] || 'pill'}>
+        <span>{statusIcons[status] || '📝'}</span>
+        {status.charAt(0).toUpperCase() + status.slice(1)}
+      </span>
+    );
+  };
+
+  const getTemplateName = (templateId) => {
+    const template = templates.find(t => t.id === templateId);
+    return template ? template.name : 'Unknown Template';
+  };
+
+  if (loading) {
+    return (
+      <div className="content">
+        <div className="page-header">
+          <h1 className="text-3xl font-bold text-gray-900">AI Crews</h1>
+          <LabsNav />
+        </div>
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="content">
+      <div className="page-header">
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-3xl font-bold text-gray-900">AI Crews</h1>
+          <Link
+            to="/labs/crews/new"
+            className="btn-primary flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            New Crew
+          </Link>
+        </div>
+        <LabsNav />
+      </div>
+
+      {crews.length === 0 ? (
+        <div className="panel p-12">
+          <div className="empty">
+            <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              🤖
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">No crews yet</h3>
+            <p className="text-gray-600 mb-6">
+              Create your first AI crew to automate content generation workflows.
+            </p>
+            <Link
+              to="/labs/crews/new"
+              className="btn-primary inline-flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              Create First Crew
+            </Link>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {crews.map(crew => (
+            <div key={crew.id} className="labs-crew-card">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      <Link to={`/labs/crews/${crew.id}`} className="hover:text-purple-600 transition-colors">
+                        {crew.name}
+                      </Link>
+                    </h3>
+                    {getStatusPill(crew.status)}
+                  </div>
+                  <p className="text-gray-600 mb-2">{crew.purpose}</p>
+                  <div className="flex items-center gap-4 text-sm text-gray-500">
+                    <span>Template: {getTemplateName(crew.template_id)}</span>
+                    <span>Created: {new Date(crew.created_at).toLocaleDateString()}</span>
+                    {crew.tags && (
+                      <span className="flex gap-1">
+                        {crew.tags.split(',').map(tag => (
+                          <span key={tag} className="px-2 py-1 bg-gray-100 rounded text-xs">
+                            {tag.trim()}
+                          </span>
+                        ))}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleRunCrew(crew.id)}
+                    disabled={runningCrew === crew.id || crew.status === 'queued'}
+                    className="btn-primary flex items-center gap-2 h-auto py-2"
+                  >
+                    {runningCrew === crew.id ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Running...
+                      </>
+                    ) : (
+                      <>
+                        <Play className="w-4 h-4" />
+                        Run
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default CrewsList;

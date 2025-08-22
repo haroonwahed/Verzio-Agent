@@ -1,25 +1,32 @@
-import React from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
-import { AuthProvider } from './contexts/AuthContext'
-import PrivateRoute from './components/PrivateRoute'
-import Login from './pages/Login'
-import Signup from './pages/Signup'
-import Dashboard from './pages/Dashboard'
-import Home from './pages/Home'
-import Wolleys from './pages/Wolleys'
-import Workflows from './pages/Workflows'
-import MediaStudio from './pages/MediaStudio'
-import ContentWriter from './pages/ContentWriter'
-import Templates from './pages/Templates'
-import Documentation from './pages/Documentation'
-import ApiDocs from './pages/ApiDocs'
-import Guides from './pages/Guides'
-import Blog from './pages/Blog'
-import Pricing from './pages/Pricing'
-import CrewsList from './pages/labs/CrewsList'
-import CrewDrafts from './pages/labs/CrewDrafts'
-import PlannerBoard from './pages/labs/PlannerBoard'
-import PlannerCalendar from './pages/labs/PlannerCalendar'
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import './index.css';
+import './styles/theme-pro.css';
+import { AuthProvider } from './contexts/AuthContext';
+import PrivateRoute from './components/PrivateRoute';
+
+// Import pages
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Dashboard from './pages/Dashboard';
+import Pricing from './pages/Pricing';
+import Documentation from './pages/Documentation';
+import ApiDocs from './pages/ApiDocs';
+import Blog from './pages/Blog';
+import Guides from './pages/Guides';
+import Templates from './pages/Templates';
+import ContentWriter from './pages/ContentWriter';
+import Workflows from './pages/Workflows';
+import MediaStudio from './pages/MediaStudio';
+import Wolleys from './pages/Wolleys';
+
+// Labs pages
+import CrewsList from './pages/labs/CrewsList';
+import CrewDrafts from './pages/labs/CrewDrafts';
+import PlannerBoard from './pages/labs/PlannerBoard';
+import PlannerCalendar from './pages/labs/PlannerCalendar';
+
 
 function App() {
   return (

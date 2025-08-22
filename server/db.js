@@ -81,7 +81,7 @@ function init() {
     if (process.env.FEATURE_CREWS === 'true') {
       db.exec(`
         CREATE TABLE IF NOT EXISTS crew_templates (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id INTEGER PRIMARYKEY AUTOINCREMENT,
           name TEXT NOT NULL,
           purpose TEXT NOT NULL,
           fields_json TEXT NOT NULL,
@@ -95,39 +95,36 @@ function init() {
         CREATE TABLE IF NOT EXISTS crews (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT NOT NULL,
-          template_id INTEGER,
+          template_id INTEGER REFERENCES crew_templates(id),
           purpose TEXT NOT NULL,
           inputs_json TEXT NOT NULL,
-          status TEXT NOT NULL DEFAULT 'draft',
+          status TEXT DEFAULT 'draft',
           tags TEXT,
           created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (template_id) REFERENCES crew_templates (id)
-        )
-      `);
-
-      db.exec(`
-        CREATE TABLE IF NOT EXISTS crew_drafts (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          crew_id INTEGER NOT NULL,
-          content_md TEXT NOT NULL,
-          seo_meta_json TEXT NOT NULL,
-          score INTEGER DEFAULT 0,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (crew_id) REFERENCES crews (id)
+          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )
       `);
 
       db.exec(`
         CREATE TABLE IF NOT EXISTS crew_runs (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
-          crew_id INTEGER NOT NULL,
+          crew_id INTEGER REFERENCES crews(id),
           input_snapshot_json TEXT NOT NULL,
-          output_snapshot_json TEXT NOT NULL,
+          output_snapshot_json TEXT,
           tokens_used INTEGER DEFAULT 0,
-          status TEXT NOT NULL DEFAULT 'queued',
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (crew_id) REFERENCES crews (id)
+          status TEXT DEFAULT 'queued',
+          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      db.exec(`
+        CREATE TABLE IF NOT EXISTS crew_drafts (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          crew_id INTEGER REFERENCES crews(id),
+          content_md TEXT NOT NULL,
+          seo_meta_json TEXT,
+          score INTEGER DEFAULT 0,
+          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )
       `);
     }
@@ -139,11 +136,11 @@ function init() {
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           title TEXT NOT NULL,
           notes TEXT,
-          priority TEXT NOT NULL DEFAULT 'med',
+          priority TEXT DEFAULT 'med',
           est_minutes INTEGER DEFAULT 60,
           due_at DATETIME,
           hard_deadline BOOLEAN DEFAULT 0,
-          status TEXT NOT NULL DEFAULT 'todo',
+          status TEXT DEFAULT 'todo',
           tags TEXT,
           created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
           updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -153,17 +150,15 @@ function init() {
       db.exec(`
         CREATE TABLE IF NOT EXISTS task_links (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
-          task_id INTEGER NOT NULL,
-          depends_on_task_id INTEGER NOT NULL,
-          FOREIGN KEY (task_id) REFERENCES tasks (id),
-          FOREIGN KEY (depends_on_task_id) REFERENCES tasks (id)
+          task_id INTEGER REFERENCES tasks(id),
+          depends_on_task_id INTEGER REFERENCES tasks(id)
         )
       `);
 
       db.exec(`
         CREATE TABLE IF NOT EXISTS work_hours (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
-          user_id INTEGER NOT NULL,
+          user_id INTEGER REFERENCES users(id),
           weekday INTEGER NOT NULL,
           start_time TEXT NOT NULL,
           end_time TEXT NOT NULL,
@@ -174,23 +169,11 @@ function init() {
       db.exec(`
         CREATE TABLE IF NOT EXISTS event_blocks (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
-          task_id INTEGER,
+          task_id INTEGER REFERENCES tasks(id),
           starts_at DATETIME NOT NULL,
           ends_at DATETIME NOT NULL,
-          source TEXT NOT NULL DEFAULT 'manual',
-          calendar_id TEXT,
-          FOREIGN KEY (task_id) REFERENCES tasks (id)
-        )
-      `);
-
-      db.exec(`
-        CREATE TABLE IF NOT EXISTS calendar_sources (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          user_id INTEGER NOT NULL,
-          type TEXT NOT NULL,
-          url_or_token TEXT NOT NULL,
-          enabled BOOLEAN DEFAULT 1,
-          last_sync_at DATETIME DEFAULT CURRENT_TIMESTAMP
+          source TEXT DEFAULT 'auto',
+          calendar_id TEXT
         )
       `);
     }

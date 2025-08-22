@@ -182,3 +182,137 @@ module.exports = seedLabsData;
 if (require.main === module) {
   seedLabsData();
 }
+const { getDb } = require('./db');
+
+function seedLabs() {
+  const db = getDb();
+  
+  try {
+    // Check if already seeded
+    const existingTemplates = db.prepare('SELECT COUNT(*) as count FROM crew_templates').get();
+    if (existingTemplates.count > 0) {
+      console.log('Labs data already seeded');
+      return;
+    }
+
+    // Seed Crew Templates
+    const insertTemplate = db.prepare(`
+      INSERT INTO crew_templates (name, purpose, fields_json, prompt_schema_json)
+      VALUES (?, ?, ?, ?)
+    `);
+
+    insertTemplate.run(
+      'Blog Post OS',
+      'Generate comprehensive blog posts with SEO optimization',
+      JSON.stringify(['topic', 'target_audience', 'tone', 'word_count']),
+      JSON.stringify({
+        system: 'You are a professional content writer specializing in blog posts.',
+        user_template: 'Write a {word_count}-word blog post about {topic} for {target_audience} in a {tone} tone.'
+      })
+    );
+
+    insertTemplate.run(
+      'Landing Page',
+      'Create high-converting landing page copy',
+      JSON.stringify(['product_name', 'target_audience', 'key_benefits', 'cta']),
+      JSON.stringify({
+        system: 'You are a conversion copywriter specializing in landing pages.',
+        user_template: 'Create landing page copy for {product_name} targeting {target_audience} with benefits: {key_benefits}. CTA: {cta}'
+      })
+    );
+
+    insertTemplate.run(
+      'Ad Set',
+      'Generate multiple ad variations for A/B testing',
+      JSON.stringify(['product', 'platform', 'audience', 'budget_range']),
+      JSON.stringify({
+        system: 'You are a digital marketing specialist creating ad copy.',
+        user_template: 'Create 3 ad variations for {product} on {platform} targeting {audience} with budget {budget_range}'
+      })
+    );
+
+    // Seed Tasks
+    const insertTask = db.prepare(`
+      INSERT INTO tasks (title, notes, priority, est_minutes, due_at, hard_deadline, status, tags)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    const nextWeek = new Date();
+    nextWeek.setDate(nextWeek.getDate() + 7);
+
+    insertTask.run(
+      'Write Q4 marketing strategy',
+      'Comprehensive strategy including channels, budget allocation, and KPIs',
+      'high',
+      180,
+      tomorrow.toISOString(),
+      1,
+      'todo',
+      'marketing,strategy'
+    );
+
+    insertTask.run(
+      'Design new product mockups',
+      'Create initial mockups for the new feature set',
+      'high',
+      120,
+      nextWeek.toISOString(),
+      0,
+      'todo',
+      'design,product'
+    );
+
+    insertTask.run(
+      'Review competitor analysis',
+      'Analyze top 5 competitors and document findings',
+      'med',
+      90,
+      nextWeek.toISOString(),
+      0,
+      'doing',
+      'research,analysis'
+    );
+
+    insertTask.run(
+      'Update documentation',
+      'Refresh API docs and user guides',
+      'low',
+      60,
+      null,
+      0,
+      'todo',
+      'docs,maintenance'
+    );
+
+    insertTask.run(
+      'Team standup preparation',
+      'Prepare agenda and review progress',
+      'med',
+      30,
+      tomorrow.toISOString(),
+      0,
+      'todo',
+      'meetings,planning'
+    );
+
+    insertTask.run(
+      'Code review backlog',
+      'Review pending PRs and provide feedback',
+      'med',
+      90,
+      null,
+      0,
+      'blocked',
+      'development,review'
+    );
+
+    console.log('Labs seed data created successfully');
+  } catch (error) {
+    console.error('Error seeding labs data:', error);
+  }
+}
+
+module.exports = seedLabs;

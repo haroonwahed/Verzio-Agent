@@ -1,0 +1,307 @@
+
+/* Professional Theme Design System */
+:root.theme-pro {
+  --bg: #f7f8fb;
+  --surface: #ffffff;
+  --muted: #6b7280;
+  --text: #0f172a;
+  --primary: #7c3aed;
+  --accent: #22d3ee;
+  --success: #16a34a;
+  --border: #e5e7eb;
+  --hover: #f3f4f6;
+  --rad: 14px;
+  --rad-sm: 10px;
+  --shadow: 0 1px 2px rgba(0,0,0,.06), 0 10px 30px rgba(0,0,0,.05);
+  --space-1: 8px;
+  --space-2: 12px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+}
+
+/* App shell: fix the exact issue you see (tight gutter between sidebar and content) */
+.theme-pro .app-shell {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: var(--space-4);
+}
+
+.theme-pro .sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+}
+
+.theme-pro .content {
+  padding: var(--space-5) var(--space-5);
+}
+
+/* Page header + toolbar rhythm */
+.theme-pro .page-header {
+  margin-bottom: var(--space-4);
+}
+
+.theme-pro .toolbar {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Panels + cards */
+.theme-pro .panel,
+.theme-pro .card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--rad);
+  box-shadow: var(--shadow);
+}
+
+/* Buttons (accessible disabled state) */
+.theme-pro .btn-primary {
+  background: var(--primary);
+  color: #fff;
+  border-radius: var(--rad-sm);
+  height: 40px;
+  padding: 0 16px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.theme-pro .btn-primary:hover:not([disabled]) {
+  background: #6d28d9;
+}
+
+.theme-pro .btn-primary[disabled] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Inputs */
+.theme-pro textarea,
+.theme-pro input,
+.theme-pro select {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--rad-sm);
+  padding: 10px 12px;
+  width: 100%;
+  font-family: inherit;
+}
+
+.theme-pro textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+
+.theme-pro textarea:focus,
+.theme-pro input:focus,
+.theme-pro select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+/* Table (if used) */
+.theme-pro table.data {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+}
+
+.theme-pro table.data thead th {
+  color: var(--muted);
+  font-weight: 600;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: #fff;
+  text-align: left;
+}
+
+.theme-pro table.data tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.theme-pro table.data tbody tr:hover {
+  background: var(--hover);
+}
+
+/* Status pill */
+.theme-pro .pill {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(22, 163, 74, 0.08);
+  color: var(--success);
+  border: 1px solid rgba(22, 163, 74, 0.18);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.theme-pro .pill.status-draft {
+  background: rgba(107, 114, 128, 0.08);
+  color: var(--muted);
+  border-color: rgba(107, 114, 128, 0.18);
+}
+
+.theme-pro .pill.status-queued {
+  background: rgba(34, 211, 238, 0.08);
+  color: var(--accent);
+  border-color: rgba(34, 211, 238, 0.18);
+}
+
+.theme-pro .pill.status-failed {
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.18);
+}
+
+/* Empty state */
+.theme-pro .empty {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--muted);
+}
+
+.theme-pro .empty a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.theme-pro .empty a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive fix: two-pane generator pages */
+@media (min-width: 1024px) {
+  .theme-pro .two-pane {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    align-items: start;
+  }
+}
+
+/* Labs specific styles */
+.theme-pro .labs-floating-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.2s;
+}
+
+.theme-pro .labs-floating-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+}
+
+.theme-pro .labs-nav {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.theme-pro .labs-nav-item {
+  padding: 8px 16px;
+  border-radius: var(--rad-sm);
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.theme-pro .labs-nav-item:hover,
+.theme-pro .labs-nav-item.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.theme-pro .labs-crew-card {
+  padding: var(--space-4);
+  margin-bottom: var(--space-3);
+  border-radius: var(--rad);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: all 0.2s;
+}
+
+.theme-pro .labs-crew-card:hover {
+  box-shadow: var(--shadow);
+  border-color: var(--primary);
+}
+
+.theme-pro .labs-task-column {
+  background: var(--hover);
+  border-radius: var(--rad);
+  padding: var(--space-3);
+  min-height: 400px;
+}
+
+.theme-pro .labs-task-card {
+  background: var(--surface);
+  border-radius: var(--rad-sm);
+  padding: var(--space-3);
+  margin-bottom: var(--space-2);
+  border: 1px solid var(--border);
+  cursor: grab;
+  transition: all 0.2s;
+}
+
+.theme-pro .labs-task-card:hover {
+  box-shadow: var(--shadow);
+}
+
+.theme-pro .labs-task-card.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.theme-pro .labs-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-radius: var(--rad);
+  overflow: hidden;
+}
+
+.theme-pro .labs-calendar-day {
+  background: var(--surface);
+  min-height: 120px;
+  padding: var(--space-2);
+  position: relative;
+}
+
+.theme-pro .labs-time-block {
+  position: absolute;
+  background: var(--primary);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 20px;
+  overflow: hidden;
+}

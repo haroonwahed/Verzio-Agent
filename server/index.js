@@ -63,6 +63,27 @@ app.use('/api/feeds', feedsRoutes);
 app.use('/api/wolleys', wolleysRoutes);
 app.use('/api/workflows', workflowRoutes);
 
+// Planner API routes (always available, but UI is feature-gated)
+const plannerController = require('./modules/planner/controller');
+const auth = require('./middleware/auth');
+
+app.get('/api/tasks', auth, plannerController.getTasks);
+app.post('/api/tasks', auth, plannerController.createTask);
+app.patch('/api/tasks/:id', auth, plannerController.updateTask);
+app.delete('/api/tasks/:id', auth, plannerController.deleteTask);
+app.post('/api/scheduler/plan', auth, plannerController.generateSchedule);
+app.get('/api/blocks', auth, plannerController.getEventBlocks);
+app.post('/api/blocks/commit', auth, plannerController.commitEventBlocks);
+
+// Crews API routes (always available, but UI is feature-gated)
+const crewsController = require('./modules/crews/controller');
+
+app.get('/api/crews', auth, crewsController.getCrews);
+app.post('/api/crews', auth, crewsController.createCrew);
+app.get('/api/crew-templates', auth, crewsController.getCrewTemplates);
+app.post('/api/crews/:id/run', auth, crewsController.runCrew);
+app.get('/api/crews/:id/drafts', auth, crewsController.getCrewDrafts);
+
 // Labs routes (conditionally enabled)
 if (process.env.VITE_FEATURE_CREWS === 'true') {
   const crewsRoutes = require('./modules/crews/routes');

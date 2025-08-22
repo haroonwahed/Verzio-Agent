@@ -12,6 +12,7 @@ import WolleyChat from '../components/WolleyChat';
 import IntegrationsPanel from '../components/IntegrationsPanel';
 import ProfileSettings from '../components/ProfileSettings';
 import LabsFloatingButton from '../components/LabsFloatingButton';
+import { Link } from 'react-router-dom';
 
 function Dashboard() {
   const { user, logout } = useAuth();
@@ -52,9 +53,9 @@ function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50/30 via-blue-50/30 to-indigo-50/30">
+    <div className="min-h-screen bg-gray-50 app-shell">
       {/* Sidebar */}
-      <div className="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-purple-50 to-blue-50 border-r border-purple-100 shadow-lg z-10">
+      <aside className="sidebar fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform lg:translate-x-0 lg:static lg:inset-0">
         {/* Logo */}
         <div className="p-6 border-b border-gray-100">
           <a href="/" className="flex items-center space-x-3">
@@ -175,21 +176,16 @@ function Dashboard() {
             </div>
           </footer>
         </div>
-      </div>
+      </aside>
 
-      {/* Main Content */}
-      <div className="ml-64">
-        <div className="h-full">
+      {/* Main content */}
+      <main className="content lg:ml-64">
+        <div className="page-header">
           {renderContent()}
         </div>
-      </div>
+      </main>
 
-      {/* Labs floating button - only show if features enabled */}
-      {(import.meta.env.VITE_FEATURE_CREWS === 'true' || import.meta.env.VITE_FEATURE_PLANNER === 'true') && (
-        <LabsFloatingButton />
-      )}
+      <LabsFloatingButton />
     </div>
-  )
+  );
 }
-
-export default Dashboard;

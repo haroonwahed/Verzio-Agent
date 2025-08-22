@@ -287,3 +287,191 @@ DROP TABLE IF EXISTS work_hours;
 DROP TABLE IF EXISTS event_blocks;
 DROP TABLE IF EXISTS calendar_sources;
 ```
+# Labs Features Documentation
+
+## Overview
+
+Labs features are experimental capabilities that extend the core Creeator platform with advanced AI crew management and task planning tools. These features are disabled by default and can be enabled via feature flags.
+
+## Feature Flags
+
+### Environment Variables
+
+Set these in your `.env` file to enable Labs features:
+
+```env
+# Enable AI Crews feature
+VITE_FEATURE_CREWS=true
+
+# Enable Task Planner feature  
+VITE_FEATURE_PLANNER=true
+```
+
+### Behavior
+
+- When **no flags** are set to `true`, the Labs floating button is hidden
+- When **any flag** is set to `true`, a Labs floating button appears in the bottom-right corner
+- Each feature's UI is only accessible when its corresponding flag is enabled
+
+## AI Crews
+
+### Overview
+
+AI Crews allow you to create reusable AI content generation workflows using templates. Each crew can be configured with specific inputs and run multiple times to generate drafts.
+
+### Data Models
+
+#### CrewTemplate
+- `id`: Unique identifier
+- `name`: Template name (e.g., "Blog Post OS")
+- `purpose`: Template description
+- `fields_json`: Input fields configuration
+- `prompt_schema_json`: AI prompt templates
+
+#### Crew
+- `id`: Unique identifier  
+- `name`: Crew instance name
+- `template_id`: Reference to CrewTemplate
+- `purpose`: Crew description
+- `inputs_json`: Configured input values
+- `status`: `draft|queued|done|failed`
+- `tags`: Comma-separated tags
+
+#### CrewRun
+- `id`: Unique identifier
+- `crew_id`: Reference to Crew
+- `input_snapshot_json`: Input values at run time
+- `output_snapshot_json`: Generated content
+- `tokens_used`: AI token consumption
+- `status`: `queued|running|done|failed`
+
+#### CrewDraft
+- `id`: Unique identifier
+- `crew_id`: Reference to Crew
+- `content_md`: Generated markdown content
+- `seo_meta_json`: SEO metadata
+- `score`: Quality score (0-100)
+
+### API Endpoints
+
+```
+GET /api/crew-templates     # List available templates
+GET /api/crews             # List user's crews
+POST /api/crews            # Create new crew
+POST /api/crews/:id/run    # Execute crew
+GET /api/crews/:id/drafts  # Get generated drafts
+```
+
+### Routes
+
+- `/labs/crews` - List all crews
+- `/labs/crews/:id` - Edit crew (editor view)
+
+## Task Planner
+
+### Overview
+
+Task Planner provides kanban board and calendar views for managing tasks with intelligent auto-scheduling capabilities.
+
+### Data Models
+
+#### Task
+- `id`: Unique identifier
+- `title`: Task name
+- `notes`: Additional details
+- `priority`: `low|med|high`
+- `est_minutes`: Estimated duration
+- `due_at`: Due date/time
+- `hard_deadline`: Boolean flag
+- `status`: `todo|doing|blocked|done`
+- `tags`: Comma-separated tags
+
+#### EventBlock
+- `id`: Unique identifier
+- `task_id`: Reference to Task
+- `starts_at`: Scheduled start time
+- `ends_at`: Scheduled end time  
+- `source`: `auto|manual`
+- `calendar_id`: External calendar integration
+
+#### WorkHours
+- `id`: Unique identifier
+- `user_id`: Reference to User
+- `weekday`: 0-6 (Monday-Sunday)
+- `start_time`: Work start time
+- `end_time`: Work end time
+- `timezone`: User timezone
+
+### API Endpoints
+
+```
+GET /api/tasks              # List tasks
+POST /api/tasks             # Create task
+PATCH /api/tasks/:id        # Update task
+DELETE /api/tasks/:id       # Delete task
+POST /api/scheduler/plan    # Generate schedule
+GET /api/blocks             # Get event blocks
+POST /api/blocks/commit     # Save schedule
+```
+
+### Routes
+
+- `/labs/planner/board` - Kanban board view
+- `/labs/planner/calendar` - Calendar view with auto-scheduling
+
+### Scheduling Algorithm
+
+The auto-scheduler uses a simple algorithm:
+
+1. **Sort tasks** by: hard_deadline (desc), priority (desc), due_at (asc)
+2. **Pack into work hours** (default: 9 AM - 5 PM, Mon-Fri)
+3. **Chunk blocks** to ≤ 90 minutes with 15-minute breaks
+4. **Avoid overlaps** and respect hard deadlines
+5. **Return proposals** for user confirmation before committing
+
+## Seed Data
+
+The system includes sample data for testing:
+
+### Crew Templates
+1. **Blog Post OS** - Comprehensive blog post generation
+2. **Landing Page** - High-converting landing page copy  
+3. **Ad Set** - Multiple ad variations for A/B testing
+
+### Sample Tasks
+- Marketing strategy (high priority, hard deadline)
+- Product mockups (high priority)
+- Competitor analysis (medium priority, in progress)
+- Documentation updates (low priority)
+- Team standup prep (medium priority)
+- Code review backlog (medium priority, blocked)
+
+## Testing
+
+### With API Keys
+When OpenAI/Anthropic API keys are present in environment:
+- Crews will generate real AI content
+- Token usage will be tracked
+- Processing time varies by model
+
+### Without API Keys  
+When no API keys are configured:
+- Crews generate mock content after 2-second delay
+- Mock token usage (150 tokens)
+- Demonstrates full workflow without API costs
+
+### Verification Steps
+
+1. **Feature Flags Off**: No Labs button visible
+2. **FEATURE_CREWS=true**: Crews list accessible, can create/run crews
+3. **FEATURE_PLANNER=true**: Board and calendar views work
+4. **Auto-scheduling**: Sample tasks schedule without overlaps
+5. **Data Persistence**: All operations save to SQLite database
+
+## Development Notes
+
+- All Labs code is additive - no existing functionality is modified
+- UI components use `.labs-*` CSS classes for scoped styling
+- Backend uses separate modules under `server/modules/`
+- Database migrations are automatic on server start
+- Feature flags are checked at both route and component levels

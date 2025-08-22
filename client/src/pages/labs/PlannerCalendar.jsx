@@ -290,3 +290,235 @@ function PlannerCalendar() {
 }
 
 export default PlannerCalendar;
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, Settings, Play, Save } from 'lucide-react';
+import LabsNav from '../../components/labs/LabsNav';
+import axios from 'axios';
+
+function PlannerCalendar() {
+  const [currentWeek, setCurrentWeek] = useState(new Date());
+  const [tasks, setTasks] = useState([]);
+  const [eventBlocks, setEventBlocks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [autoScheduling, setAutoScheduling] = useState(false);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const [tasksRes, blocksRes] = await Promise.all([
+        axios.get('/api/tasks'),
+        axios.get('/api/blocks')
+      ]);
+      setTasks(tasksRes.data);
+      setEventBlocks(blocksRes.data || []);
+    } catch (error) {
+      console.error('Error fetching calendar data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getWeekDays = () => {
+    const days = [];
+    const startOfWeek = new Date(currentWeek);
+    startOfWeek.setDate(currentWeek.getDate() - currentWeek.getDay() + 1); // Monday
+
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(startOfWeek);
+      day.setDate(startOfWeek.getDate() + i);
+      days.push(day);
+    }
+    return days;
+  };
+
+  const navigateWeek = (direction) => {
+    const newWeek = new Date(currentWeek);
+    newWeek.setDate(currentWeek.getDate() + (direction * 7));
+    setCurrentWeek(newWeek);
+  };
+
+  const handleAutoSchedule = async () => {
+    setAutoScheduling(true);
+    try {
+      const response = await axios.post('/api/scheduler/plan');
+      setEventBlocks(response.data);
+    } catch (error) {
+      console.error('Error auto-scheduling:', error);
+    } finally {
+      setAutoScheduling(false);
+    }
+  };
+
+  const handleCommitPlan = async () => {
+    try {
+      await axios.post('/api/blocks/commit', { blocks: eventBlocks });
+      alert('Schedule committed successfully!');
+    } catch (error) {
+      console.error('Error committing plan:', error);
+      alert('Error committing plan');
+    }
+  };
+
+  const getTasksForDay = (day) => {
+    const dayStr = day.toISOString().split('T')[0];
+    return eventBlocks.filter(block => {
+      const blockDay = new Date(block.starts_at).toISOString().split('T')[0];
+      return blockDay === dayStr;
+    });
+  };
+
+  const getTaskById = (taskId) => {
+    return tasks.find(task => task.id === taskId);
+  };
+
+  const formatTime = (dateStr) => {
+    return new Date(dateStr).toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  };
+
+  const weekDays = getWeekDays();
+
+  if (loading) {
+    return (
+      <div className="content">
+        <div className="page-header">
+          <h1 className="text-3xl font-bold text-gray-900">Calendar</h1>
+          <LabsNav />
+        </div>
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="content">
+      <div className="page-header">
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-3xl font-bold text-gray-900">Calendar</h1>
+          <div className="toolbar">
+            <button
+              onClick={handleAutoSchedule}
+              disabled={autoScheduling}
+              className="btn-primary flex items-center gap-2"
+            >
+              {autoScheduling ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Scheduling...
+                </>
+              ) : (
+                <>
+                  <Play className="w-4 h-4" />
+                  Auto-schedule
+                </>
+              )}
+            </button>
+            <button
+              onClick={handleCommitPlan}
+              className="btn-primary flex items-center gap-2"
+            >
+              <Save className="w-4 h-4" />
+              Commit Plan
+            </button>
+            <button className="btn-primary flex items-center gap-2">
+              <Settings className="w-4 h-4" />
+              Work Hours
+            </button>
+          </div>
+        </div>
+        <LabsNav />
+      </div>
+
+      {/* Week Navigation */}
+      <div className="panel p-4 mb-6">
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => navigateWeek(-1)}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          
+          <h2 className="text-lg font-semibold">
+            {weekDays[0].toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - {' '}
+            {weekDays[6].toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+          </h2>
+          
+          <button
+            onClick={() => navigateWeek(1)}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
+      {/* Calendar Grid */}
+      <div className="labs-calendar-grid">
+        {weekDays.map(day => (
+          <div key={day.toISOString()} className="labs-calendar-day">
+            <div className="font-semibold text-sm text-gray-900 mb-2">
+              {day.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric' })}
+            </div>
+            
+            <div className="space-y-1">
+              {getTasksForDay(day).map(block => {
+                const task = getTaskById(block.task_id);
+                if (!task) return null;
+                
+                return (
+                  <div
+                    key={block.id}
+                    className="labs-time-block"
+                    style={{
+                      top: `${(new Date(block.starts_at).getHours() - 9) * 20 + 40}px`,
+                      height: `${(new Date(block.ends_at) - new Date(block.starts_at)) / (1000 * 60) * 20 / 60}px`
+                    }}
+                    title={`${task.title} (${formatTime(block.starts_at)} - ${formatTime(block.ends_at)})`}
+                  >
+                    <div className="font-medium text-xs">{task.title}</div>
+                    <div className="text-xs opacity-90">
+                      {formatTime(block.starts_at)}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Unscheduled Tasks */}
+      <div className="panel p-6 mt-6">
+        <h3 className="font-semibold text-gray-900 mb-4">Unscheduled Tasks</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+          {tasks
+            .filter(task => task.status !== 'done' && !eventBlocks.some(block => block.task_id === task.id))
+            .map(task => (
+              <div key={task.id} className="labs-task-card">
+                <div className="flex items-center justify-between mb-1">
+                  <h4 className="font-medium text-sm">{task.title}</h4>
+                  <span className="text-xs text-gray-500">{task.est_minutes}m</span>
+                </div>
+                {task.due_at && (
+                  <div className="text-xs text-gray-500">
+                    Due: {new Date(task.due_at).toLocaleDateString()}
+                  </div>
+                )}
+              </div>
+            ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default PlannerCalendar;

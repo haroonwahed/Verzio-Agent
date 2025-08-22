@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Mic, Download, Play, Square } from 'lucide-react';
@@ -21,7 +20,7 @@ function VoicePanel() {
 
   const handleGenerate = async () => {
     if (!text.trim()) return;
-    
+
     setLoading(true);
     try {
       const res = await axios.post('/api/voice/generate', { text, voice });
@@ -49,9 +48,9 @@ function VoicePanel() {
         <h2 className="text-2xl font-bold text-gray-900">Voice Generation</h2>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="two-pane grid lg:grid-cols-2 gap-6">
         {/* Input Section */}
-        <div className="space-y-4">
+        <div className="panel bg-white rounded-xl p-6 shadow-sm border border-gray-200">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Text to Convert
@@ -83,10 +82,10 @@ function VoicePanel() {
           </div>
 
           <button
-            onClick={handleGenerate}
-            disabled={loading || !text.trim()}
-            className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-md flex items-center justify-center space-x-2"
-          >
+              onClick={handleGenerate}
+              disabled={loading || !text.trim()}
+              className="btn-primary w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white py-3 px-6 rounded-lg font-medium transition-colors"
+            >
             {loading ? (
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
             ) : (
@@ -99,9 +98,9 @@ function VoicePanel() {
         </div>
 
         {/* Output Section */}
-        <div className="space-y-4">
+        <div className="panel bg-white rounded-xl p-6 shadow-sm border border-gray-200">
           <h3 className="text-lg font-medium text-gray-900">Generated Audio</h3>
-          
+
           {audioUrl ? (
             <div className="space-y-4">
               <div className="bg-gray-50 p-4 rounded-lg">
@@ -110,7 +109,7 @@ function VoicePanel() {
                   Your browser does not support the audio element.
                 </audio>
               </div>
-              
+
               <div className="flex space-x-2">
                 <button
                   onClick={handlePlay}
@@ -119,7 +118,7 @@ function VoicePanel() {
                   {isPlaying ? <Square className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                   <span>{isPlaying ? 'Stop' : 'Play'}</span>
                 </button>
-                
+
                 <a
                   href={audioUrl}
                   download="generated-speech.mp3"
