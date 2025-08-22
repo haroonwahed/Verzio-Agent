@@ -324,10 +324,6 @@ function NewTaskModal({ onClose, onCreated }) {
 }
 
 export default PlannerBoard;
-import React, { useState, useEffect } from 'react';
-import { Plus, Clock, AlertCircle } from 'lucide-react';
-import LabsNav from '../../components/labs/LabsNav';
-import axios from 'axios';
 
 function PlannerBoard() {
   const [tasks, setTasks] = useState([]);

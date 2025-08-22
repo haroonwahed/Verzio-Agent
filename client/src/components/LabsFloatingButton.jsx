@@ -102,9 +102,6 @@ function LabsFloatingButton() {
 }
 
 export default LabsFloatingButton;
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Beaker, X } from 'lucide-react';
 
 function LabsFloatingButton() {
   const [isOpen, setIsOpen] = useState(false);

@@ -290,10 +290,6 @@ function PlannerCalendar() {
 }
 
 export default PlannerCalendar;
-import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Settings, Play, Save } from 'lucide-react';
-import LabsNav from '../../components/labs/LabsNav';
-import axios from 'axios';
 
 function PlannerCalendar() {
   const [currentWeek, setCurrentWeek] = useState(new Date());
